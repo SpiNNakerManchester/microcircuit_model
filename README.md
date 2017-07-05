@@ -6,6 +6,7 @@ Sacha van Albada (s.van.albada@fz-juelich.de)
 Maximilian Schmidt  
 Jannis Schücker  
 Andrew Rowley
+Alan Stokes
 
 This is an implementation of the multi-layer microcircuit model of early
 sensory cortex published by Potjans and Diesmann (2014) _The cell-type specific
