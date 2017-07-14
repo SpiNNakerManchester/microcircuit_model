@@ -43,7 +43,10 @@ def spike_array_to_neo(spike_array, population, runtime, n_items):
 
 
 # prepare simulation
-exec('import pyNN.%s as sim' %simulator)
+try:
+    exec('import pyNN.%s as sim' %simulator)
+except:
+    import spynnaker7.pyNN as sim
 
 sim.setup(**simulator_params[simulator])
 
