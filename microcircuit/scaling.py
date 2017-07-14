@@ -26,10 +26,7 @@ def adjust_w_and_ext_to_K(K_full, K_scaling, w, DC):
     '''Adjust synaptic weights and external drive to the in-degrees
      to preserve mean and variance of inputs in the diffusion approximation'''
 
-    if simulator == 'hardware.brainscales':
-        internal_scaling = K_scaling * (1. - expected_internal_synapse_loss)
-    else :
-        internal_scaling = K_scaling
+    internal_scaling = K_scaling
    
     w_new = w / np.sqrt(internal_scaling)
     I_ext = {}
@@ -46,10 +43,7 @@ def adjust_w_and_ext_to_K(K_full, K_scaling, w, DC):
 
             if input_type == 'poisson':
                 x1_ext = w_mean * K_ext[target_layer][target_pop] * bg_rate
-                if simulator == 'hardware.brainscales':
-                    external_scaling = K_scaling * (1. - expected_external_synapse_loss)
-                else :
-                    external_scaling = K_scaling
+                external_scaling = K_scaling
                 w_ext_new = w_mean / np.sqrt(external_scaling)
                 I_ext[target_layer][target_pop] = 0.001 * neuron_params['tau_syn_E'] * \
                     ((1. - np.sqrt(internal_scaling)) * x1 + \

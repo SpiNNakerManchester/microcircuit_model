@@ -6,6 +6,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import os
 import glob
+import neo
 
 def plot_raster_bars(t_start, t_stop, n_rec, frac_to_plot, path):
 
@@ -22,8 +23,19 @@ def plot_raster_bars(t_start, t_stop, n_rec, frac_to_plot, path):
             pop_spike_array = np.empty((0,2))
             for file_name in filelist :
                 try :
-                    spike_array = np.loadtxt(file_name)
-                    pop_spike_array = np.vstack((pop_spike_array, spike_array))
+                    if file_name.endswith(".dat"):
+                        spike_array = np.loadtxt(file_name)
+                        pop_spike_array = np.vstack((pop_spike_array, spike_array))
+                    else:
+                        data = neo.get_io(file_name)
+                        spiketrains = data.read_block().segments[0].spiketrains
+                        spike_array = [
+                            [float(spiketrains[i][j]), float(i)]
+                            for i in range(len(spiketrains))
+                            for j in range(len(spiketrains[i]))]
+                        n_rec[layer][pop] = len(spiketrains)
+                        pop_spike_array = np.vstack((pop_spike_array, spike_array))
+                        data.close()
                 except IOError :
                     print 'reading spike data from ', file_name, ' failed'
                     pass
@@ -56,14 +68,14 @@ def plot_raster_bars(t_start, t_stop, n_rec, frac_to_plot, path):
             ids = ids[filtered_times_indices]
 
             # Compute rates with all neurons
-            rate = 1000*len(t_spikes) / (t_stop-t_start) * time_scaling / n_rec[layer][pop]
+            rate = 1000*len(t_spikes) / (t_stop-t_start) / n_rec[layer][pop]
             rates[layer][pop] = rate
             print layer, pop, np.round(rate,2)
             # Reduce data for raster plot
             num_neurons = frac_to_plot * n_rec[layer][pop]
             t_spikes = t_spikes[np.where(ids < num_neurons + id_count + 1)[0]]
             ids = ids[np.where(ids < num_neurons + id_count + 1)[0]]
-            axarr[0].plot(t_spikes / time_scaling, ids, '.', color=color[pop])
+            axarr[0].plot(t_spikes, ids, '.', color=color[pop])
             id_count += num_neurons
 
     rate_list = np.zeros(n_layers*n_pops_per_layer)
