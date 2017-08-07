@@ -2,9 +2,10 @@
 ###     	Main script			###
 ###################################################
 
-import neo
+# import neo
 import sys
 from sim_params import *
+
 sys.path.append(system_params['backend_path'])
 sys.path.append(system_params['pyNN_path'])
 from network_params import *
@@ -13,40 +14,9 @@ import time
 import plotting
 import numpy as np
 
-
-def spike_array_to_neo(spike_array, population, runtime, n_items):
-    """
-    Convert the spike array produced by PyNN 0.7 to a Neo Block
-    (the data format used by PyNN 0.8)
-    """
-    from datetime import datetime
-    
-    items = None
-    if n_items is not None:
-        if n_items < len(population):
-            items = np.random.permutation(np.arange(len(population)))[:n_items]
-        else:
-            items = np.arange(len(population))
-            items = np.append(items, np.random.randint(0, len(population), n_items - len(population)))
-    else:
-        items = xrange(len(population))
-    
-    segment = neo.Segment(name="microcircuit data", rec_datetime=datetime.now())
-    segment.spiketrains = [
-        neo.SpikeTrain(
-            spike_array[:, 1][spike_array[:, 0] == index], t_start=0.0,
-            t_stop=runtime, units='ms', source_index=index)
-        for index in items]
-    data = neo.Block(name="microcircuit data")
-    data.segments.append(segment)
-    return data
-
-
 # prepare simulation
-try:
-    exec('import pyNN.%s as sim' %simulator)
-except:
-    import spynnaker7.pyNN as sim
+
+import spynnaker7.pyNN as sim
 
 sim.setup(**simulator_params[simulator])
 
@@ -55,7 +25,7 @@ if simulator == 'nest':
     if sim.rank() == 0:
         print 'n_vp: ', n_vp
         print 'master_seed: ', master_seed
-    sim.nest.SetKernelStatus({'print_time' : False,
+    sim.nest.SetKernelStatus({'print_time': False,
                               'dict_miss_is_error': False,
                               'grng_seed': master_seed,
                               'rng_seeds': range(master_seed + 1, master_seed + n_vp + 1)})
@@ -98,16 +68,16 @@ for layer in layers:
     for pop in pops:
         filename = system_params['output_path'] + '/spikes_' + layer + pop + '.' + system_params['output_format']
         if system_params['output_format'] == 'h5':
-        # The default for getSpikes() is gather=True.
-        # For parallel IO, you may need to check if neurons are local, like so:
-        # if 0 in population1.id_to_index(population1.local_cells.tolist()):
-        #      spikes=population1[[0]].getSpikes(gather=False)
-        # and check how parallel IO works with neo.
-        # getSpikes() does not seem to work when called on a single rank:
-        # the simulation then gets stuck.
+            # The default for getSpikes() is gather=True.
+            # For parallel IO, you may need to check if neurons are local, like so:
+            # if 0 in population1.id_to_index(population1.local_cells.tolist()):
+            #      spikes=population1[[0]].getSpikes(gather=False)
+            # and check how parallel IO works with neo.
+            # getSpikes() does not seem to work when called on a single rank:
+            # the simulation then gets stuck.
             spikes = spike_array_to_neo(
-              n.pops[layer][pop].getSpikes(), n.pops[layer][pop],
-              simulator_params[simulator]['sim_duration'], n_rec[layer][pop])
+                n.pops[layer][pop].getSpikes(), n.pops[layer][pop],
+                simulator_params[simulator]['sim_duration'], n_rec[layer][pop])
             if sim.rank() == 0:
                 io = neo.get_io(filename)
                 io.write(spikes)
@@ -137,12 +107,12 @@ if simulator == 'nest':
                         for source_pop in pops:
                             source_index = structure[source_layer][source_pop]
                             cov[target_index][source_index] = np.array(list(cov_all[target_index][source_index][::-1]) \
-                            + list(cov_all[source_index][target_index][1:]))
+                                                                       + list(cov_all[source_index][target_index][1:]))
 
             f = open(system_params['output_path'] + '/covariances.dat', 'w')
-            print >>f, 'tau_max: ', tau_max
-            print >>f, 'delta_tau: ', delta_tau
-            print >>f, 'simtime: ', simulator_params[simulator]['sim_duration'], '\n'
+            print >> f, 'tau_max: ', tau_max
+            print >> f, 'delta_tau: ', delta_tau
+            print >> f, 'simtime: ', simulator_params[simulator]['sim_duration'], '\n'
 
             for target_layer in np.sort(layers.keys()):
                 for target_pop in pops:
@@ -150,19 +120,20 @@ if simulator == 'nest':
                     for source_layer in np.sort(layers.keys()):
                         for source_pop in pops:
                             source_index = structure[source_layer][source_pop]
-                            print >>f, target_layer, target_pop, '-', source_layer, source_pop
-                            print >>f, 'n_events_target: ', sim.nest.GetStatus(n.corr_detector, 'n_events')[0][target_index]
-                            print >>f, 'n_events_source: ', sim.nest.GetStatus(n.corr_detector, 'n_events')[0][source_index]
+                            print >> f, target_layer, target_pop, '-', source_layer, source_pop
+                            print >> f, 'n_events_target: ', sim.nest.GetStatus(n.corr_detector, 'n_events')[0][
+                                target_index]
+                            print >> f, 'n_events_source: ', sim.nest.GetStatus(n.corr_detector, 'n_events')[0][
+                                source_index]
                             for i in xrange(len(cov[target_index][source_index])):
-                                print >>f, cov[target_index][source_index][i]
-                            print >>f, ''
+                                print >> f, cov[target_index][source_index][i]
+                            print >> f, ''
             f.close()
-
 
 end_writing = time.time()
 print "Writing data took ", end_writing - start_writing, " s"
 
-if plot_spiking_activity and sim.rank()==0:
+if plot_spiking_activity and sim.rank() == 0:
     plotting.plot_raster_bars( \
         raster_t_min, raster_t_max, n_rec, frac_to_plot, \
         system_params['output_path'])

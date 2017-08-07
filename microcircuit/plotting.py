@@ -6,7 +6,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import os
 import glob
-import neo
+
 
 def plot_raster_bars(t_start, t_stop, n_rec, frac_to_plot, path):
 
