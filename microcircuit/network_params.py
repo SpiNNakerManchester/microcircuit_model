@@ -11,7 +11,7 @@ params_dict = {
     # Whether to make random numbers independent of the number of processes
     'parallel_safe': True,
     # Fraction of neurons to simulate
-    'N_scaling': 1.,
+    'N_scaling': 0.1,
     # Scaling factor for in-degrees. Upon downscaling, synaptic weights are
     # taken proportional to 1/sqrt(in-degree) and external drive is adjusted
     # to preserve mean and variances of activity in the diffusion approximation.
@@ -19,7 +19,7 @@ params_dict = {
     # This scaling was not part of the original study, but this option is included
     # here to enable simulations on small systems that give results similar to
     # full-scale simulations.
-    'K_scaling': 1.,
+    'K_scaling': 0.1,
     # Neuron model. Possible values: 'IF_curr_exp', 'iaf_psc_exp_ps'
     'neuron_model': 'iaf_psc_exp_ps',
     # Connection routine
