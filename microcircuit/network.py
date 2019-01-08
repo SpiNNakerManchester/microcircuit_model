@@ -47,7 +47,7 @@ class Network:
             self.K_ext[layer] = {}
             for pop in pops:
                 self.K_ext[layer][pop] = K_scaling * K_ext[layer][pop]
-
+               
         self.w = create_weight_matrix('IF_curr_exp')
         # Network scaling
         if K_scaling != 1:
@@ -103,20 +103,27 @@ class Network:
 
                 # Provide DC input
                 if neuron_model == 'IF_curr_exp':
-                    this_pop.set(i_offset=self.DC_amp[layer][pop])
+                    this_pop.set('i_offset', self.DC_amp[layer][pop])
                 if neuron_model == 'iaf_psc_exp_ps':
-                    this_pop.set(I_e=1000*self.DC_amp[layer][pop])
+                    this_pop.set('I_e', 1000*self.DC_amp[layer][pop])
 
                 self.base_neuron_ids[this_pop] = global_neuron_id
                 global_neuron_id += len(this_pop) + 2
 
                 if voltage_input_type == 'random':
-                    this_pop.initialize(v=V_dist)
+                    this_pop.initialize('v', V_dist)
                 elif voltage_input_type == 'from_list':
-                    this_pop.initialize(v=get_init_voltages_from_file(this_pop))
+                    this_pop.initialize('v', get_init_voltages_from_file(this_pop))
 
                 # Spike recording
-                this_pop[0:n_rec[layer][pop]].record("spikes")
+                if simulator == 'spiNNaker':
+                    this_pop.record()
+                    if live_output:
+                        from spynnaker_external_devices_plugin.pyNN \
+                            import activate_live_output_for
+                        activate_live_output_for(this_pop)
+                else:
+                    this_pop[0:n_rec[layer][pop]].record()
 
                 # Membrane potential recording
                 if record_v:
@@ -142,7 +149,7 @@ class Network:
 
 
         if simulator == 'nest':
-            if record_corr:
+            if record_corr:        
                 # reset receptor_type
                 sim.nest.SetDefaults('static_synapse', {'receptor_type': 0})
 
@@ -167,12 +174,12 @@ class Network:
                 # External inputs
                 if input_type == 'poisson':
                     rate = bg_rate * self.K_ext[target_layer][target_pop]
-
+                    
                     if simulator == 'nest':
-                    # create only a single Poisson generator for each population,
+                    # create only a single Poisson generator for each population, 
                     # since the native NEST implementation sends independent spike trains to all targets
                         if sim.rank() == 0:
-                            print 'connecting Poisson generator to', target_layer, target_pop, ' via SLI'
+                            print 'connecting Poisson generator to', target_layer, target_pop, ' via SLI'            
                         sim.nest.sli_run('/poisson_generator Create /poisson_generator_e Set poisson_generator_e << /rate ' \
                             + str(rate) + ' >> SetStatus')
                         sim.nest.sli_run("poisson_generator_e " + str(list(this_target_pop.all_cells)).replace(',', '') \
@@ -182,9 +189,8 @@ class Network:
                             print 'connecting Poisson generators to', target_layer, target_pop
                         poisson_generator = sim.Population(this_target_pop.size, \
                             sim.SpikeSourcePoisson, {'rate': rate})
-                        conn = sim.OneToOneConnector()
-                        syn = sim.StaticSynapse(weight=w_ext)
-                        sim.Projection(poisson_generator, this_target_pop, conn, syn, receptor_type='excitatory')
+                        conn = sim.OneToOneConnector(weights = w_ext)                   
+                        sim.Projection(poisson_generator, this_target_pop, conn, target = 'excitatory')
 
                 if thalamic_input:
                     # Thalamic inputs

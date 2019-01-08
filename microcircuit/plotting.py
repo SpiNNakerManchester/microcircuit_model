@@ -35,6 +35,7 @@ def plot_raster_bars(t_start, t_stop, n_rec, frac_to_plot, path):
                             for j in range(len(spiketrains[i]))]
                         n_rec[layer][pop] = len(spiketrains)
                         pop_spike_array = np.vstack((pop_spike_array, spike_array))
+                        data.close()
                 except IOError :
                     print 'reading spike data from ', file_name, ' failed'
                     pass

@@ -19,8 +19,8 @@ def FixedTotalNumberConnect_NEST(sim, pop1, pop2, K, w_mean, w_sd, d_mean, d_sd)
     target_neurons = list(pop2.all_cells)
     n_syn = int(round(K*len(target_neurons)))
     # weights are multiplied by 1000 because NEST uses pA whereas PyNN uses nA
-    # RandomPopulationConnectD is called on each process with the full sets of
-    # source and target neurons, and internally only connects the target
+    # RandomPopulationConnectD is called on each process with the full sets of 
+    # source and target neurons, and internally only connects the target 
     # neurons on the current process.
 
     conn_dict = {'rule' : 'fixed_total_number',
@@ -28,11 +28,11 @@ def FixedTotalNumberConnect_NEST(sim, pop1, pop2, K, w_mean, w_sd, d_mean, d_sd)
 
     syn_dict = {'model' : 'static_synapse',
                 'weight': {'distribution': 'normal_clipped',
-                           'mu': 1000. * w_mean,
+                           'mu': 1000. * w_mean, 
                            'sigma': 1000. * w_sd},
                 'delay' : {'distribution': 'normal_clipped',
                            'low': simulator_params[simulator]['min_delay'],
-                           'mu': d_mean,
+                           'mu': d_mean, 
                            'sigma': d_sd}}
     if w_mean > 0:
        syn_dict['weight']['low'] = 0.0
@@ -78,26 +78,21 @@ def FixedTotalNumberConnect_SpiNNaker(sim, pop1, pop2, K, w_mean, w_sd, d_mean, 
     n_syn = int(round(K*len(pop2)))
 
     if delay_dist_type == 'normal':
-        d_dist = RandomDistribution(
-            'normal_clipped', mu=d_mean, sigma=d_sd, rng=rng,
-                 low=simulator_params[simulator]['min_delay'],
-                 high=simulator_params[simulator]['max_delay'])
+        d_dist = RandomDistribution('normal', [d_mean, d_sd], rng=rng, \
+                 boundaries=(simulator_params[simulator]['min_delay'], \
+                 simulator_params[simulator]['max_delay']), constrain='redraw')
     elif delay_dist_type == 'uniform':
-        d_dist = RandomDistribution(
-            'uniform', low=d_mean - d_sd, high=d_mean + d_sd, rng=rng)
+        d_dist = RandomDistribution('uniform', [d_mean - d_sd, d_mean + d_sd], rng=rng)
 
     if w_mean > 0:
-        w_dist = RandomDistribution(
-            'normal_clipped', mu=w_mean, sigma=w_sd, rng=rng,
-            low=0., high=np.inf)
+        w_dist = RandomDistribution('normal', [w_mean, w_sd], rng=rng, \
+                 boundaries=(0., np.inf), constrain='redraw')
     else:
-        w_dist = RandomDistribution(
-            'normal_clipped', mu=w_mean, sigma=w_sd, rng=rng,
-            low=-np.inf, high=0.)
+        w_dist = RandomDistribution('normal', [w_mean, w_sd], rng=rng, \
+                 boundaries=(-np.inf, 0.), constrain='redraw')
 
-    syn = sim.StaticSynapse(weight=w_dist, delay=d_dist)
-    connector = sim.FixedTotalNumberConnector(n=n_syn, rng=rng)
-    proj = sim.Projection(pop1, pop2, connector, syn, receptor_type=conn_type)
+    connector = sim.MultapseConnector(num_synapses=n_syn, weights=w_dist, delays=d_dist)
+    proj = sim.Projection(pop1, pop2, connector, target=conn_type, rng=rng)
 
     if save_connections:
         proj.saveConnections(system_params['conn_dir'] + '/' + pop1.label \
@@ -133,4 +128,4 @@ def FromListConnect(sim, pop1, pop2, conn_type, base_neuron_ids):
             f.close()
     if len(connections) > 0:
         connector = sim.FromListConnector(conn_list=connections)
-        sim.Projection(pop1, pop2, connector, receptor_type=conn_type)
+        sim.Projection(pop1, pop2, connector, target=conn_type)

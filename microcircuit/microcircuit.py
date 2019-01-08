@@ -13,8 +13,40 @@ import time
 import plotting
 import numpy as np
 
+
+def spike_array_to_neo(spike_array, population, runtime, n_items):
+    """
+    Convert the spike array produced by PyNN 0.7 to a Neo Block
+    (the data format used by PyNN 0.8)
+    """
+    from datetime import datetime
+    
+    items = None
+    if n_items is not None:
+        if n_items < len(population):
+            items = np.random.permutation(np.arange(len(population)))[:n_items]
+        else:
+            items = np.arange(len(population))
+            items = np.append(items, np.random.randint(0, len(population), n_items - len(population)))
+    else:
+        items = xrange(len(population))
+    
+    segment = neo.Segment(name="microcircuit data", rec_datetime=datetime.now())
+    segment.spiketrains = [
+        neo.SpikeTrain(
+            spike_array[:, 1][spike_array[:, 0] == index], t_start=0.0,
+            t_stop=runtime, units='ms', source_index=index)
+        for index in items]
+    data = neo.Block(name="microcircuit data")
+    data.segments.append(segment)
+    return data
+
+
 # prepare simulation
-exec('import pyNN.%s as sim' %simulator)
+try:
+    exec('import pyNN.%s as sim' %simulator)
+except:
+    import spynnaker7.pyNN as sim
 
 sim.setup(**simulator_params[simulator])
 
@@ -29,8 +61,8 @@ if simulator == 'nest':
                               'rng_seeds': range(master_seed + 1, master_seed + n_vp + 1)})
 
 if simulator == 'spiNNaker':
-    sim.set_number_of_neurons_per_core(sim.IF_curr_exp, 255)
-    sim.set_number_of_neurons_per_core(sim.SpikeSourcePoisson, 255)
+    sim.set_number_of_neurons_per_core('IF_curr_exp', 80)
+    sim.set_number_of_neurons_per_core('SpikeSourcePoisson', 80)
 
 import network
 
@@ -65,7 +97,23 @@ start_writing = time.time()
 for layer in layers:
     for pop in pops:
         filename = system_params['output_path'] + '/spikes_' + layer + pop + '.' + system_params['output_format']
-        n.pops[layer][pop].printSpikes(filename, gather=True)
+        if system_params['output_format'] == 'h5':
+        # The default for getSpikes() is gather=True.
+        # For parallel IO, you may need to check if neurons are local, like so:
+        # if 0 in population1.id_to_index(population1.local_cells.tolist()):
+        #      spikes=population1[[0]].getSpikes(gather=False)
+        # and check how parallel IO works with neo.
+        # getSpikes() does not seem to work when called on a single rank:
+        # the simulation then gets stuck.
+            spikes = spike_array_to_neo(
+              n.pops[layer][pop].getSpikes(), n.pops[layer][pop],
+              simulator_params[simulator]['sim_duration'], n_rec[layer][pop])
+            if sim.rank() == 0:
+                io = neo.get_io(filename)
+                io.write(spikes)
+                io.close()
+        else:
+            n.pops[layer][pop].printSpikes(filename, gather=True)
 
 if record_v:
     for layer in layers:

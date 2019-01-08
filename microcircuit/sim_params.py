@@ -12,9 +12,9 @@ simulator_params = {
       'sim_duration'    : 10000.,
       'min_delay'       : 0.1,
       'max_delay'       : 100.
-      # Set max_delay to avoid error due to requested delays being larger
+      # Set max_delay to avoid error due to requested delays being larger 
       # than the default maximum delay of 10 ms.
-      # Do not set to np.inf: the simulation then fails as buffers are
+      # Do not set to np.inf: the simulation then fails as buffers are 
       # probably too large.
     },
     'spiNNaker':
@@ -42,7 +42,7 @@ system_params = {
     # absolute path to which the output files should be written
     'output_path'       : 'results',
     # output format for spike data (h5 or dat)
-    'output_format'     : 'pkl',
+    'output_format'     : 'dat',
     # Directory for connectivity I/O
     'conn_dir'		: 'connectivity',
     # path to the MPI shell script
