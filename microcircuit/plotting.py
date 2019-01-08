@@ -33,6 +33,10 @@ def plot_raster_bars(t_start, t_stop, n_rec, frac_to_plot, path):
                             [float(spiketrains[i][j]), float(i)]
                             for i in range(len(spiketrains))
                             for j in range(len(spiketrains[i]))]
+
+			if spike_array == []:
+			    spike_array = [[0.0, 0.0]]
+
                         n_rec[layer][pop] = len(spiketrains)
                         pop_spike_array = np.vstack((pop_spike_array, spike_array))
                 except IOError :

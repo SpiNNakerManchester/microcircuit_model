@@ -50,7 +50,7 @@ class Network:
 
         self.w = create_weight_matrix('IF_curr_exp')
         # Network scaling
-        if K_scaling != 1:
+	if K_scaling != 1:
             self.w, self.w_ext, self.DC_amp = adjust_w_and_ext_to_K(K_full, K_scaling, self.w, self.DC_amp)
         else:
             self.w_ext = w_mean
@@ -58,6 +58,10 @@ class Network:
         # Initial membrane potential distribution
         V_dist = RandomDistribution('normal', [V0_mean, V0_sd], rng=script_rng)
 
+        #V_dist = RandomDistribution('normal_clipped', (V0_mean, V0_sd,
+        #               neuron_params['v_reset'],
+        #               neuron_params['v_thresh']+0.5),
+        #               rng=script_rng)
         if neuron_model == 'iaf_psc_exp_ps':
             model = native_cell_type('iaf_psc_exp_ps')
         else:
