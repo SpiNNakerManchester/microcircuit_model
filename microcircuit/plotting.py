@@ -1,8 +1,8 @@
 from network_params import *
 from sim_params import *
 import numpy as np
-# import matplotlib
-# matplotlib.use('Agg')
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import os
 import glob
@@ -98,6 +98,5 @@ def plot_raster_bars(t_start, t_stop, n_rec, frac_to_plot, path):
     axarr[1].set_yticklabels(pop_labels[::-1])
     axarr[1].set_xlabel('rate (spikes/s)')
 
-    plt.show(block=True)
     plt.savefig(path + '/spiking_activity.png')
 
