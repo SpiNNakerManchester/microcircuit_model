@@ -60,7 +60,7 @@ class Network:
 
         V_dist = RandomDistribution('normal_clipped', (V0_mean, V0_sd,
                        neuron_params['v_reset'],
-                       neuron_params['v_thresh']+0.5),
+                       neuron_params['v_thresh']),
                        rng=script_rng)
 
         if neuron_model == 'iaf_psc_exp_ps':
