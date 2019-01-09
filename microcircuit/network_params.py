@@ -258,7 +258,7 @@ plot_spiking_activity = True
 raster_t_min = 0 # ms
 raster_t_max = simulator_params[simulator]['sim_duration'] # ms
 # Fraction of recorded neurons to include in raster plot
-frac_to_plot = 0.5
+frac_to_plot = 0.05
 
 # Numbers of neurons from which to record spikes
 n_rec = {}
