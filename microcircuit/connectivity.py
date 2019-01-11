@@ -57,14 +57,14 @@ def FixedTotalNumberConnect_NEST(sim, pop1, pop2, K, w_mean, w_sd, d_mean, d_sd)
         if not os.path.exists(system_params['conn_dir']):
             try:
                 os.makedirs(system_params['conn_dir'])
-            except OSError, e:
+            except OSError as e:
                 if e.errno != 17:
                     raise
                 pass
         f = open(system_params['conn_dir'] +  '/' + pop1.label + "_" + \
                  pop2.label + '.conn' + str(sim.rank()), 'w')
         for c in conns:
-            print >> f, str(c).replace('(','').replace(')','').replace(', ', '\t')
+            f.write(str(c).replace('(','').replace(')','').replace(', ', '\t'))
         f.close()
 
 
@@ -110,7 +110,7 @@ def FromListConnect(sim, pop1, pop2, conn_type, base_neuron_ids):
     connections = list()
     for filename in os.listdir(system_params['conn_dir']):
         if filename.startswith(pop1.label + "_" + pop2.label):
-            print "Reading {}".format(filename)
+            print("Reading {}".format(filename))
             f = open(os.path.join(system_params['conn_dir'], filename))
             in_comment_bracket = False
             for line in f:
@@ -127,7 +127,7 @@ def FromListConnect(sim, pop1, pop2, conn_type, base_neuron_ids):
                         source_id = int(math.floor(float(source_id))) - base_neuron_ids[pop1]
                         target_id = int(math.floor(float(target_id))) - base_neuron_ids[pop2]
                         if source_id < 0 or target_id < 0:
-                            print line, base_neuron_ids[pop1], base_neuron_ids[pop2]
+                            print(line, base_neuron_ids[pop1], base_neuron_ids[pop2])
                         connections.append((source_id, target_id,
                                 float(weight) / 1000.0, float(delay)))
             f.close()

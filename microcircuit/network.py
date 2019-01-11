@@ -73,20 +73,20 @@ class Network:
 
 
         if sim.rank() == 0:
-            print 'neuron_params:', neuron_params
-            print 'K: ', self.K
-            print 'K_ext: ', self.K_ext
-            print 'w: ', self.w
-            print 'w_ext: ', self.w_ext
-            print 'DC_amp: ', self.DC_amp
-            print 'n_rec:'
+            print('neuron_params:', neuron_params)
+            print('K: ', self.K)
+            print('K_ext: ', self.K_ext)
+            print('w: ', self.w)
+            print('w_ext: ', self.w_ext)
+            print('DC_amp: ', self.DC_amp)
+            print('n_rec:')
             for layer in sorted(layers):
                 for pop in sorted(pops):
-                    print layer, pop, n_rec[layer][pop]
+                    print(layer, pop, n_rec[layer][pop])
                     if simulator == 'nest':
                         if not record_fraction and n_record > int(round(N_full[layer][pop] * N_scaling)):
-                            print 'Note that requested number of neurons to record exceeds ', \
-                                   layer, pop, ' population size'
+                            print('Note that requested number of neurons to record exceeds ', \
+                                   layer, pop, ' population size')
 
 
         # Create cortical populations
@@ -172,14 +172,14 @@ class Network:
                     # create only a single Poisson generator for each population,
                     # since the native NEST implementation sends independent spike trains to all targets
                         if sim.rank() == 0:
-                            print 'connecting Poisson generator to', target_layer, target_pop, ' via SLI'
+                            print('connecting Poisson generator to', target_layer, target_pop, ' via SLI')
                         sim.nest.sli_run('/poisson_generator Create /poisson_generator_e Set poisson_generator_e << /rate ' \
                             + str(rate) + ' >> SetStatus')
                         sim.nest.sli_run("poisson_generator_e " + str(list(this_target_pop.all_cells)).replace(',', '') \
                             + " [" + str(1000 * w_ext) + "] [" + str(d_mean['E']) + "] DivergentConnect")
                     else:
                         if sim.rank() == 0:
-                            print 'connecting Poisson generators to', target_layer, target_pop
+                            print('connecting Poisson generators to', target_layer, target_pop)
                         poisson_generator = sim.Population(this_target_pop.size, \
                             sim.SpikeSourcePoisson, {'rate': rate})
                         conn = sim.OneToOneConnector()
@@ -189,7 +189,7 @@ class Network:
                 if thalamic_input:
                     # Thalamic inputs
                     if sim.rank() == 0:
-                        print 'creating thalamic connections to ' + target_layer + target_pop
+                        print('creating thalamic connections to ' + target_layer + target_pop)
                     C_thal = thal_params['C'][target_layer][target_pop]
                     n_target = N_full[target_layer][target_pop]
                     K_thal = round(np.log(1 - C_thal) / np.log((n_target * thal_params['n_thal'] - 1.)/ \
@@ -216,8 +216,8 @@ class Network:
                         conn_type = possible_targets[int((np.sign(weight)+1)/2)]
 
                         if sim.rank() == 0:
-                            print 'creating connections from ' + source_layer + \
-                            source_pop + ' to ' + target_layer + target_pop
+                            print('creating connections from ' + source_layer + \
+                            source_pop + ' to ' + target_layer + target_pop)
 
                         if source_pop == 'E' and source_layer == 'L4' and target_layer == 'L23' and target_pop == 'E':
                             w_sd = weight * w_rel_234
