@@ -14,7 +14,9 @@ import plotting_to_display as plotting
 import numpy as np
 
 # system_params['output_path'] = '/Users/oliver/Documents/microcircuit_data/poisson_master'
-system_params['output_path'] = '/Users/oliver/Documents/microcircuit_data/DC_master'
+# system_params['output_path'] = '/Users/oliver/Documents/microcircuit_data/DC_master'
+# system_params['output_path'] = '/Users/oliver/Documents/microcircuit_data/subthreshold_init_poisson_master'
+system_params['output_path'] = '/Users/oliver/Documents/microcircuit_data/subthreshold_init_dc_master'
 
 # prepare simulation
 #exec('import pyNN.%s as sim' %simulator)
