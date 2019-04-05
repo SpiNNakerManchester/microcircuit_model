@@ -73,7 +73,8 @@ if record_v:
     for layer in layers:
         for pop in pops:
             filename = system_params['output_path'] + '/voltages_' + layer + pop + '.dat'
-            n.pops[layer][pop].print_v(filename, gather=True)
+#             n.pops[layer][pop].print_v(filename, gather=True)
+            n.pops[layer][pop].write_data(io=filename, variables='v')
 
 if simulator == 'nest':
     if record_corr:

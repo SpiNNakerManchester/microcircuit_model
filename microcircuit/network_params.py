@@ -112,11 +112,11 @@ params_dict = {
     # Note that this option only works with the .h5 output format.
     'record_fraction': True,
     # Number of neurons from which to record spikes when record_fraction = False
-    'n_record': 100,
+    'n_record': 1,
     # Fraction of neurons from which to record spikes when record_fraction = True
     'frac_record_spikes': 1.,
     # Whether to record membrane potentials
-    'record_v': False,
+    'record_v': True,
     # random number generator seed for V and connectivity.
     'pyseed': 2563297,
     # Whether to send output live
@@ -259,7 +259,7 @@ plot_spiking_activity = True
 raster_t_min = 0 # ms
 raster_t_max = simulator_params[simulator]['sim_duration'] # ms
 # Fraction of recorded neurons to include in raster plot
-frac_to_plot = 0.05
+frac_to_plot = 1  #0.05
 
 # Numbers of neurons from which to record spikes
 n_rec = {}
