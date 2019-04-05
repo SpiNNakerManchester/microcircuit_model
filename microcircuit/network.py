@@ -126,7 +126,7 @@ class Network:
                 # Membrane potential recording
                 if record_v:
                     if simulator == 'spiNNaker':
-                        this_pop.record_v()
+                        this_pop.record("v")
                     else:
                         if record_fraction:
                             n_rec_v = round(this_pop.size * frac_record_v)
@@ -136,7 +136,7 @@ class Network:
                             this_pop.celltype.recordable = ['V_m', 'spikes']
                             this_pop[0 : n_rec_v]._record('V_m')
                         else:
-                            this_pop[0 : n_rec_v].record_v()
+                            this_pop[0 : n_rec_v].record("v")
 
                 # Correlation recording
                 if simulator == 'nest':
