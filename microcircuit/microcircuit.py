@@ -72,8 +72,9 @@ for layer in layers:
 if record_v:
     for layer in layers:
         for pop in pops:
-            filename = system_params['output_path'] + '/voltages_' + layer + pop + '.dat'
+            filename = system_params['output_path'] + '/voltages_' + layer + pop + '.' + system_params['output_format']
 #             n.pops[layer][pop].print_v(filename, gather=True)
+            print "writing voltage data to: {}\n".format(filename)
             n.pops[layer][pop].write_data(io=filename, variables='v')
 
 if simulator == 'nest':
