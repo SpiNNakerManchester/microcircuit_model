@@ -126,7 +126,7 @@ class Network:
                 # Membrane potential recording
                 if record_v:
                     if simulator == 'spiNNaker':
-                        this_pop.record("v", indexes=range(10))
+                        this_pop.record("all", indexes=range(10))
                     else:
                         if record_fraction:
                             n_rec_v = round(this_pop.size * frac_record_v)
