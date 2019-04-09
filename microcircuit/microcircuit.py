@@ -30,8 +30,9 @@ if simulator == 'nest':
                               'rng_seeds': range(master_seed + 1, master_seed + n_vp + 1)})
 
 if simulator == 'spiNNaker':
-    sim.set_number_of_neurons_per_core(sim.IF_curr_exp, 128)
-    sim.set_number_of_neurons_per_core(sim.SpikeSourcePoisson, 128)
+    npc = 255
+    sim.set_number_of_neurons_per_core(sim.IF_curr_exp, npc)
+    sim.set_number_of_neurons_per_core(sim.SpikeSourcePoisson, npc)
 
 import network
 
