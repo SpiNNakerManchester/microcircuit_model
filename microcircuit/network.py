@@ -56,8 +56,25 @@ class Network:
             self.w_ext = w_mean
 
         # Initial membrane potential distribution
-        V_dist = RandomDistribution('normal', [V0_mean, V0_sd], rng=script_rng)
+#         V_dist = RandomDistribution('normal', [V0_mean, V0_sd], rng=script_rng)
 
+
+        # Improved initialisation from Julich
+        V_dist={}
+
+        V_dist['L23E'] = RandomDistribution('normal', [-64.28, 4.36], rng=script_rng)
+        V_dist['L23I'] = RandomDistribution('normal', [-59.16, 3.57], rng=script_rng)
+
+        V_dist['L4E'] = RandomDistribution('normal', [-59.33, 3.74], rng=script_rng)
+        V_dist['L4I'] = RandomDistribution('normal', [-59.45, 3.94], rng=script_rng)
+
+        V_dist['L5E'] = RandomDistribution('normal', [-59.11, 3.94], rng=script_rng)
+        V_dist['L5I'] = RandomDistribution('normal', [-57.66, 3.55], rng=script_rng)
+
+        V_dist['L6E'] = RandomDistribution('normal', [-62.72, 4.46], rng=script_rng)
+        V_dist['L6I'] = RandomDistribution('normal', [-57.43, 3.48], rng=script_rng)
+
+#         # Uniform sub-threshold initialisation
 #         V_dist = RandomDistribution('normal_clipped', (V0_mean, V0_sd,
 #                        neuron_params['v_reset'],
 #                        neuron_params['v_thresh']),
@@ -117,6 +134,8 @@ class Network:
 
                 if voltage_input_type == 'random':
                     this_pop.initialize(v=V_dist)
+                elif voltage_input_type == 'pop_random':
+                    this_pop.initialize(v=V_dist[this_pop.label])
                 elif voltage_input_type == 'from_list':
                     this_pop.initialize(v=get_init_voltages_from_file(this_pop))
 

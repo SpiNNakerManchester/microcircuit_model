@@ -94,7 +94,7 @@ params_dict = {
     # Initialization of membrane potentials
     # 'from_list' uses a set of initial neuron voltages read from a file,
     # 'random' uses randomized voltages
-    'voltage_input_type': 'random',
+    'voltage_input_type': 'pop_random',
     'input_dir': 'voltages_0.1_0.1_delays',
     # Delay distribution. Possible values: 'normal' and 'uniform'.
     # The original model has normally distributed delays.
@@ -102,8 +102,8 @@ params_dict = {
     # Type of background input. Possible values: 'poisson' or 'DC'
     # If 'DC' is chosen, a constant external current is provided, equal to the mean
     # current due to the Poisson input used in the default version of the model.
-#     'input_type': 'poisson',
-    'input_type': 'DC',
+    'input_type': 'poisson',
+#     'input_type': 'DC',
     # Whether to write out spikes only for a fixed fraction of neurons in each population.
     # If False, spikes are written out for a fixed number of neurons.
     # Note that spike recording parameters are interpreted slightly differently
