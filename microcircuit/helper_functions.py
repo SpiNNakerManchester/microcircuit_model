@@ -24,7 +24,7 @@ def get_init_voltages_from_file(pop):
     voltages = np.zeros(len(pop))
     for filename in os.listdir(input_dir):
         if filename == ('voltages_{}.dat'.format(pop.label)):
-            print 'Reading voltages from {}'.format(filename)
+            print('Reading voltages from {}'.format(filename))
             f = open(os.path.join(input_dir, filename))
             for line in f:
                 if not line.startswith("#"):
