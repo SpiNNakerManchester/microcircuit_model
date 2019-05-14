@@ -56,6 +56,13 @@ def plot_raster_bars(t_start, t_stop, n_rec, frac_to_plot, path):
     axarr.append(fig.add_subplot(121))
     axarr.append(fig.add_subplot(122))
 
+#     count_oliver = {}
+#
+#     for layer in layer_list[-1::-1]:
+#         count_oliver[layer] = {}
+#         for pop in pop_list[-1::-1]:
+#             count_oliver[layer][pop] = []
+
     # Plot raster plot
     id_count = 0
     print "Mean rates"
@@ -66,7 +73,7 @@ def plot_raster_bars(t_start, t_stop, n_rec, frac_to_plot, path):
             rate = 0.0
             t_spikes = spikes[layer][pop][:,0]
             ids = spikes[layer][pop][:,1] + (id_count + 1)
-            filtered_times_indices = [np.where((t_spikes > t_start) & (t_spikes < t_stop))][0]
+            filtered_times_indices = [np.where((t_spikes >= t_start) & (t_spikes <= t_stop))][0]
             t_spikes = t_spikes[filtered_times_indices]
             ids = ids[filtered_times_indices]
 
@@ -77,6 +84,11 @@ def plot_raster_bars(t_start, t_stop, n_rec, frac_to_plot, path):
             # Reduce data for raster plot
             num_neurons = frac_to_plot * n_rec[layer][pop]
             t_spikes = t_spikes[np.where(ids < num_neurons + id_count + 1)[0]]
+
+#             for oi in t_spikes:
+#                 if oi == 0.0:
+#                     counter_oliver[layer][pop] += 1
+
             ids = ids[np.where(ids < num_neurons + id_count + 1)[0]]
             axarr[0].plot(t_spikes, ids, '.', color=color[pop])
             id_count += num_neurons
@@ -93,6 +105,7 @@ def plot_raster_bars(t_start, t_stop, n_rec, frac_to_plot, path):
     axarr[0].set_ylim((0.0, id_count))
     axarr[0].set_yticklabels([])
     axarr[0].set_xlabel('time (ms)')
+
     axarr[1].set_ylim((0.0, 8.5))
     axarr[1].set_yticks(np.arange(0.5, 8.5, 1.0))
     axarr[1].set_yticklabels(pop_labels[::-1])
@@ -100,4 +113,5 @@ def plot_raster_bars(t_start, t_stop, n_rec, frac_to_plot, path):
 
     plt.show(block=True)
     plt.savefig(path + '/spiking_activity.png')
+    print "zero spike counter: {}".format(counter_oliver)
 
