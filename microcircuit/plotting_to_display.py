@@ -62,6 +62,44 @@ def plot_raster_bars(t_start, t_stop, n_rec, frac_to_plot, path):
 #         count_oliver[layer] = {}
 #         for pop in pop_list[-1::-1]:
 #             count_oliver[layer][pop] = []
+    print "filtering total incoming E and I spikes"
+
+    # sum excitatory spikes
+    exc_counter = []
+    inh_counter = []
+    total_counter = []
+    for i in range(10000):
+        time = float(i)/10
+        exc_temp_count = 0
+        inh_temp_count = 0
+
+#         for l in layer_list:
+#             for j in spikes[l]['E']:
+#                 if np.round(j[0], 1) == time:
+#                     exc_temp_count += 1
+#             for j in spikes[l]['I']:
+#                 if np.round(j[0], 1) == time:
+#                     inh_temp_count += 1
+        for l in layer_list:
+#             if spikes[l]['E'].__contains__(time):
+                exc_temp_count += np.count_nonzero(
+                    np.round(spikes[l]['E'][:,0], 1) == time)
+#             if spikes[l]['I'].__contains__(time):
+                inh_temp_count += np.count_nonzero(
+                    np.round(spikes[l]['I'][:,0], 1) == time)
+
+        exc_counter.append(exc_temp_count)
+        inh_counter.append(100 + inh_temp_count)
+        total_counter.append(200 + exc_temp_count + inh_temp_count)
+        print i
+
+# for i in range(10000):
+# ...     temp_count = 0
+# ...     time = float(i)/10
+# ...     for j in spikes['L23']['E']:
+# ...         if j[0] == time:
+# ...             temp_count += 1
+# ...     counter.append(temp_count)
 
     # Plot raster plot
     id_count = 0
@@ -113,5 +151,13 @@ def plot_raster_bars(t_start, t_stop, n_rec, frac_to_plot, path):
 
     plt.show(block=True)
     plt.savefig(path + '/spiking_activity.png')
-    print "zero spike counter: {}".format(counter_oliver)
+#     print "zero spike counter: {}".format(counter_oliver)
+
+
+    plt.Figure()
+    plt.plot(exc_counter, label='Excitatory Spikes')
+    plt.plot(inh_counter, label='Inhibitory Spikes')
+    plt.plot(total_counter, label='Total Spikes')
+    plt.legend()
+    plt.show()
 

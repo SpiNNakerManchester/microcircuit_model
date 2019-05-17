@@ -17,11 +17,11 @@ import numpy as np
 # system_params['output_path'] = '/Users/oliver/Documents/microcircuit_data/DC_master'
 # system_params['output_path'] = '/Users/oliver/Documents/microcircuit_data/subthreshold_init_poisson_master'
 # system_params['output_path'] = '/Users/oliver/Documents/microcircuit_data/subthreshold_init_dc_master'
-system_params['output_path'] = '/Users/oliver/Desktop/poisson_orig_init'
+# system_params['output_path'] = '/Users/oliver/Desktop/poisson_orig_init'
 # system_params['output_path'] = '/Users/oliver/Desktop/dc_orig_init'
 
 # system_params['output_path'] = '/Users/oliver/Desktop/poisson_julich_init'
-
+system_params['output_path'] = '/Users/oliver/Documents/microcircuit_results/dc_julich_spike_counts'
 # prepare simulation
 #exec('import pyNN.%s as sim' %simulator)
 import spynnaker8 as sim

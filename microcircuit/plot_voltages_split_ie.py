@@ -6,23 +6,9 @@ import pickle
 
 runtime = 1000
 
-# output_dir = '/Users/oliver/Documents/microcircuit_results/dc_orig_init'
-# output_dir = '/Users/oliver/Documents/microcircuit_results/dc_subthresh_init'
-# output_dir = '/Users/oliver/Documents/microcircuit_results/poisson_orig_init'
-# output_dir = '/Users/oliver/Documents/microcircuit_results/poisson_subthresh_init'
 
-# output_dir = '/Users/oliver/Documents/microcircuit_results/dc_orig_init_255'
-# output_dir = '/Users/oliver/Documents/microcircuit_results/dc_subthresh_init_255'
-# output_dir = '/Users/oliver/Documents/microcircuit_results/poisson_orig_init_255'
-# output_dir = '/Users/oliver/Documents/microcircuit_results/poisson_subthresh_init_255'
-
-# output_dir = '/Users/oliver/Documents/microcircuit_results/poisson_julich_init'
-
-
-# output_dir = '/Users/oliver/Documents/microcircuit_results/poisson_julich_spike_counts'
-# output_dir = '/Users/oliver/Documents/microcircuit_results/dc_julich_spike_counts'
-# output_dir = '/Users/oliver/Documents/microcircuit_results/dc_julich_spike_counts_255'
-# output_dir = '/Users/oliver/Documents/microcircuit_results/poisson_julich_spike_counts_255'
+# output_dir = '/Users/oliver/Documents/microcircuit_results/split_ie/dc_julich_spike_counts_128'
+output_dir = '/Users/oliver/Documents/microcircuit_results/split_ie/dc_julich_spike_counts_255'
 
 layer_keys = [
     ['L23E', 'L23I'],
@@ -73,9 +59,9 @@ for k in layer_keys:
 
     index += 1
 
-# Plot total processing time
+# Plot breakdown of total processing time
 plt.figure()
-plt.suptitle("Total processing time per simulation timestep: {}".format(output_dir))
+plt.suptitle("Breakdown of spike processing from incoming excitatory spikes: {}".format(output_dir))
 index = 1
 for k in layer_keys:
 
@@ -105,31 +91,44 @@ for k in layer_keys:
     plt.legend()
     plt.show(block=False)
 
+    index += 1
 
 
-#     print "Plotting {} total processing time".format(k)
-#
-#     # Create excitatory plot
-#     plt.subplot(4, 2, index)
-#     plt.title(k[0])
-#     plt.plot(time[1:],
-#         (20000000 - ((exc_data.segments[0].filter(name='v')[0].magnitude[1:len(time)]) * 2**15)) * 5E-6
-#         )
-#     plt.legend()
-#     plt.show(block=False)
-#
-#     index += 1
-#
-#     # Create inhibitoryp plot
-#     plt.subplot(4, 2, index)
-#     plt.title(k[1])
-#     plt.plot(time[1:],
-#         (20000000 - ((inh_data.segments[0].filter(name='v')[0].magnitude[1:len(time)])* 2**15)) * 5E-6
-#         )
-#     plt.legend()
-#     plt.show(block=False)
+
+plt.figure()
+plt.suptitle("Breakdown of spike processing from incoming inhibitory spikes: {}".format(output_dir))
+index = 1
+for k in layer_keys:
+
+    sh_exc = (exc_data.segments[0].filter(name='gsyn_inh')[0].magnitude[1:len(time)] * 2**15).astype(int)
+    sh_inh = (inh_data.segments[0].filter(name='gsyn_inh')[0].magnitude[1:len(time)] * 2**15).astype(int)
+
+    # Create excitatory plot
+    plt.subplot(4, 2, index)
+    plt.title(k[0])
+    plt.plot(time[1:], ((sh_exc[:,0] >> 24) & 0xFF), label='d')
+    plt.plot(time[1:], ((sh_exc[:,0] >> 16) & 0xFF), label='c')
+    plt.plot(time[1:], ((sh_exc[:,0] >> 8) & 0xFF), label='b')
+    plt.plot(time[1:], ((sh_exc[:,0] >> 0) & 0xFF), label='a')
+    plt.legend()
+    plt.show(block=False)
 
     index += 1
 
+    # Create inhibitoryp plot
+    plt.subplot(4, 2, index)
+    plt.title(k[1])
+    plt.plot(time[1:], ((sh_inh[:,0] >> 24) & 0xFF), label='d (6+)')
+    plt.plot(time[1:], ((sh_inh[:,0] >> 16) & 0xFF), label='c (2-5)')
+    plt.plot(time[1:], ((sh_inh[:,0] >> 8) & 0xFF), label='b (1)')
+    plt.plot(time[1:], ((sh_inh[:,0] >> 0) & 0xFF), label='a (0)')
+
+    plt.legend()
+    plt.show(block=False)
+
+    index += 1
+
+
+# All plots configured, now show...
 
 plt.show()
