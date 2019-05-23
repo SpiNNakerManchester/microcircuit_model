@@ -2,18 +2,15 @@
 ###     	Main script			###
 ###################################################
 
-import neo
 import sys
+
 from sim_params import *
 from spinn_front_end_common.utilities import globals_variables
 
 sys.path.append(system_params['backend_path'])
 sys.path.append(system_params['pyNN_path'])
 from network_params import *
-import pyNN
 import time
-import plotting
-import numpy as np
 
 # prepare simulation
 #exec('import pyNN.%s as sim' %simulator)
@@ -30,11 +27,19 @@ class MicroCircuit(object):
             self, mapping_algorithms, loading_algorithms, time_step,
             time_scale_factor):
 
-        simulator_params["extra_mapping_algorithms"] = mapping_algorithms
-        simulator_params["extra_load_algorithms"] = loading_algorithms
-        simulator_params["timestep"] = time_step
-        simulator_params["time_scale_factor"] = time_scale_factor
-        sim.setup(**simulator_params[simulator])
+        simulator_params['spiNNaker']["extra_mapping_algorithms"] = \
+            mapping_algorithms
+        simulator_params['spiNNaker']["extra_load_algorithms"] = \
+            loading_algorithms
+        simulator_params['spiNNaker']["timestep"] = time_step
+        simulator_params['spiNNaker']["time_scale_factor"] = time_scale_factor
+        simulator_params['spiNNaker']["min_delay"] = time_step
+
+        try:
+            sim.setup(**simulator_params[simulator])
+        except Exception as e:
+            print e
+            return globals_variables.get_simulator(), sim, False
 
         if simulator == 'spiNNaker':
             sim.set_number_of_neurons_per_core(sim.IF_curr_exp, 255)
@@ -56,7 +61,8 @@ class MicroCircuit(object):
 
         try:
             sim.run(simulator_params[simulator]['sim_duration'])
-        except Exception:
+        except Exception as e:
+            print e
             return globals_variables.get_simulator(), sim, False
         return globals_variables.get_simulator(), sim, True
 
