@@ -70,5 +70,5 @@ if __name__ == "__main__":
     run = MicroCircuit()
     run(mapping_algorithms=None,
         loading_algorithms=None,
-        time_step=1000,
+        time_step=0.1,
         time_scale_factor=100)
