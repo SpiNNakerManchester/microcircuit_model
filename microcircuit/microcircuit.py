@@ -7,10 +7,9 @@ import sys
 from sim_params import *
 from spinn_front_end_common.utilities import globals_variables
 
-sys.path.append(system_params['backend_path'])
-sys.path.append(system_params['pyNN_path'])
 from network_params import *
 import time
+import network
 
 # prepare simulation
 #exec('import pyNN.%s as sim' %simulator)
@@ -27,6 +26,7 @@ class MicroCircuit(object):
             self, mapping_algorithms, loading_algorithms, time_step,
             time_scale_factor):
 
+        # interface allowing us to test mapping algorithms inside
         simulator_params['spiNNaker']["extra_mapping_algorithms"] = \
             mapping_algorithms
         simulator_params['spiNNaker']["extra_load_algorithms"] = \
@@ -45,15 +45,13 @@ class MicroCircuit(object):
             sim.set_number_of_neurons_per_core(sim.IF_curr_exp, 255)
             sim.set_number_of_neurons_per_core(sim.SpikeSourcePoisson, 255)
 
-        import network
-
         # create network
         start_netw = time.time()
         n = network.Network(sim)
         n.setup(sim)
-        end_netw = time.time()
+        end_net_w = time.time()
         if sim.rank() == 0:
-            print( 'Creating the network took ', end_netw - start_netw, ' s')
+            print('Creating the network took ', end_net_w - start_netw, ' s')
 
         # simulate
         if sim.rank() == 0:
@@ -68,6 +66,10 @@ class MicroCircuit(object):
 
 if __name__ == "__main__":
     run = MicroCircuit()
+
+    sys.path.append(system_params['backend_path'])
+    sys.path.append(system_params['pyNN_path'])
+
     run(mapping_algorithms=None,
         loading_algorithms=None,
         time_step=0.1,
