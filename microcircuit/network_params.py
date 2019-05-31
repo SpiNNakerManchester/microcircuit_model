@@ -94,7 +94,7 @@ params_dict = {
     # Initialization of membrane potentials
     # 'from_list' uses a set of initial neuron voltages read from a file,
     # 'random' uses randomized voltages
-    'voltage_input_type': 'random',
+    'voltage_input_type': 'pop_random',
     'input_dir': 'voltages_0.1_0.1_delays',
     # Delay distribution. Possible values: 'normal' and 'uniform'.
     # The original model has normally distributed delays.
