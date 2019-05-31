@@ -14,7 +14,8 @@ import plotting
 import numpy as np
 
 # prepare simulation
-exec('import pyNN.%s as sim' %simulator)
+#exec('import pyNN.%s as sim' %simulator)
+import spynnaker8 as sim
 
 sim.setup(**simulator_params[simulator])
 
