@@ -6,7 +6,7 @@ import pickle
 
 runtime = 1000
 
-output_dir = '/Users/oliver/Documents/microcircuit_results/dc_orig_init'
+output_dir = '/localhome/g90604lp/results'
 # output_dir = '/Users/oliver/Documents/microcircuit_results/dc_subthresh_init'
 # output_dir = '/Users/oliver/Documents/microcircuit_results/poisson_orig_init'
 # output_dir = '/Users/oliver/Documents/microcircuit_results/poisson_subthresh_init'
@@ -57,7 +57,7 @@ for k in layer_keys:
     plt.subplot(4, 2, index)
     plt.title(k[0])
     plt.plot(time,
-        exc_data.segments[0].filter(name='gsyn_exc')[0].magnitude[0:len(time)])
+        exc_data.segments[0].filter(name='v')[0].magnitude[0:len(time)])
     plt.legend()
     plt.show(block=False)
 
@@ -73,37 +73,37 @@ for k in layer_keys:
 
     index += 1
 
-# Plot total processing time
-plt.figure()
-plt.suptitle("Total processing time per simulation timestep: {}".format(output_dir))
-index = 1
-for k in layer_keys:
-
-    sh_exc = (exc_data.segments[0].filter(name='v')[0].magnitude[1:len(time)] * 2**15).astype(int)
-    sh_inh = (inh_data.segments[0].filter(name='v')[0].magnitude[1:len(time)] * 2**15).astype(int)
-
-    # Create excitatory plot
-    plt.subplot(4, 2, index)
-    plt.title(k[0])
-    plt.plot(time[1:], ((sh_exc[:,0] >> 24) & 0xFF), label='d')
-    plt.plot(time[1:], ((sh_exc[:,0] >> 16) & 0xFF), label='c')
-    plt.plot(time[1:], ((sh_exc[:,0] >> 8) & 0xFF), label='b')
-    plt.plot(time[1:], ((sh_exc[:,0] >> 0) & 0xFF), label='a')
-    plt.legend()
-    plt.show(block=False)
-
-    index += 1
-
-    # Create inhibitoryp plot
-    plt.subplot(4, 2, index)
-    plt.title(k[1])
-    plt.plot(time[1:], ((sh_inh[:,0] >> 24) & 0xFF), label='d (6+)')
-    plt.plot(time[1:], ((sh_inh[:,0] >> 16) & 0xFF), label='c (2-5)')
-    plt.plot(time[1:], ((sh_inh[:,0] >> 8) & 0xFF), label='b (1)')
-    plt.plot(time[1:], ((sh_inh[:,0] >> 0) & 0xFF), label='a (0)')
-
-    plt.legend()
-    plt.show(block=False)
+# # Plot total processing time
+# plt.figure()
+# plt.suptitle("Total processing time per simulation timestep: {}".format(output_dir))
+# index = 1
+# for k in layer_keys:
+#
+#     sh_exc = (exc_data.segments[0].filter(name='v')[0].magnitude[1:len(time)] * 2**15).astype(int)
+#     sh_inh = (inh_data.segments[0].filter(name='v')[0].magnitude[1:len(time)] * 2**15).astype(int)
+#
+#     # Create excitatory plot
+#     plt.subplot(4, 2, index)
+#     plt.title(k[0])
+#     plt.plot(time[1:], ((sh_exc[:,0] >> 24) & 0xFF), label='d')
+#     plt.plot(time[1:], ((sh_exc[:,0] >> 16) & 0xFF), label='c')
+#     plt.plot(time[1:], ((sh_exc[:,0] >> 8) & 0xFF), label='b')
+#     plt.plot(time[1:], ((sh_exc[:,0] >> 0) & 0xFF), label='a')
+#     plt.legend()
+#     plt.show(block=False)
+#
+#     index += 1
+#
+#     # Create inhibitoryp plot
+#     plt.subplot(4, 2, index)
+#     plt.title(k[1])
+#     plt.plot(time[1:], ((sh_inh[:,0] >> 24) & 0xFF), label='d (6+)')
+#     plt.plot(time[1:], ((sh_inh[:,0] >> 16) & 0xFF), label='c (2-5)')
+#     plt.plot(time[1:], ((sh_inh[:,0] >> 8) & 0xFF), label='b (1)')
+#     plt.plot(time[1:], ((sh_inh[:,0] >> 0) & 0xFF), label='a (0)')
+#
+#     plt.legend()
+#     plt.show(block=False)
 
 
 
@@ -129,7 +129,7 @@ for k in layer_keys:
 #     plt.legend()
 #     plt.show(block=False)
 
-    index += 1
+    # index += 1
 
 
 plt.show()

@@ -74,7 +74,7 @@ if record_v:
             filename = system_params['output_path'] + '/voltages_' + layer + pop + '.' + system_params['output_format']
 #             n.pops[layer][pop].print_v(filename, gather=True)
             print "writing voltage data to: {}\n".format(filename)
-            n.pops[layer][pop].write_data(io=filename, variables='all')
+            n.pops[layer][pop].write_data(io=filename, variables=["v", "gsyn_exc", "gsyn_inh"])
 
 if simulator == 'nest':
     if record_corr:
