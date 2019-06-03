@@ -116,7 +116,7 @@ params_dict = {
     # Fraction of neurons from which to record spikes when record_fraction = True
     'frac_record_spikes': 1.,
     # Whether to record membrane potentials
-    'record_v': False,
+    'record_v': True,
     # random number generator seed for V and connectivity.
     'pyseed': 2563297,
     # Whether to send output live
