@@ -6,7 +6,7 @@ import pickle
 
 runtime = 1000
 
-# output_dir = '/Users/oliver/Documents/microcircuit_results/dc_orig_init'
+output_dir = '/Users/oliver/Documents/microcircuit_results/dc_orig_init'
 # output_dir = '/Users/oliver/Documents/microcircuit_results/dc_subthresh_init'
 # output_dir = '/Users/oliver/Documents/microcircuit_results/poisson_orig_init'
 # output_dir = '/Users/oliver/Documents/microcircuit_results/poisson_subthresh_init'
