@@ -52,7 +52,13 @@ if simulator == 'nest':
 if sim.rank() == 0:
     print("Simulating...")
 start_sim = time.time()
-t = sim.run(simulator_params[simulator]['sim_duration'])
+
+
+######### Update to run in short chunks ########
+for i in range(10):
+    t = sim.run(simulator_params[simulator]['sim_duration']/10)
+
+
 end_sim = time.time()
 if sim.rank() == 0:
     print('Simulation took ', end_sim - start_sim, ' s')
