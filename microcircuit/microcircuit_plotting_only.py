@@ -23,7 +23,7 @@ import numpy as np
 
 # system_params['output_path'] = '/Users/oliver/Desktop/poisson_julich_init'
 # system_params['output_path'] = '/Users/oliver/Documents/microcircuit_results/dc_julich_spike_counts'
-system_params['output_path'] = '/Users/oliver/Desktop/luca_results/results'
+system_params['output_path'] = '/Users/oliver/Desktop/column_results'
 
 # prepare simulation
 #exec('import pyNN.%s as sim' %simulator)

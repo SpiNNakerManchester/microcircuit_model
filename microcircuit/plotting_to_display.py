@@ -65,9 +65,9 @@ def plot_raster_bars(t_start, t_stop, n_rec, frac_to_plot, path):
     print "filtering total incoming E and I spikes"
 
     # sum excitatory spikes
-    exc_counter = []
-    inh_counter = []
-    total_counter = []
+    exc_counter = np.zeros(10000)
+    inh_counter = np.zeros(10000)
+    total_counter = np.zeros(10000)
     for i in range(10000):
         time = float(i)/10
         exc_temp_count = 0
@@ -88,9 +88,9 @@ def plot_raster_bars(t_start, t_stop, n_rec, frac_to_plot, path):
                 inh_temp_count += np.count_nonzero(
                     np.round(spikes[l]['I'][:,0], 1) == time)
 
-        exc_counter.append(exc_temp_count)
-        inh_counter.append(100 + inh_temp_count)
-        total_counter.append(200 + exc_temp_count + inh_temp_count)
+        exc_counter[i] = exc_temp_count
+        inh_counter[i] = inh_temp_count
+        total_counter[i] = exc_temp_count + inh_temp_count
         print i
 
 # for i in range(10000):
@@ -155,9 +155,9 @@ def plot_raster_bars(t_start, t_stop, n_rec, frac_to_plot, path):
 
 
     plt.Figure()
-    plt.plot(exc_counter, label='Excitatory Spikes')
-    plt.plot(inh_counter, label='Inhibitory Spikes')
-    plt.plot(total_counter, label='Total Spikes')
+    plt.plot(exc_counter, label='Excitatory Spikes = {}'.format(exc_counter.sum()))
+    plt.plot(inh_counter + 100, label='Inhibitory Spikes = {}'.format(inh_counter.sum()))
+    plt.plot(total_counter + 200, label='Total Spikes = {}'.format(total_counter.sum()))
     plt.legend()
     plt.show()
 
