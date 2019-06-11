@@ -55,8 +55,8 @@ start_sim = time.time()
 
 
 ######### Update to run in short chunks ########
-for i in range(10):
-    t = sim.run(simulator_params[simulator]['sim_duration']/10)
+for i in range(simulator_params[simulator]['n_sub_runs']):
+    t = sim.run(simulator_params[simulator]['sim_duration']/simulator_params[simulator]['n_sub_runs'])
 
 
 end_sim = time.time()
