@@ -155,9 +155,9 @@ def plot_raster_bars(t_start, t_stop, n_rec, frac_to_plot, path):
 
 
     plt.Figure()
-    plt.plot(exc_counter, label='Excitatory Spikes = {}'.format(exc_counter.sum()))
-    plt.plot(inh_counter + 100, label='Inhibitory Spikes = {}'.format(inh_counter.sum()))
-    plt.plot(total_counter + 200, label='Total Spikes = {}'.format(total_counter.sum()))
+    plt.plot(exc_counter, label='Excitatory Spikes = {}, std = {}'.format(exc_counter.sum(), exc_counter.std()))
+    plt.plot(inh_counter + 100, label='Inhibitory Spikes = {}, std = {}'.format(inh_counter.sum(), inh_counter.std()))
+    plt.plot(total_counter + 200, label='Total Spikes = {}, std = {}'.format(total_counter.sum(), total_counter.std()))
     plt.legend()
     plt.show()
 

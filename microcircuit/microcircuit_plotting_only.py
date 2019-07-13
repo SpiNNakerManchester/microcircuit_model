@@ -23,7 +23,17 @@ import numpy as np
 
 # system_params['output_path'] = '/Users/oliver/Desktop/poisson_julich_init'
 # system_params['output_path'] = '/Users/oliver/Documents/microcircuit_results/dc_julich_spike_counts'
-system_params['output_path'] = '/Users/oliver/Desktop/column_results'
+# system_params['output_path'] = '/Users/oliver/Desktop/column_results'
+# system_params['output_path'] = '/Users/oliver/Documents/Spin24B_testing/reports/Spin24B_2x_1s_split/results'
+# system_params['output_path'] = '/Users/oliver/Documents/1x_sync_exploration/1x_100ms/results'
+# system_params['output_path'] = '/Users/oliver/Documents/1x_sync_exploration/1x_1000ms/results'
+
+
+# system_params['output_path'] = '/Users/oliver/Documents/10x_shift_exploration/10x_act_check/results'
+# system_params['output_path'] = '/Users/oliver/Documents/10x_shift_exploration/10x_act_check_shift2/results'
+# system_params['output_path'] = '/Users/oliver/Documents/10x_shift_exploration/10x_act_check_shift4/results'
+# system_params['output_path'] = '/Users/oliver/Documents/10x_shift_exploration/1x_act_check_shift2/results'
+system_params['output_path'] = '/Users/oliver/Documents/10x_shift_exploration/2x_act_check_shift2/results'
 
 # prepare simulation
 #exec('import pyNN.%s as sim' %simulator)
