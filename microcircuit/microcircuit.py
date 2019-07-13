@@ -13,6 +13,8 @@ import time
 import plotting
 import numpy as np
 
+import pickle
+
 # prepare simulation
 #exec('import pyNN.%s as sim' %simulator)
 import spynnaker8 as sim
@@ -81,6 +83,11 @@ if record_v:
 #             n.pops[layer][pop].print_v(filename, gather=True)
             print "writing voltage data to: {}\n".format(filename)
             n.pops[layer][pop].write_data(io=filename, variables=["v", "gsyn_exc", "gsyn_inh"])
+
+            syn_filename = system_params['output_path'] +'/syn_core_' + layer + pop + '.' + system_params['output_format']
+            syn_data = n.pops[layer][pop].get_data('synapse')
+            pickle.dump(syn_data, open(syn_filename, "wb"))
+
 
 if simulator == 'nest':
     if record_corr:
