@@ -71,10 +71,11 @@ if simulator == 'nest':
     print('memory usage after simulation:', sim.nest.sli_pop(), 'kB')
 
 start_writing = time.time()
-for layer in layers:
-    for pop in pops:
-        filename = system_params['output_path'] + '/spikes_' + layer + pop + '.' + system_params['output_format']
-        n.pops[layer][pop].write_data(io=filename, variables='spikes')
+if record_SpiNN_spikes:
+    for layer in layers:
+        for pop in pops:
+            filename = system_params['output_path'] + '/spikes_' + layer + pop + '.' + system_params['output_format']
+            n.pops[layer][pop].write_data(io=filename, variables='spikes')
 
 if record_v:
     for layer in layers:
@@ -84,8 +85,12 @@ if record_v:
             print "writing voltage data to: {}\n".format(filename)
             n.pops[layer][pop].write_data(io=filename, variables=["v", "gsyn_exc", "gsyn_inh"])
 
+if record_syn:
+    for layer in layers:
+        for pop in pops:
             syn_filename = system_params['output_path'] +'/syn_core_' + layer + pop + '.' + system_params['output_format']
             syn_data = n.pops[layer][pop].get_data('synapse')
+            print "writing syn_core data to: {}\n".format(syn_filename)
             pickle.dump(syn_data, open(syn_filename, "wb"))
 
 

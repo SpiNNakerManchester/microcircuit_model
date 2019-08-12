@@ -133,8 +133,9 @@ class Network:
                 elif voltage_input_type == 'from_list':
                     this_pop.initialize(v=get_init_voltages_from_file(this_pop))
 
-                # Spike recording
-                this_pop[0:n_rec[layer][pop]].record("spikes")
+                # Spike recording	
+                if record_SpiNN_spikes:
+                    this_pop[0:n_rec[layer][pop]].record("spikes")
 
                 # Membrane potential recording
                 if record_v:
@@ -151,6 +152,12 @@ class Network:
                             this_pop[0 : n_rec_v]._record('V_m')
                         else:
                             this_pop[0 : n_rec_v].record("v")
+
+
+		# Membrane potential recording
+                if record_syn:
+                    if simulator == 'spiNNaker':
+                        this_pop.record(['synapse'])
 
                 # Correlation recording
                 if simulator == 'nest':
