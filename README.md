@@ -1,4 +1,4 @@
-# Cortical microcircuit simulation: PyNN version
+#  Cortical microcircuit simulation: PyNN version
 _Stored for easy access for people within the organisation_
 
 **Contributors:**  

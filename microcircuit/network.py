@@ -205,12 +205,15 @@ class Network:
                             + " [" + str(1000 * w_ext) + "] [" + str(d_mean['E']) + "] DivergentConnect")
                     else:
                         if sim.rank() == 0:
-                            print 'connecting Poisson generators to', target_layer, target_pop
+                            print 'connecting Poisson generators to {}, {} with rate {}'.format(target_layer, target_pop, rate)
                         poisson_generator = sim.Population(this_target_pop.size, \
-                            sim.SpikeSourcePoisson, {'rate': rate})
-                        conn = sim.OneToOneConnector()
-                        syn = sim.StaticSynapse(weight=w_ext)
-                        sim.Projection(poisson_generator, this_target_pop, conn, syn, receptor_type='excitatory')
+                            sim.PoissonSource, 
+			    {'rate': rate})
+                        # conn = sim.OneToOneConnector()
+                        # syn = sim.StaticSynapse(weight=w_ext)
+                        # sim.Projection(poisson_generator, this_target_pop, conn, syn, receptor_type='excitatory')
+			this_target_pop.add_poisson_source(poisson_generator)			
+
 
                 if thalamic_input:
                     # Thalamic inputs

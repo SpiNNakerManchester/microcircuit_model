@@ -118,7 +118,7 @@ params_dict = {
     # Whether to record membrane potentials
     'record_v': False,
     'record_syn': False,
-    'record_SpiNN_spikes': False,
+    'record_SpiNN_spikes': True,
     # random number generator seed for V and connectivity.
     'pyseed': 2563297,
     # Whether to send output live
