@@ -2,8 +2,8 @@ import sys
 import traceback
 from enum import Enum
 
-#from microcircuit.microcircuit_run import run_colun, column_end
-from microcircuit.synfire_if_curr_exp import run_chain, chain_end
+from microcircuit.microcircuit_run import run_colun, column_end
+#from microcircuit.synfire_if_curr_exp import run_chain, chain_end
 from spinn_front_end_common.utilities import globals_variables
 
 
@@ -23,7 +23,7 @@ class AggregatorRun(object):
         "[Machine] \n\ntimeScaleFactor = 100\n\n")
 
     # the cfg params for only using none expander
-    NO_EXPANDER = "[Synapses]\n\nuse_expander = True\n\n"
+    NO_EXPANDER = "[Synapses]\n\nuse_expander = False\n\n"
 
     # the cfg params for using the expander
     EXPANDER = "[Synapses]\n\nuse_expander = True\n\n"
@@ -199,12 +199,12 @@ class AggregatorRun(object):
         while not passed and not failed:
             try:
                 print("running {}:{}".format(state, iteration))
-                #(total_sdram, matrix, expander, data_extraction_time,
-                # data_loading_time_dsg, data_loading_time_dse,
-                # data_loading_time_expand) = run_colun()
                 (total_sdram, matrix, expander, data_extraction_time,
                  data_loading_time_dsg, data_loading_time_dse,
-                 data_loading_time_expand) = run_chain()
+                 data_loading_time_expand) = run_colun()
+                #(total_sdram, matrix, expander, data_extraction_time,
+                # data_loading_time_dsg, data_loading_time_dse,
+                # data_loading_time_expand) = run_chain()
                 passed = True
             except Exception as e:
                 attempt += 1
@@ -223,8 +223,8 @@ class AggregatorRun(object):
                 fail.flush()
                 fail.close()
                 try:
-                    chain_end()
-                    #column_end()
+                    #chain_end()
+                    column_end()
                 except Exception as d:
                     globals_variables.unset_simulator()
 
@@ -273,8 +273,6 @@ class AggregatorRun(object):
 
         y = open(self.EXPANDER_TOTALS_PATH, "w")
         y.close()
-
-
 
         self._set_config_python_sdp()
         for run_id in range(0, self.N_RUNS):
