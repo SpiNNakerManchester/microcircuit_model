@@ -78,7 +78,9 @@ class AggregatorRun(object):
     CFG_FILE_NAME = "spynnaker.cfg"
     OUT_PUT_FILE = "results.txt"
     FAIL_PATH = "failed.txt"
-    SIZE_TOTAL = "size"
+    SIZE_TOTAL_PATH = "size_totals.txt"
+    MATRIX_TOTALS_PATH = "matrix_totals.txt"
+    EXPANDER_TOTALS_PATH = "expander_totals.txt"
 
     def __init__(self):
         pass
@@ -238,12 +240,41 @@ class AggregatorRun(object):
             out.flush()
             out.close()
 
+            # size stores
+            tots = open(self.SIZE_TOTAL_PATH, "a")
+            tots.write("{}\n".format(total_sdram))
+            tots.flush()
+            tots.close()
+
+            matrixs_tots = open(self.MATRIX_TOTALS_PATH, "a")
+            matrixs_tots.write("{}\n".format(matrix))
+            matrixs_tots.flush()
+            matrixs_tots.close()
+
+            expander_tots = open(self.EXPANDER_TOTALS_PATH, "a")
+            expander_tots.write("{}\n".format(expander))
+            expander_tots.flush()
+            expander_tots.close()
+
     def __call__(self):
+
+        # clear the old files so that no mixings
         x = open(self.FAIL_PATH, "w")
         x.close()
 
         y = open(self.OUT_PUT_FILE, "w")
         y.close()
+
+        z = open(self.SIZE_TOTAL_PATH, "w")
+        z.close()
+
+        x = open(self.MATRIX_TOTALS_PATH, "w")
+        x.close()
+
+        y = open(self.EXPANDER_TOTALS_PATH, "w")
+        y.close()
+
+
 
         self._set_config_python_sdp()
         for run_id in range(0, self.N_RUNS):
