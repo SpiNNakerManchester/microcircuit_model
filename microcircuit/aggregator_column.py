@@ -233,8 +233,8 @@ class AggregatorRun(object):
             out = open(self.OUT_PUT_FILE, "a")
             out.write(
                 "[{}] [{}] [{}] [{}] [{}] [{}] [{}] [{}] [{}]\n".format(
-                    state, iteration, total_sdram[(0, 0, 0)],
-                    matrix[(0, 0, 0)], expander[(0, 0, 0)],
+                    state, iteration, total_sdram[(-1, -1, -1)],
+                    matrix[(-1, -1, -1)], expander[(-1, -1, -1)],
                     data_extraction_time, data_loading_time_dsg,
                     data_loading_time_dse, data_loading_time_expand))
             out.flush()
