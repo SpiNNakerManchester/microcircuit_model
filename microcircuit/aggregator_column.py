@@ -73,6 +73,7 @@ class AggregatorRun(object):
         USE_PROTOCOL_JAVA_PARALLEL = 4
         USE_PROTOCOL_JAVA_EXPANDER = 5
         USE_PROTOCOL_JAVA_EXPANDER_PARALLEL = 6
+        USE_PROTOCOL_PYTHON_EXPANDER = 7
 
     # filepath name
     CFG_FILE_NAME = "spynnaker.cfg"
@@ -183,6 +184,16 @@ class AggregatorRun(object):
         output.flush()
         output.close()
 
+    def _set_python_expander_protocol(self):
+        output = open(self.CFG_FILE_NAME, "w")
+        output.write(self.BASIC_DATA)
+        output.write(self.USE_SPEED_UP)
+        output.write(self.USE_PYTHON)
+        output.write(self.USE_MPIF)
+        output.write(self.EXPANDER)
+        output.flush()
+        output.close()
+
     def _protected_run(self, state, iteration):
         passed = False
         failed = False
@@ -279,6 +290,15 @@ class AggregatorRun(object):
             self._protected_run(
                 self.STATES.USE_PROTOCOL_JAVA_EXPANDER_PARALLEL, run_id)
 
+        self._set_python_protocol()
+        for run_id in range(0, self.N_RUNS):
+            self._protected_run(self.STATES.USE_PROTOCOL_PYTHON, run_id)
+
+        self._set_python_expander_protocol()
+        for run_id in range(0, self.N_RUNS):
+            self._protected_run(
+                self.STATES.USE_PROTOCOL_PYTHON_EXPANDER, run_id)
+
         self._set_config_java_expander()
         for run_id in range(0, self.N_RUNS):
             self._protected_run(
@@ -291,10 +311,6 @@ class AggregatorRun(object):
         self._set_python_mpif()
         for run_id in range(0, self.N_RUNS):
             self._protected_run(self.STATES.USE_MPIF, run_id)
-
-        self._set_python_protocol()
-        for run_id in range(0, self.N_RUNS):
-            self._protected_run(self.STATES.USE_PROTOCOL_PYTHON, run_id)
 
         self._set_config_java_no_expander()
         for run_id in range(0, self.N_RUNS):
