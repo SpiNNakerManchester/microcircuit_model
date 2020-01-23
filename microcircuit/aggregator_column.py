@@ -274,6 +274,16 @@ class AggregatorRun(object):
         y = open(self.EXPANDER_TOTALS_PATH, "w")
         y.close()
 
+        self._set_config_java_parallel_expander()
+        for run_id in range(0, self.N_RUNS):
+            self._protected_run(
+                self.STATES.USE_PROTOCOL_JAVA_EXPANDER_PARALLEL, run_id)
+
+        self._set_config_java_expander()
+        for run_id in range(0, self.N_RUNS):
+            self._protected_run(
+                self.STATES.USE_PROTOCOL_JAVA_EXPANDER, run_id)
+
         self._set_config_python_sdp()
         for run_id in range(0, self.N_RUNS):
             self._protected_run(self.STATES.USE_SDP, run_id)
@@ -294,16 +304,6 @@ class AggregatorRun(object):
         for run_id in range(0, self.N_RUNS):
             self._protected_run(
                 self.STATES.USE_PROTOCOL_JAVA_PARALLEL, run_id)
-
-        self._set_config_java_expander()
-        for run_id in range(0, self.N_RUNS):
-            self._protected_run(
-                self.STATES.USE_PROTOCOL_JAVA_EXPANDER, run_id)
-
-        self._set_config_java_parallel_expander()
-        for run_id in range(0, self.N_RUNS):
-            self._protected_run(
-                self.STATES.USE_PROTOCOL_JAVA_EXPANDER_PARALLEL, run_id)
 
         print("completed")
 
