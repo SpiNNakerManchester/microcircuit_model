@@ -95,7 +95,14 @@ def FixedTotalNumberConnect_SpiNNaker(sim, pop1, pop2, K, w_mean, w_sd, d_mean, 
             'normal_clipped', mu=w_mean, sigma=w_sd, rng=rng,
             low=-np.inf, high=0.)
 
-    syn = sim.StaticSynapse(weight=w_dist, delay=d_dist)
+    if conn_type == "excitatory":
+        syn = sim.StaticSynapse(weight=w_dist, delay=d_dist)
+    else:
+        syn = sim.STDPMechanism(
+            timing_dependence=sim.SpikePairRule(),
+            weight_dependence=sim.AdditiveWeightDependence(
+                w_min=w_mean-w_sd, w_max=w_mean+w_sd),
+            weight=w_mean, delay=d_dist)
     connector = sim.FixedTotalNumberConnector(n=n_syn, rng=rng)
     proj = sim.Projection(pop1, pop2, connector, syn, receptor_type=conn_type)
 
