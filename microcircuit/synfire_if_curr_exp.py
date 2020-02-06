@@ -20,7 +20,7 @@ import spynnaker8 as p
 
 
 def run_chain():
-    runtime = 2450015
+    runtime = 1800000
 
     p.setup(timestep=0.01, min_delay=1.0, max_delay=1.440, n_boards_required=3)
     cores = \
@@ -28,8 +28,7 @@ def run_chain():
         get_number_of_available_cores_on_machine
     p.globals_variables.get_simulator()._machine_outputs[
         "PlanNTimeSteps"] = 2450015
-    neurons = cores - 1
-    neurons = 5
+    neurons = cores - 5
 
     nNeurons = 1  # number of neurons in each population
 

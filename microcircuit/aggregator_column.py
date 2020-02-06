@@ -20,7 +20,7 @@ class AggregatorRun(object):
     BASIC_DATA = (
         "[Buffers]\n\n" + "use_auto_pause_and_resume = True\n\n" +
         "[Simulation]\n\n" + "incoming_spike_buffer_size = 512\n\n" +
-        "[Machine] \n\ntimeScaleFactor = 400\n\n")
+        "[Machine] \n\ntimeScaleFactor = 600\n\n")
 
     # the cfg params for only using none expander
     NO_EXPANDER = "[Synapses]\n\nuse_expander = False\n\n"
