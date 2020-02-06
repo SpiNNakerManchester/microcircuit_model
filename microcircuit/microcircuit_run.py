@@ -119,18 +119,23 @@ def run_colun():
         "MatrixTracker")
     expander = sim.globals_variables.get_simulator().get_generated_output(
         "ExpanderTracker")
+    data_extraction_size = \
+        sim.globals_variables.get_simulator().get_generated_output(
+            "TotalDataExtracted")
+    io_time = \
+        sim.globals_variables.get_simulator().get_generated_output(
+            "TimeToUseIO")
 
     (data_extraction_time, data_loading_time_dsg, data_loading_time_dse,
      data_loading_time_expand) = extract_prov_elements()
-    sim.end()
+    try:
+        sim.end()
+    except Exception:
+        pass
     return (
         total_sdram, matrix, expander, data_extraction_time,
         data_loading_time_dsg, data_loading_time_dse,
-        data_loading_time_expand)
-
-
-def column_end():
-    sim.end()
+        data_loading_time_expand, data_extraction_size, io_time)
 
 
 def extract_prov_elements():

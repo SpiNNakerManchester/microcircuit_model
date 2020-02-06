@@ -17,15 +17,21 @@
 Synfirechain-like example
 """
 import spynnaker8 as p
-from pyNN.utility.plotting import Figure, Panel
-import matplotlib.pyplot as plt
 
 
 def run_chain():
-    runtime = 50
-    p.setup(timestep=1.0, min_delay=1.0, max_delay=144.0)
-    nNeurons = 200  # number of neurons in each population
-    p.set_number_of_neurons_per_core(p.IF_curr_exp, nNeurons / 2)
+    runtime = 2450015
+
+    p.setup(timestep=0.01, min_delay=1.0, max_delay=1.440, n_boards_required=3)
+    cores = \
+        p.globals_variables.get_simulator().\
+        get_number_of_available_cores_on_machine
+    p.globals_variables.get_simulator()._machine_outputs[
+        "PlanNTimeSteps"] = 2450015
+    neurons = cores - 1
+    neurons = 5
+
+    nNeurons = 1  # number of neurons in each population
 
     cell_params_lif = {'cm': 0.25,
                        'i_offset': 0.0,
@@ -39,39 +45,38 @@ def run_chain():
                        }
 
     populations = list()
-    projections = list()
-
-    weight_to_spike = 2.0
-    delay = 17
-
-    loopConnections = list()
-    for i in range(0, nNeurons):
-        singleConnection = ((i, (i + 1) % nNeurons, weight_to_spike, delay))
-        loopConnections.append(singleConnection)
 
     injectionConnection = [(0, 0)]
     spikeArray = {'spike_times': [[0]]}
     populations.append(
-        p.Population(nNeurons, p.IF_curr_exp(**cell_params_lif), label='pop_1'))
-    populations.append(
-        p.Population(1, p.SpikeSourceArray(**spikeArray), label='inputSpikes_1'))
+        p.Population(
+            1, p.SpikeSourceArray(**spikeArray), label='inputSpikes_1'))
 
-    projections.append(p.Projection(
-        populations[0], populations[0], p.FromListConnector(loopConnections),
-        p.StaticSynapse(weight=weight_to_spike, delay=delay)))
-    projections.append(p.Projection(
-        populations[1], populations[0], p.FromListConnector(injectionConnection),
-        p.StaticSynapse(weight=weight_to_spike, delay=1)))
+    for _ in range(0, neurons):
+        populations.append(
+            p.Population(nNeurons, p.IF_curr_exp(**cell_params_lif),
+                         label='pop_1'))
+        populations[-1].record(['v'])
 
-    populations[0].record(['v', 'gsyn_exc', 'gsyn_inh', 'spikes'])
+    p.Projection(
+        populations[0], populations[1],
+        p.FromListConnector(injectionConnection),
+        p.StaticSynapse(weight=2, delay=1))
+    for pop_id in range(2, neurons):
+        p.Projection(
+            populations[pop_id-1], populations[pop_id],
+            p.AllToAllConnector(),
+            p.StaticSynapse(weight=2, delay=1))
+    p.Projection(
+        populations[-1], populations[1],
+        p.AllToAllConnector(),
+        p.StaticSynapse(weight=2, delay=1))
 
     p.run(runtime)
 
     # get data (could be done as one, but can be done bit by bit as well)
-    v = populations[0].get_data('v')
-    gsyn_exc = populations[0].get_data('gsyn_exc')
-    gsyn_inh = populations[0].get_data('gsyn_inh')
-    spikes = populations[0].get_data('spikes')
+    for id in range(1, neurons):
+        v = populations[id].get_data('v')
 
     total_sdram = p.globals_variables.get_simulator().get_generated_output(
         "TotalSDRAMTracker")
@@ -79,16 +84,22 @@ def run_chain():
         "MatrixTracker")
     expander = p.globals_variables.get_simulator().get_generated_output(
         "ExpanderTracker")
+    io_time = \
+        p.globals_variables.get_simulator().get_generated_output(
+            "TimeToUseIO")
+    print (io_time)
+    print (total_sdram)
+
     (data_extraction_time, data_loading_time_dsg, data_loading_time_dse,
      data_loading_time_expand) = extract_prov_elements()
-    p.end()
+    try:
+        p.end()
+    except Exception:
+        pass
     return (
         total_sdram, matrix, expander, data_extraction_time,
-        data_loading_time_dsg, data_loading_time_dse, data_loading_time_expand)
-
-
-def chain_end():
-    p.end()
+        data_loading_time_dsg, data_loading_time_dse,
+        data_loading_time_expand, io_time)
 
 
 def extract_prov_elements():
@@ -116,3 +127,7 @@ def extract_prov_elements():
     return (
         data_extraction_time, data_loading_time_dsg, data_loading_time_dse,
         data_loading_time_expand)
+
+
+if __name__ == '__main__':
+    run_chain()
