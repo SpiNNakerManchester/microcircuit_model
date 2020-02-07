@@ -16,7 +16,7 @@ import spynnaker8 as sim
 
 def run_colun():
 
-    sim.setup(**simulator_params[simulator])
+    sim.setup(**simulator_params[simulator], n_boards_required=24)
 
     if simulator == 'nest':
         n_vp = sim.nest.GetKernelStatus('total_num_virtual_procs')

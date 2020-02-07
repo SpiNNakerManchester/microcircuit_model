@@ -20,15 +20,15 @@ import spynnaker8 as p
 
 
 def run_chain():
-    runtime = 1800000
+    runtime = 180000
 
-    p.setup(timestep=0.01, min_delay=1.0, max_delay=1.440, n_boards_required=3)
+    p.setup(timestep=0.01, min_delay=0.01, max_delay=1.440, n_boards_required=3)
     cores = \
         p.globals_variables.get_simulator().\
         get_number_of_available_cores_on_machine
     p.globals_variables.get_simulator()._machine_outputs[
-        "PlanNTimeSteps"] = 2450015
-    neurons = cores - 5
+        "PlanNTimeSteps"] = runtime
+    neurons = cores - 400
 
     nNeurons = 1  # number of neurons in each population
 
@@ -51,25 +51,25 @@ def run_chain():
         p.Population(
             1, p.SpikeSourceArray(**spikeArray), label='inputSpikes_1'))
 
-    for _ in range(0, neurons):
+    for index in range(0, neurons):
         populations.append(
             p.Population(nNeurons, p.IF_curr_exp(**cell_params_lif),
-                         label='pop_1'))
+                         label='pop_{}'.format(index)))
         populations[-1].record(['v'])
 
     p.Projection(
         populations[0], populations[1],
         p.FromListConnector(injectionConnection),
-        p.StaticSynapse(weight=2, delay=1))
+        p.StaticSynapse(weight=2, delay=0.01))
     for pop_id in range(2, neurons):
         p.Projection(
             populations[pop_id-1], populations[pop_id],
             p.AllToAllConnector(),
-            p.StaticSynapse(weight=2, delay=1))
+            p.StaticSynapse(weight=2, delay=0.01))
     p.Projection(
         populations[-1], populations[1],
         p.AllToAllConnector(),
-        p.StaticSynapse(weight=2, delay=1))
+        p.StaticSynapse(weight=2, delay=0.01))
 
     p.run(runtime)
 
