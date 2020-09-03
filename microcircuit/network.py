@@ -134,7 +134,7 @@ class Network:
                 global_neuron_id += len(this_pop) + 2
 
                 if voltage_input_type == 'random':
-                    this_pop.initialize(v=V_dist)
+                    this_pop.initialize(v=V_dist_all)
                 elif voltage_input_type == 'pop_random':
                     this_pop.initialize(v=V_dist[this_pop.label])
                 elif voltage_input_type == 'from_list':
