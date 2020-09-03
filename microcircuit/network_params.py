@@ -93,8 +93,9 @@ params_dict = {
     'save_connections': False,
     # Initialization of membrane potentials
     # 'from_list' uses a set of initial neuron voltages read from a file,
-    # 'random' uses randomized voltages
-    'voltage_input_type': 'random',
+    # 'random' uses randomized voltages based on V0_mean and V0_sd
+    # 'pop_random' uses randomized voltages based on mean and sd for each pop type
+    'voltage_input_type': 'pop_random',
     'input_dir': 'voltages_0.1_0.1_delays',
     # Delay distribution. Possible values: 'normal' and 'uniform'.
     # The original model has normally distributed delays.
@@ -208,6 +209,22 @@ full_mean_rates = {
 # Mean and standard deviation of initial membrane potential distribution
 V0_mean = -58. # mV
 V0_sd = 5.     # mV
+V0_L23E_mean = -64.28 # mV
+V0_L23E_sd = 4.36     # mV
+V0_L23I_mean = -59.16 # mV
+V0_L23I_sd = 3.57     # mV
+V0_L4E_mean = -59.33 # mV
+V0_L4E_sd = 3.74     # mV
+V0_L4I_mean = -59.45 # mV
+V0_L4I_sd = 3.94     # mV
+V0_L5E_mean = -59.11 # mV
+V0_L5E_sd = 3.94     # mV
+V0_L5I_mean = -57.66 # mV
+V0_L5I_sd = 3.55     # mV
+V0_L6E_mean = -62.72 # mV
+V0_L6E_sd = 4.46     # mV
+V0_L6I_mean = -57.43 # mV
+V0_L6I_sd = 3.48     # mV
 
 # Background rate per synapse
 bg_rate = 8. # spikes/s
