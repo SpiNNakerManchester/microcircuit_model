@@ -56,7 +56,30 @@ class Network:
             self.w_ext = w_mean
 
         # Initial membrane potential distribution
-        V_dist = RandomDistribution('normal', [V0_mean, V0_sd], rng=script_rng)
+        V_dist_all = RandomDistribution('normal', [V0_mean, V0_sd], rng=script_rng)
+
+        # Improved initialisation from Julich
+        V_dist={}
+
+        V_dist['L23E'] = RandomDistribution(
+            'normal', [V0_L23E_mean, V0_L23E_sd], rng=script_rng)
+        V_dist['L23I'] = RandomDistribution(
+            'normal', [V0_L23I_mean, V0_L23I_sd], rng=script_rng)
+
+        V_dist['L4E'] = RandomDistribution(
+            'normal', [V0_L4E_mean, V0_L4E_sd], rng=script_rng)
+        V_dist['L4I'] = RandomDistribution(
+            'normal', [V0_L4I_mean, V0_L4I_sd], rng=script_rng)
+
+        V_dist['L5E'] = RandomDistribution(
+            'normal', [V0_L5E_mean, V0_L5E_sd], rng=script_rng)
+        V_dist['L5I'] = RandomDistribution(
+            'normal', [V0_L5I_mean, V0_L5I_sd], rng=script_rng)
+
+        V_dist['L6E'] = RandomDistribution(
+            'normal', [V0_L6E_mean, V0_L6E_sd], rng=script_rng)
+        V_dist['L6I'] = RandomDistribution(
+            'normal', [V0_L6I_mean, V0_L6I_sd], rng=script_rng)
 
         if neuron_model == 'iaf_psc_exp_ps':
             model = native_cell_type('iaf_psc_exp_ps')
@@ -111,7 +134,9 @@ class Network:
                 global_neuron_id += len(this_pop) + 2
 
                 if voltage_input_type == 'random':
-                    this_pop.initialize(v=V_dist)
+                    this_pop.initialize(v=V_dist_all)
+                elif voltage_input_type == 'pop_random':
+                    this_pop.initialize(v=V_dist[this_pop.label])
                 elif voltage_input_type == 'from_list':
                     this_pop.initialize(v=get_init_voltages_from_file(this_pop))
 
