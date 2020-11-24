@@ -20,8 +20,7 @@ import spynnaker8 as p
 
 
 def run_chain():
-    runtime = 180000
-
+    runtime = 894
     p.setup(timestep=0.01, min_delay=0.01, max_delay=1.440, n_boards_required=3)
     cores = \
         p.globals_variables.get_simulator().\
@@ -79,6 +78,9 @@ def run_chain():
 
     total_sdram = p.globals_variables.get_simulator().get_generated_output(
         "TotalSDRAMTracker")
+    data_extraction_size = \
+        p.globals_variables.get_simulator().get_generated_output(
+            "TotalDataExtracted")
     matrix = p.globals_variables.get_simulator().get_generated_output(
         "MatrixTracker")
     expander = p.globals_variables.get_simulator().get_generated_output(
@@ -98,7 +100,7 @@ def run_chain():
     return (
         total_sdram, matrix, expander, data_extraction_time,
         data_loading_time_dsg, data_loading_time_dse,
-        data_loading_time_expand, io_time)
+        data_loading_time_expand, data_extraction_size, io_time)
 
 
 def extract_prov_elements():

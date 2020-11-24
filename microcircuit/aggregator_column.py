@@ -2,8 +2,8 @@ import sys
 import traceback
 from enum import Enum
 
-from microcircuit_run import run_colun
-#from microcircuit.synfire_if_curr_exp import run_chain
+#from microcircuit_run import run_colun
+from microcircuit.synfire_if_curr_exp import run_chain
 from spinn_front_end_common.utilities import globals_variables
 
 
@@ -20,8 +20,7 @@ class AggregatorRun(object):
     BASIC_DATA = (
         "[Buffers]\n\n" + "use_auto_pause_and_resume = True\n\n" +
         "[Simulation]\n\n" + "incoming_spike_buffer_size = 512\n\n" +
-        "[Machine] \n\ntimeScaleFactor = 600\n\n" +
-        "spalloc_machine = Spin24b-001\n\n")
+        "[Machine] \n\ntimeScaleFactor = 600\n\n")
 
     # the cfg params for only using none expander
     NO_EXPANDER = "[Synapses]\n\nuse_expander = False\n\n"
@@ -213,14 +212,14 @@ class AggregatorRun(object):
         while not passed and not failed:
             try:
                 print("running {}:{}".format(state, iteration))
+                #(total_sdram, matrix, expander, data_extraction_time,
+                # data_loading_time_dsg, data_loading_time_dse,
+                # data_loading_time_expand, data_extraction_size, io_time) = \
+                #    run_colun()
                 (total_sdram, matrix, expander, data_extraction_time,
                  data_loading_time_dsg, data_loading_time_dse,
                  data_loading_time_expand, data_extraction_size, io_time) = \
-                    run_colun()
-                #(total_sdram, matrix, expander, data_extraction_time,
-                # data_loading_time_dsg, data_loading_time_dse,
-                 #data_loading_time_expand, data_extraction_size, io_time) = \
-                #   run_chain()
+                    run_chain()
                 passed = True
             except Exception as e:
                 attempt += 1
@@ -288,6 +287,14 @@ class AggregatorRun(object):
         y = open(self.EXPANDER_TOTALS_PATH, "w")
         y.close()
 
+        self._set_python_protocol()
+        for run_id in range(0, self.N_RUNS):
+            self._protected_run(self.STATES.USE_PROTOCOL_PYTHON, run_id)
+
+        self._set_config_python_sdp()
+        for run_id in range(0, self.N_RUNS):
+            self._protected_run(self.STATES.USE_SDP, run_id)
+
         self._set_config_java_parallel_expander()
         for run_id in range(0, self.N_RUNS):
             self._protected_run(
@@ -307,14 +314,6 @@ class AggregatorRun(object):
         for run_id in range(0, self.N_RUNS):
             self._protected_run(
                 self.STATES.USE_PROTOCOL_PYTHON_EXPANDER, run_id)
-
-        self._set_python_protocol()
-        for run_id in range(0, self.N_RUNS):
-            self._protected_run(self.STATES.USE_PROTOCOL_PYTHON, run_id)
-
-        self._set_config_python_sdp()
-        for run_id in range(0, self.N_RUNS):
-            self._protected_run(self.STATES.USE_SDP, run_id)
 
         self._set_python_mpif()
         for run_id in range(0, self.N_RUNS):
