@@ -10,8 +10,8 @@ from spinn_front_end_common.utilities import globals_variables
 class AggregatorRun(object):
 
     # the number of runs to aggregate over
-    N_RUNS = 10
-    #N_RUNS = 1
+    #N_RUNS = 10
+    N_RUNS = 1
 
     # the number of times to retry without crashing fully
     N_RETRIES = 3
@@ -294,7 +294,7 @@ class AggregatorRun(object):
         for run_id in range(0, self.N_RUNS):
             self._protected_run(self.STATES.USE_PROTOCOL_PYTHON, run_id)
 
-        self._set_config_python_sdp()
+        """self._set_config_python_sdp()
         for run_id in range(0, self.N_RUNS):
             self._protected_run(self.STATES.USE_SDP, run_id)
 
@@ -329,7 +329,7 @@ class AggregatorRun(object):
         self._set_config_java_parallel_no_expander()
         for run_id in range(0, self.N_RUNS):
             self._protected_run(
-                self.STATES.USE_PROTOCOL_JAVA_PARALLEL, run_id)
+                self.STATES.USE_PROTOCOL_JAVA_PARALLEL, run_id)"""
 
         print("completed")
 
