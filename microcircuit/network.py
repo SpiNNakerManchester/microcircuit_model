@@ -119,9 +119,19 @@ class Network:
         for layer in sorted(layers):
             self.pops[layer] = {}
             for pop in sorted(pops):
+                additional_params = {}
+                if simulator == 'spiNNaker':
+                    from spynnaker.pyNN.extra_algorithms.splitter_components\
+                        .splitter_abstract_pop_vertex_neurons_synapses import (
+                            SplitterAbstractPopulationVertexNeuronsSynapses)
+                    additional_params = {
+                        "splitter":
+                        SplitterAbstractPopulationVertexNeuronsSynapses(3)
+                    }
                 self.pops[layer][pop] = sim.Population( \
                     int(round(N_full[layer][pop] * N_scaling)), \
-                    model, cellparams=neuron_params, label=layer+pop)
+                    model, cellparams=neuron_params, label=layer+pop,
+                    additional_parameters=additional_params)
                 this_pop = self.pops[layer][pop]
 
                 # Provide DC input

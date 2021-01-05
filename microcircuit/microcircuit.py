@@ -29,7 +29,7 @@ if simulator == 'nest':
                               'rng_seeds': range(master_seed + 1, master_seed + n_vp + 1)})
 
 if simulator == 'spiNNaker':
-    neurons_per_core = 255
+    neurons_per_core = 64
     sim.set_number_of_neurons_per_core(sim.IF_curr_exp, neurons_per_core)
     sim.set_number_of_neurons_per_core(sim.SpikeSourcePoisson, neurons_per_core)
 
