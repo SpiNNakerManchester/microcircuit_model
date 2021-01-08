@@ -122,8 +122,7 @@ class Network:
                 additional_params = {}
                 if simulator == 'spiNNaker':
                     from spynnaker.pyNN.extra_algorithms.splitter_components\
-                        .splitter_abstract_pop_vertex_neurons_synapses import (
-                            SplitterAbstractPopulationVertexNeuronsSynapses)
+                        import SplitterAbstractPopulationVertexNeuronsSynapses
                     additional_params = {
                         "splitter":
                         SplitterAbstractPopulationVertexNeuronsSynapses(3)
@@ -215,8 +214,17 @@ class Network:
                     else:
                         if sim.rank() == 0:
                             print('connecting Poisson generators to', target_layer, target_pop)
+                        additional_params = {}
+                        if simulator == 'spiNNaker':
+                            from spynnaker.pyNN.extra_algorithms.splitter_components\
+                                import SplitterPoissonDelegate
+                            additional_params = {
+                                "splitter": SplitterPoissonDelegate()
+                            }
+
                         poisson_generator = sim.Population(this_target_pop.size, \
-                            sim.SpikeSourcePoisson, {'rate': rate})
+                            sim.SpikeSourcePoisson, {'rate': rate},
+                            additional_parameters=additional_params)
                         conn = sim.OneToOneConnector()
                         syn = sim.StaticSynapse(weight=w_ext)
                         sim.Projection(poisson_generator, this_target_pop, conn, syn, receptor_type='excitatory')
