@@ -125,7 +125,7 @@ class Network:
                         import SplitterAbstractPopulationVertexNeuronsSynapses
                     additional_params = {
                         "splitter":
-                        SplitterAbstractPopulationVertexNeuronsSynapses(3)
+                        SplitterAbstractPopulationVertexNeuronsSynapses(3, 128, False)
                     }
                 self.pops[layer][pop] = sim.Population( \
                     int(round(N_full[layer][pop] * N_scaling)), \

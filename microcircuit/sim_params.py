@@ -21,7 +21,7 @@ simulator_params = {
     {
       'timestep'        : 0.1,
       'min_delay'       : 0.1,
-      'max_delay'       : 14.4,
+      'max_delay'       : 12.8,
       'sim_duration'    : 1000.0
     }
 }
