@@ -43,11 +43,11 @@ class Network:
                 dc_amp[target_layer] = {}
                 for target_pop in common_params.pops:
                     dc_amp[target_layer][target_pop] = (
-                        simulator_specific_stuff.bg_rate *
-                        simulator_specific_stuff.k_ext[
+                        common_params.bg_rate *
+                        common_params.k_ext[
                             target_layer][target_pop] *
-                        simulator_specific_stuff.w_mean *
-                        simulator_specific_stuff.tau_syn_name / 1000.0)
+                        common_params.w_mean *
+                        common_params.tau_syn_name / 1000.0)
         else:
             dc_amp = {
                 'L23': {'E': 0.0, 'I': 0.0},
