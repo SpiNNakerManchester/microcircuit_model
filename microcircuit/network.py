@@ -10,7 +10,7 @@ import numpy as np
 
 
 class Network:
-    """ builds the pynn network
+    """ builds the PyNN network
 
     """
 
@@ -22,7 +22,7 @@ class Network:
         self.pops = {}
 
     def setup(self, sim, simulator_specific_stuff, common_params):
-        """ creates the pynn network
+        """ creates the PyNN network
 
         :param sim: the simulator
         :param simulator_specific_stuff: \

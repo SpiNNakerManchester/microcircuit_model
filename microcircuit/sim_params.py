@@ -70,7 +70,7 @@ class NestParams(SimParams):
         # path to back-end (not needed for standard NEST versions on Blaustein,
         # which are loaded as modules)
         'backend_path',
-        # path to pyNN installation
+        # path to PyNN installation
         'pynn_path']
 
     def __init__(
