@@ -68,7 +68,7 @@ class SpinnakerSimulatorStuff(SpinnakerParams):
         'pyseed',
         # Whether to send output live
         'live_output',
-        # ???????????
+        # input directory where voltages are read from.
         'input_dir',
         # neuron params
         'neuron_params',
