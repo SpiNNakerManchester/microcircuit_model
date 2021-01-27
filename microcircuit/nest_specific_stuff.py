@@ -8,7 +8,7 @@ import numpy
 
 class NestSimulatorStuff(NestParams):
     """
-    nest specific params.
+    NEST specific params.
     """
 
     __slots__ = [
