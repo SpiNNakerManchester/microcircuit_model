@@ -193,12 +193,11 @@ class Network:
         if common_params.thalamic_input:
             # Create thalamic population
             thalamic_population = sim.Population(
-                simulator_specific_stuff.thal_params['n_thal'],
+                common_params.thal_params['n_thal'],
                 sim.SpikeSourcePoisson, {
-                    'rate': simulator_specific_stuff.thal_params['rate'],
-                    'start': simulator_specific_stuff.thal_params['start'],
-                    'duration': simulator_specific_stuff.thal_params[
-                        'duration']},
+                    'rate': common_params.thal_params['rate'],
+                    'start': common_params.thal_params['start'],
+                    'duration': common_params.thal_params['duration']},
                 label='thalamic_population',
                 additional_parameters={
                     'seed': simulator_specific_stuff.pyseed})
@@ -242,11 +241,9 @@ class Network:
                     k_thal = (
                         round(np.log(1 - c_thal) / np.log(
                             (n_target *
-                             simulator_specific_stuff.thal_params[
-                                 'n_thal'] - 1.) /
+                             common_params.thal_params['n_thal'] - 1.) /
                             (n_target *
-                             simulator_specific_stuff.thal_params[
-                                 'n_thal']))) /
+                             common_params.thal_params['n_thal']))) /
                         n_target * simulator_specific_stuff.k_scaling)
 
                     if simulator_specific_stuff.conn_routine == CONN_ROUTINE:
