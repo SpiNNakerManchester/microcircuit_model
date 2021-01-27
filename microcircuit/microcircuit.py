@@ -40,9 +40,7 @@ if sim.rank() == 0:
     print( 'Creating the network took ', end_netw - start_netw, ' s')
 
 if SIMULATOR == NEST_SIM:
-    # determine memory consumption
-    sim.nest.sli_run("memory_thisjob")
-    print('memory usage after network creation:', sim.nest.sli_pop(), 'kB')
+    simulator_specific_stuff.memory_print(sim)
 
 # simulate
 if sim.rank() == 0:
