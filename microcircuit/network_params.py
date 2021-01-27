@@ -76,7 +76,9 @@ class NestNetworkParams(NestParams):
         # neuron params
         'neuron_params',
         # tau_syn param name
-        'tau_syn_name'
+        'tau_syn_name',
+        # ????????
+        'corr_detector'
     ]
 
     def __init__(
@@ -119,6 +121,7 @@ class NestNetworkParams(NestParams):
             'E_L': -65.0,  # mV
             'V_th': -50.0  # mV
         }
+        self.corr_detector = None
 
 
 class SpinnakerNetworkParams(SpinnakerParams):

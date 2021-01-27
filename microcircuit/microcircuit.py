@@ -97,12 +97,12 @@ if simulator_params.record_v:
 
 if SIMULATOR == NEST_SIM:
     if simulator_params.record_corr:
-        if sim.nest.GetStatus(network.corr_detector, 'local')[0]:
+        if sim.nest.GetStatus(simulator_params.corr_detector, 'local')[0]:
             print('getting count_covariance on rank ', sim.rank())
             cov_all = (sim.nest.GetStatus(
-                network.corr_detector, 'count_covariance')[0])
+                simulator_params.corr_detector, 'count_covariance')[0])
             delta_tau = sim.nest.GetStatus(
-                network.corr_detector, 'delta_tau')[0]
+                simulator_params.corr_detector, 'delta_tau')[0]
 
             cov = {}
             for target_layer in np.sort(common_params.layers.keys()):
@@ -140,12 +140,12 @@ if SIMULATOR == NEST_SIM:
                                 source_pop))
                             f.write('n_events_target: {}'.format(
                                 sim.nest.GetStatus(
-                                    network.corr_detector, 'n_events')[0][
-                                    target_index]))
+                                    simulator_params.corr_detector,
+                                    'n_events')[0][target_index]))
                             f.write('n_events_source: {}'.format(
                                 sim.nest.GetStatus(
-                                    network.corr_detector, 'n_events')[0][
-                                    source_index]))
+                                    simulator_params.corr_detector,
+                                    'n_events')[0][source_index]))
                             for i in xrange(
                                     len(cov[target_index][source_index])):
                                 f.write(cov[target_index][source_index][i])

@@ -18,12 +18,10 @@ class Network:
 
     __slots__ = [
         'pops',
-        'corr_detector'
     ]
 
     def __init__(self):
         self.pops = {}
-        self.corr_detector = None
 
     def setup(self, sim, simulator_params, common_params):
         """ creates the pynn network
@@ -121,10 +119,10 @@ class Network:
                 # Create correlation recording device
                 sim.nest.SetDefaults(
                     'correlomatrix_detector', {'delta_tau': 0.5})
-                self.corr_detector = (
+                simulator_params.corr_detector = (
                     sim.nest.Create('correlomatrix_detector'))
                 sim.nest.SetStatus(
-                    self.corr_detector,
+                    simulator_params.corr_detector,
                     {'N_channels': (
                          common_params.n_layers *
                          common_params.n_pops_per_layer),
@@ -224,7 +222,8 @@ class Network:
                     'rate': simulator_params.thal_params['rate'],
                     'start': simulator_params.thal_params['start'],
                     'duration': simulator_params.thal_params['duration']},
-                label='thalamic_population')
+                label='thalamic_population',
+                additional_parameters={'seed': simulator_params.pyseed})
             base_neuron_ids[thalamic_population] = global_neuron_id
             global_neuron_id += len(thalamic_population) + 2
 
