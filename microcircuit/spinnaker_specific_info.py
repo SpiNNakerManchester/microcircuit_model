@@ -4,7 +4,7 @@ from pyNN.random import RandomDistribution
 import numpy
 
 
-class SpinnakerSimulatorStuff(SpinnakerParams):
+class SpinnakerSimulatorInfo(SpinnakerParams):
     """
     spinnaker specific params.
     """
@@ -85,7 +85,7 @@ class SpinnakerSimulatorStuff(SpinnakerParams):
             n_record=100, frac_record_spikes=1.0, record_v=False,
             frac_record_v=0.1, pyseed=2563297, live_output=False,
             tau_syn_name='tau_syn_E'):
-        super(SpinnakerSimulatorStuff, self).__init__()
+        super(SpinnakerSimulatorInfo, self).__init__()
         self.parallel_safe = parallel_safe
         self.n_scaling = n_scaling
         self.k_scaling = k_scaling

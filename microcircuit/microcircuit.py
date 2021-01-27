@@ -6,15 +6,15 @@ import time
 import plotting
 from network import Network
 from sim_params import NEST_SIM, SPINNAKER_SIM, SIMULATOR
-from spinnaker_specific_stuff import SpinnakerSimulatorStuff
-from nest_specific_stuff import NestSimulatorStuff
+from spinnaker_specific_info import SpinnakerSimulatorInfo
+from nest_specific_info import NestSimulatorInfo
 from common_params import CommonParams
 
 # build sim params
 if SIMULATOR == NEST_SIM:
-    simulator_specific_stuff = NestSimulatorStuff()
+    simulator_specific_stuff = NestSimulatorInfo()
 else:
-    simulator_specific_stuff = SpinnakerSimulatorStuff()
+    simulator_specific_stuff = SpinnakerSimulatorInfo()
 
 # build common params
 common_params = CommonParams(simulator_specific_stuff)

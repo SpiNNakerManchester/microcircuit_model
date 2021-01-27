@@ -6,7 +6,7 @@ from constants import DC, NEST_NEURON_MODEL, CONN_ROUTINE
 import numpy
 
 
-class NestSimulatorStuff(NestParams):
+class NestSimulatorInfo(NestParams):
     """
     NEST specific params.
     """
@@ -92,7 +92,7 @@ class NestSimulatorStuff(NestParams):
             n_record_v=20, frac_record_v=0.1, record_corr=False,
             pyseed=2563297, master_seed=124678,
             tau_syn_name='tau_syn_ex'):
-        super(NestSimulatorStuff, self).__init__()
+        super(NestSimulatorInfo, self).__init__()
         self.parallel_safe = parallel_safe
         self.n_scaling = n_scaling
         self.k_scaling = k_scaling
