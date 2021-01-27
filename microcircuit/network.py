@@ -175,7 +175,7 @@ class Network:
                         this_pop, simulator_specific_stuff))
 
                 # Spike recording
-                this_pop[0: common_params.n_rec[layer][pop]].record("spikes")
+                this_pop[0:common_params.n_rec[layer][pop]].record("spikes")
 
                 # Membrane potential recording
                 if simulator_specific_stuff.record_v:
