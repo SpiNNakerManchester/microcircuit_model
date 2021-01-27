@@ -27,9 +27,6 @@ if SIMULATOR == NEST_SIM:
 # prepare simulation
 if SIMULATOR == SPINNAKER_SIM:
     import spynnaker8 as sim
-else:
-    #?????????
-    pass
 
 sim.setup(**simulator_specific_stuff.setup_params)
 simulator_specific_stuff.after_setup_stuff(sim)
@@ -57,9 +54,7 @@ if sim.rank() == 0:
     print('Simulation took ', end_sim - start_sim, ' s')
 
 if SIMULATOR == NEST_SIM:
-    # determine memory consumption
-    sim.nest.sli_run("memory_thisjob")
-    print('memory usage after simulation:', sim.nest.sli_pop(), 'kB')
+    simulator_specific_stuff.memory_print(sim)
 
 start_writing = time.time()
 for layer in common_params.layers:

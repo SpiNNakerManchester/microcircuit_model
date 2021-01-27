@@ -1,3 +1,5 @@
+import os
+
 from past.builtins import xrange
 from sim_params import NestParams
 from constants import DC, NEST_NERUON_MODEL, CONN_ROUTINE
@@ -159,10 +161,10 @@ class NestSimulatorStuff(NestParams):
                                 cov[target_index][source_index] = (
                                     numpy.array(list(
                                         cov_all[target_index][source_index][
-                                        ::-1])
+                                            ::-1])
                                              + list(
                                         cov_all[source_index][target_index][
-                                        1:])))
+                                            1:])))
 
                 f = open(self.output_path + '/covariances.dat', 'w')
                 f.write('tau_max: {}'.format(common_params.tau_max))
@@ -195,3 +197,154 @@ class NestSimulatorStuff(NestParams):
                                     f.write(cov[target_index][source_index][i])
                                 f.write('')
                 f.close()
+
+    def record_corr_stuff(self, sim, common_params):
+        if self.record_corr:
+            # Create correlation recording device
+            sim.nest.SetDefaults(
+                'correlomatrix_detector', {'delta_tau': 0.5})
+            self.corr_detector = (sim.nest.Create('correlomatrix_detector'))
+            sim.nest.SetStatus(
+                self.corr_detector,
+                {'N_channels': (
+                    common_params.n_layers * common_params.n_pops_per_layer),
+                 'tau_max': common_params.tau_max,
+                 'Tstart': common_params.tau_max})
+
+    def rank_stuff(self, common_params, layer, pop):
+        if (not self.record_fraction and self.n_record > int(
+                round(common_params.n_full[layer][pop] * self.n_scaling))):
+            print(
+                'Note that requested number of neurons '
+                'to record exceeds {} {} population '
+                'size'.format(layer, pop))
+
+    def set_record_v(self, this_pop):
+        if self.record_fraction:
+            n_rec_v = round(this_pop.size * self.frac_record_v)
+        else:
+            n_rec_v = self.n_record_v
+        if self.neuron_model == NEST_NERUON_MODEL:
+            this_pop.celltype.recordable = ['V_m', 'spikes']
+            this_pop[0: n_rec_v]._record('V_m')
+        else:
+            this_pop[0: n_rec_v].record_v()
+
+    def set_corr_recording(
+            self, layer, pop, common_params, sim, this_pop):
+        if self.record_corr:
+            index = common_params.structure[layer][pop]
+            sim.nest.SetDefaults(
+                'static_synapse', {'receptor_type': index})
+            sim.nest.ConvergentConnect(
+                list(this_pop.all_cells), self.corr_detector)
+
+    def set_defaults(self, sim):
+        if self.record_corr:
+            # reset receptor_type
+            sim.nest.SetDefaults('static_synapse', {'receptor_type': 0})
+
+    @staticmethod
+    def create_poissons(
+            sim, target_layer, target_pop, rate, this_target_pop,
+            w_ext, common_params):
+        # create only a single Poisson generator for
+        # each population, since the native NEST implementation
+        # sends independent spike trains to all targets
+        if sim.rank() == 0:
+            print('connecting Poisson generator to {} {} '
+                  'via SLI'.format(target_layer, target_pop))
+        sim.nest.sli_run(
+            '/poisson_generator Create /poisson_generator_e '
+            'Set poisson_generator_e << /rate ' + str(rate) + ' >> SetStatus')
+        sim.nest.sli_run(
+            "poisson_generator_e " + str(list(
+                this_target_pop.all_cells)).replace(',', '')
+            + " [" + str(1000 * w_ext) + "] [" +
+            str(common_params.d_mean['E']) + "] DivergentConnect")
+
+    def fixed_tot_number_connect(
+            self, sim, pop1, pop2, k, w_mean, w_sd, d_mean, d_sd):
+        """
+        Function connecting two populations with multapses and a fixed
+        total number of synapses Using new NEST implementation of Connect
+
+        :param sim:
+        :param pop1:
+        :param pop2:
+        :param k:
+        :param w_mean:
+        :param w_sd:
+        :param d_mean:
+        :param d_sd:
+        :return:
+        """
+
+        if not k:
+            return
+
+        source_neurons = list(pop1.all_cells)
+        target_neurons = list(pop2.all_cells)
+        n_syn = int(round(k * len(target_neurons)))
+        # weights are multiplied by 1000 because NEST uses pA whereas PyNN
+        # uses nA RandomPopulationConnectD is called on each process with the
+        # full sets of source and target neurons, and internally only
+        # connects the target neurons on the current process.
+
+        conn_dict = {'rule': 'fixed_total_number',
+                     'N': n_syn}
+
+        syn_dict = {'model': 'static_synapse',
+                    'weight': {
+                        'distribution': 'normal_clipped',
+                        'mu': 1000. * w_mean,
+                        'sigma': 1000. * w_sd},
+                    'delay': {
+                        'distribution': 'normal_clipped',
+                        'low': self.min_delay,
+                        'mu': d_mean,
+                        'sigma': d_sd}}
+        if w_mean > 0:
+            syn_dict['weight']['low'] = 0.0
+        if w_mean < 0:
+            syn_dict['weight']['high'] = 0.0
+
+        sim.nest.sli_push(source_neurons)
+        sim.nest.sli_push(target_neurons)
+        sim.nest.sli_push(conn_dict)
+        sim.nest.sli_push(syn_dict)
+        sim.nest.sli_run("Connect")
+
+        if self.save_connections:
+            # - weights are in pA
+            # - no header lines
+            # - one file for each MPI process
+            # - GIDs
+
+            # get connections to target on this MPI process
+            conn = sim.nest.GetConnections(
+                source=source_neurons, target=target_neurons)
+            conns = sim.nest.GetStatus(
+                conn, ['source', 'target', 'weight', 'delay'])
+            if not os.path.exists(self.conn_dir):
+                try:
+                    os.makedirs(self.conn_dir)
+                except OSError as e:
+                    if e.errno != 17:
+                        raise
+                    pass
+            f = open(
+                "{}/{}_{}'.conn{}".format(
+                    self.conn_dir, pop1.label, pop2.label, str(sim.rank())),
+                'w')
+            for c in conns:
+                f.write(
+                    str(c).replace('(', '').replace(')', '').replace(
+                        ', ', '\t'))
+            f.close()
+
+    @staticmethod
+    def memory_print(sim):
+        # determine memory consumption
+        sim.nest.sli_run("memory_thisjob")
+        print('memory usage after simulation:', sim.nest.sli_pop(), 'kB')

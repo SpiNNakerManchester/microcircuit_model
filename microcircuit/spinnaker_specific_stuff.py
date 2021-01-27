@@ -1,5 +1,7 @@
 from sim_params import SpinnakerParams
 from constants import POISSON, SPINNAKER_NEURON_MODEL, CONN_ROUTINE
+from pyNN.random import RandomDistribution
+import numpy
 
 
 class SpinnakerSimulatorStuff(SpinnakerParams):
@@ -116,8 +118,101 @@ class SpinnakerSimulatorStuff(SpinnakerParams):
 
     @staticmethod
     def after_setup_stuff(sim):
+        """
+        unique stuff for after setup
+        :param sim: sim
+        :rtype: None
+        """
         neurons_per_core = 255
         sim.set_number_of_neurons_per_core(
             sim.IF_curr_exp, neurons_per_core)
         sim.set_number_of_neurons_per_core(
             sim.SpikeSourcePoisson, neurons_per_core)
+
+    @staticmethod
+    def set_record_v(this_pop):
+        """ sets a pop to record v
+
+        :param this_pop:
+        :return:
+        """
+        this_pop.record_v()
+
+    @staticmethod
+    def create_poissons(
+            sim, target_layer, target_pop, rate, this_target_pop, w_ext):
+        """ creates the SSP's
+
+        :param sim:
+        :param target_layer:
+        :param target_pop:
+        :param rate:
+        :param this_target_pop:
+        :param w_ext:
+        :return:
+        """
+        if sim.rank() == 0:
+            print(
+                'connecting Poisson generators to'
+                ' {} {}'.format(target_layer, target_pop))
+        poisson_generator = sim.Population(
+            this_target_pop.size, sim.SpikeSourcePoisson,
+            {'rate': rate})
+        conn = sim.OneToOneConnector()
+        syn = sim.StaticSynapse(weight=w_ext)
+        sim.Projection(
+            poisson_generator, this_target_pop, conn, syn,
+            receptor_type='excitatory')
+
+    def fixed_tot_number_connect(
+            self, sim, pop1, pop2, k, w_mean, w_sd, d_mean, d_sd, conn_type,
+            rng):
+        """
+        SpiNNaker-specific function connecting two populations with multapses
+        and a fixed total number of synapses
+
+        :param sim:
+        :param pop1:
+        :param pop2:
+        :param k:
+        :param w_mean:
+        :param w_sd:
+        :param d_mean:
+        :param d_sd:
+        :param conn_type:
+        :param rng:
+        :return:
+        """
+
+        if not k:
+            return
+
+        n_syn = int(round(k * len(pop2)))
+        d_dist = None
+
+        if self.delay_dist_type == 'normal':
+            d_dist = RandomDistribution(
+                'normal_clipped', mu=d_mean, sigma=d_sd, rng=rng,
+                low=self.min_delay, high=self.max_delay)
+        elif self.delay_dist_type == 'uniform':
+            d_dist = RandomDistribution(
+                'uniform', low=d_mean - d_sd, high=d_mean + d_sd, rng=rng)
+
+        if w_mean > 0:
+            w_dist = RandomDistribution(
+                'normal_clipped', mu=w_mean, sigma=w_sd, rng=rng,
+                low=0., high=numpy.inf)
+        else:
+            w_dist = RandomDistribution(
+                'normal_clipped', mu=w_mean, sigma=w_sd, rng=rng,
+                low=-numpy.inf, high=0.)
+
+        syn = sim.StaticSynapse(weight=w_dist, delay=d_dist)
+        connector = sim.FixedTotalNumberConnector(n=n_syn, rng=rng)
+        proj = sim.Projection(pop1, pop2, connector, syn,
+                              receptor_type=conn_type)
+
+        if self.save_connections:
+            proj.saveConnections(
+                self.conn_dir + '/' + pop1.label + "_" + pop2.label + '.conn',
+                gather=True)
