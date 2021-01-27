@@ -68,6 +68,7 @@ class Network:
                     common_params.k_ext[layer][pop])
 
         w = create_weight_matrix(common_params)
+
         # Network scaling
         if simulator_specific_stuff.k_scaling != 1:
             w, w_ext, dc_amp = adjust_w_and_ext_to_k(
@@ -82,31 +83,39 @@ class Network:
             rng=script_rng)
 
         # Improved initialisation from Julich
-        v_dist = {'L23E': RandomDistribution(
-            'normal',
-            [common_params.v0_l23e_mean, common_params.v0_l23e_sd],
-            rng=script_rng), 'L23I': RandomDistribution(
-            'normal',
-            [common_params.v0_l23i_mean, common_params.v0_l23i_sd],
-            rng=script_rng), 'L4E': RandomDistribution(
-            'normal',
-            [common_params.v0_l4e_mean, common_params.v0_l4e_sd],
-            rng=script_rng), 'L4I': RandomDistribution(
-            'normal',
-            [common_params.v0_l4i_mean, common_params.v0_l4i_sd],
-            rng=script_rng), 'L5E': RandomDistribution(
-            'normal',
-            [common_params.v0_l5e_mean, common_params.v0_l5e_sd],
-            rng=script_rng), 'L5I': RandomDistribution(
-            'normal',
-            [common_params.v0_l5i_mean, common_params.v0_l5i_sd],
-            rng=script_rng), 'L6E': RandomDistribution(
-            'normal',
-            [common_params.v0_l6e_mean, common_params.v0_l6e_sd],
-            rng=script_rng), 'L6I': RandomDistribution(
-            'normal',
-            [common_params.v0_l6i_mean, common_params.v0_l6i_sd],
-            rng=script_rng)}
+        v_dist = {
+            'L23E': RandomDistribution(
+                'normal',
+                [common_params.v0_l23e_mean, common_params.v0_l23e_sd],
+                rng=script_rng),
+            'L23I': RandomDistribution(
+                'normal',
+                [common_params.v0_l23i_mean, common_params.v0_l23i_sd],
+                rng=script_rng),
+            'L4E': RandomDistribution(
+                'normal',
+                [common_params.v0_l4e_mean, common_params.v0_l4e_sd],
+                rng=script_rng),
+            'L4I': RandomDistribution(
+                'normal',
+                [common_params.v0_l4i_mean, common_params.v0_l4i_sd],
+                rng=script_rng),
+            'L5E': RandomDistribution(
+                'normal',
+                [common_params.v0_l5e_mean, common_params.v0_l5e_sd],
+                rng=script_rng),
+            'L5I': RandomDistribution(
+                'normal',
+                [common_params.v0_l5i_mean, common_params.v0_l5i_sd],
+                rng=script_rng),
+            'L6E': RandomDistribution(
+                'normal',
+                [common_params.v0_l6e_mean, common_params.v0_l6e_sd],
+                rng=script_rng),
+            'L6I': RandomDistribution(
+                'normal',
+                [common_params.v0_l6i_mean, common_params.v0_l6i_sd],
+                rng=script_rng)}
 
         if simulator_specific_stuff.neuron_model == NEST_NERUON_MODEL:
             from pyNN.nest import native_cell_type
