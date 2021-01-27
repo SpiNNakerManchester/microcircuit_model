@@ -79,7 +79,7 @@ class NestSimulatorStuff(NestParams):
         'neuron_params',
         # tau_syn param name
         'tau_syn_name',
-        # ????????
+        # correlation detector
         'corr_detector'
     ]
 
