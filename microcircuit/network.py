@@ -1,9 +1,10 @@
-from connectivity import fixed_total_number_connect_spinnaker, \
-    fixed_total_number_connect_nest, FromListConnect
+from connectivity import (
+    fixed_total_number_connect_spinnaker,
+    fixed_total_number_connect_nest, build_from_list_connect)
 from constants import (
     DC, NEST_NERUON_MODEL, SPINNAKER_NEURON_MODEL, POISSON, CONN_ROUTINE)
 from sim_params import SIMULATOR, NEST_SIM, SPINNAKER_SIM
-from scaling import get_indegrees, adjust_w_and_ext_to_K
+from scaling import get_in_degrees, adjust_w_and_ext_to_k
 from helper_functions import (
     create_weight_matrix, get_init_voltages_from_file)
 from pyNN.random import NumpyRNG, RandomDistribution
@@ -11,6 +12,9 @@ import numpy as np
 
 
 class Network:
+    """ builds the pynn network
+
+    """
 
     __slots__ = [
         'pops',
@@ -22,6 +26,13 @@ class Network:
         self.corr_detector = None
 
     def setup(self, sim, simulator_params, common_params):
+        """ creates the pynn network
+
+        :param sim: the simulator
+        :param simulator_params: the holder for simulator specific params.
+        :param common_params: the holder for common params.
+        :rtype: None
+        """
 
         # if parallel_safe=False, PyNN offsets the seeds by 1 for each rank
         script_rng = NumpyRNG(
@@ -47,7 +58,7 @@ class Network:
                 'L6': {'E': 0.0, 'I': 0.0}}
 
         # In-degrees of the full-scale and scaled models
-        k_full = get_indegrees(common_params)
+        k_full = get_in_degrees(common_params)
         k = simulator_params.k_scaling * k_full
 
         k_ext = {}
@@ -61,7 +72,7 @@ class Network:
         w = create_weight_matrix(common_params)
         # Network scaling
         if simulator_params.k_scaling != 1:
-            w, w_ext, dc_amp = adjust_w_and_ext_to_K(
+            w, w_ext, dc_amp = adjust_w_and_ext_to_k(
                 k_full, simulator_params.k_scaling, w, dc_amp,
                 common_params, simulator_params)
         else:
@@ -296,7 +307,7 @@ class Network:
                                 common_params.d_mean['E'],
                                 common_params.d_sd['E'], simulator_params)
                     elif simulator_params.conn_routine == 'from_list':
-                        FromListConnect(
+                        build_from_list_connect(
                             sim, thalamic_population, this_target_pop,
                             'excitatory', base_neuron_ids, simulator_params)
 
@@ -341,7 +352,7 @@ class Network:
                                     common_params.d_sd[source_pop],
                                     simulator_params)
                         elif simulator_params.conn_routine == 'from_list':
-                            FromListConnect(
+                            build_from_list_connect(
                                 sim, this_source_pop, this_target_pop,
                                 conn_type, base_neuron_ids,
                                 simulator_params)

@@ -5,6 +5,9 @@ from constants import (
 
 
 class NestNetworkParams(NestParams):
+    """
+    nest specific params.
+    """
 
     __slots__ = [
         # Whether to make random numbers independent of the number of processes
@@ -119,6 +122,9 @@ class NestNetworkParams(NestParams):
 
 
 class SpinnakerNetworkParams(SpinnakerParams):
+    """
+    spinnaker specific params.
+    """
 
     __slots__ = [
         # Whether to make random numbers independent of the number of processes

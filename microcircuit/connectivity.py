@@ -6,8 +6,20 @@ import numpy as np
 
 def fixed_total_number_connect_nest(
         sim, pop1, pop2, k, w_mean, w_sd, d_mean, d_sd, simulator_params):
-    """ Function connecting two populations with multapses and a fixed
-     total number of synapses Using new NEST implementation of Connect
+    """
+    Function connecting two populations with multapses and a fixed
+    total number of synapses Using new NEST implementation of Connect
+
+    :param sim:
+    :param pop1:
+    :param pop2:
+    :param k:
+    :param w_mean:
+    :param w_sd:
+    :param d_mean:
+    :param d_sd:
+    :param simulator_params:
+    :return:
     """
 
     if not k:
@@ -25,17 +37,19 @@ def fixed_total_number_connect_nest(
                  'N': n_syn}
 
     syn_dict = {'model': 'static_synapse',
-                'weight': {'distribution': 'normal_clipped',
-                           'mu': 1000. * w_mean,
-                           'sigma': 1000. * w_sd},
-                'delay': {'distribution': 'normal_clipped',
-                          'low': simulator_params.min_delay,
-                          'mu': d_mean,
-                          'sigma': d_sd}}
+                'weight': {
+                    'distribution': 'normal_clipped',
+                    'mu': 1000. * w_mean,
+                    'sigma': 1000. * w_sd},
+                'delay': {
+                    'distribution': 'normal_clipped',
+                    'low': simulator_params.min_delay,
+                    'mu': d_mean,
+                    'sigma': d_sd}}
     if w_mean > 0:
-       syn_dict['weight']['low'] = 0.0
+        syn_dict['weight']['low'] = 0.0
     if w_mean < 0:
-       syn_dict['weight']['high'] = 0.0
+        syn_dict['weight']['high'] = 0.0
 
     sim.nest.sli_push(source_neurons)
     sim.nest.sli_push(target_neurons)
@@ -67,7 +81,8 @@ def fixed_total_number_connect_nest(
                 str(sim.rank())),
             'w')
         for c in conns:
-            f.write(str(c).replace('(','').replace(')','').replace(', ', '\t'))
+            f.write(
+                str(c).replace('(', '').replace(')', '').replace(', ', '\t'))
         f.close()
 
 
@@ -77,6 +92,19 @@ def fixed_total_number_connect_spinnaker(
     """
     SpiNNaker-specific function connecting two populations with multapses
     and a fixed total number of synapses
+
+    :param sim:
+    :param pop1:
+    :param pop2:
+    :param k:
+    :param w_mean:
+    :param w_sd:
+    :param d_mean:
+    :param d_sd:
+    :param conn_type:
+    :param rng:
+    :param simulator_params:
+    :return:
     """
 
     if not k:
@@ -113,9 +141,18 @@ def fixed_total_number_connect_spinnaker(
             pop2.label + '.conn', gather=True)
 
 
-def FromListConnect(
+def build_from_list_connect(
         sim, pop1, pop2, conn_type, base_neuron_ids, simulator_params):
-    """Establish connections based on data read from file"""
+    """
+    Establish connections based on data read from file
+    :param sim:
+    :param pop1:
+    :param pop2:
+    :param conn_type:
+    :param base_neuron_ids:
+    :param simulator_params:
+    :return:
+    """
     connections = list()
     for filename in os.listdir(simulator_params.conn_dir):
         if filename.startswith(pop1.label + "_" + pop2.label):

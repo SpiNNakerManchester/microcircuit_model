@@ -1,9 +1,9 @@
 import numpy as np
+import glob
+import neo
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import glob
-import neo
 
 
 def plot_raster_bars(
@@ -17,10 +17,10 @@ def plot_raster_bars(
     for layer in common_params.layers:
         spikes[layer] = {}
         for pop in common_params.pops:
-            filestart = path + '/spikes_' + layer + pop + '*'
-            filelist = glob.glob(filestart)
+            file_start = path + '/spikes_' + layer + pop + '*'
+            file_list = glob.glob(file_start)
             pop_spike_array = np.empty((0, 2))
-            for file_name in filelist:
+            for file_name in file_list:
                 try:
                     if file_name.endswith(".dat"):
                         spike_array = np.loadtxt(file_name)
@@ -28,12 +28,13 @@ def plot_raster_bars(
                             np.vstack((pop_spike_array, spike_array)))
                     else:
                         data = neo.get_io(file_name)
-                        spiketrains = data.read_block().segments[0].spiketrains
+                        spike_trains = (
+                            data.read_block().segments[0].spiketrains)
                         spike_array = [
-                            [float(spiketrains[i][j]), float(i)]
-                            for i in range(len(spiketrains))
-                            for j in range(len(spiketrains[i]))]
-                        n_rec[layer][pop] = len(spiketrains)
+                            [float(spike_trains[i][j]), float(i)]
+                            for i in range(len(spike_trains))
+                            for j in range(len(spike_trains[i]))]
+                        n_rec[layer][pop] = len(spike_trains)
                         pop_spike_array = (
                             np.vstack((pop_spike_array, spike_array)))
                 except IOError:
@@ -49,9 +50,7 @@ def plot_raster_bars(
     color = {'E': '#595289', 'I': '#af143c'}
     color_list = ['#595289', '#af143c']
     fig = plt.figure()
-    axarr = []
-    axarr.append(fig.add_subplot(121))
-    axarr.append(fig.add_subplot(122))
+    axarr = [fig.add_subplot(121), fig.add_subplot(122)]
 
     # Plot raster plot
     id_count = 0
@@ -70,7 +69,7 @@ def plot_raster_bars(
             # Compute rates with all neurons
             rate = 1000 * len(t_spikes) / (t_stop-t_start) / n_rec[layer][pop]
             rates[layer][pop] = rate
-            print(layer, pop, np.round(rate,2))
+            print(layer, pop, np.round(rate, 2))
             # Reduce data for raster plot
             num_neurons = frac_to_plot * n_rec[layer][pop]
             t_spikes = t_spikes[np.where(ids < num_neurons + id_count + 1)[0]]
@@ -101,4 +100,3 @@ def plot_raster_bars(
     axarr[1].set_xlabel('rate (spikes/s)')
 
     plt.savefig(path + '/spiking_activity.png')
-
