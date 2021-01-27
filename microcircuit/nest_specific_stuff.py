@@ -2,7 +2,7 @@ import os
 
 from past.builtins import xrange
 from sim_params import NestParams
-from constants import DC, NEST_NERUON_MODEL, CONN_ROUTINE
+from constants import DC, NEST_NEURON_MODEL, CONN_ROUTINE
 import numpy
 
 
@@ -85,7 +85,7 @@ class NestSimulatorStuff(NestParams):
 
     def __init__(
             self, parallel_safe=True, n_scaling=1.0, k_scaling=1.0,
-            neuron_model=NEST_NERUON_MODEL, conn_routine=CONN_ROUTINE,
+            neuron_model=NEST_NEURON_MODEL, conn_routine=CONN_ROUTINE,
             save_connections=False, voltage_input_type='random',
             delay_dist_type='normal', input_type=DC, record_fraction=True,
             n_record=100, frac_record_spikes=1.0, record_v=False,
@@ -224,7 +224,7 @@ class NestSimulatorStuff(NestParams):
             n_rec_v = round(this_pop.size * self.frac_record_v)
         else:
             n_rec_v = self.n_record_v
-        if self.neuron_model == NEST_NERUON_MODEL:
+        if self.neuron_model == NEST_NEURON_MODEL:
             this_pop.celltype.recordable = ['V_m', 'spikes']
             this_pop[0: n_rec_v]._record('V_m')
         else:

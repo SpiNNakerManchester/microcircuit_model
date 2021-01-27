@@ -1,6 +1,6 @@
 from connectivity import build_from_list_connect
 from constants import (
-    DC, NEST_NERUON_MODEL, SPINNAKER_NEURON_MODEL, POISSON, CONN_ROUTINE)
+    DC, NEST_NEURON_MODEL, SPINNAKER_NEURON_MODEL, POISSON, CONN_ROUTINE)
 from sim_params import SIMULATOR, NEST_SIM, SPINNAKER_SIM
 from scaling import get_in_degrees, adjust_w_and_ext_to_k
 from helper_functions import (
@@ -117,7 +117,7 @@ class Network:
                 [common_params.v0_l6i_mean, common_params.v0_l6i_sd],
                 rng=script_rng)}
 
-        if simulator_specific_stuff.neuron_model == NEST_NERUON_MODEL:
+        if simulator_specific_stuff.neuron_model == NEST_NEURON_MODEL:
             from pyNN.nest import native_cell_type
             model = native_cell_type('iaf_psc_exp_ps')
         else:
@@ -158,7 +158,7 @@ class Network:
                 if (simulator_specific_stuff.neuron_model ==
                         SPINNAKER_NEURON_MODEL):
                     this_pop.set(i_offset=dc_amp[layer][pop])
-                if simulator_specific_stuff.neuron_model == NEST_NERUON_MODEL:
+                if simulator_specific_stuff.neuron_model == NEST_NEURON_MODEL:
                     this_pop.set(I_e=1000 * dc_amp[layer][pop])
 
                 base_neuron_ids[this_pop] = global_neuron_id
