@@ -138,9 +138,8 @@ class SpinnakerSimulatorStuff(SpinnakerParams):
         """
         this_pop.record_v()
 
-    @staticmethod
     def create_poissons(
-            sim, target_layer, target_pop, rate, this_target_pop, w_ext):
+            self, sim, target_layer, target_pop, rate, this_target_pop, w_ext):
         """ creates the SSP's
 
         :param sim:
@@ -157,7 +156,8 @@ class SpinnakerSimulatorStuff(SpinnakerParams):
                 ' {} {}'.format(target_layer, target_pop))
         poisson_generator = sim.Population(
             this_target_pop.size, sim.SpikeSourcePoisson,
-            {'rate': rate})
+            {'rate': rate},
+            additional_parameters={'seed': self.pyseed})
         conn = sim.OneToOneConnector()
         syn = sim.StaticSynapse(weight=w_ext)
         sim.Projection(
