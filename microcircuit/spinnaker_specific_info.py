@@ -117,7 +117,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         }
 
     @staticmethod
-    def after_setup_stuff(sim):
+    def after_setup_info(sim):
         """
         unique stuff for after setup
         :param sim: sim

@@ -125,7 +125,7 @@ class NestSimulatorInfo(NestParams):
         }
         self.corr_detector = None
 
-    def after_setup_stuff(self, sim):
+    def after_setup_info(self, sim):
         n_vp = sim.nest.GetKernelStatus('total_num_virtual_procs')
         if sim.rank() == 0:
             print('n_vp: ', n_vp)
@@ -137,7 +137,7 @@ class NestSimulatorInfo(NestParams):
                  self.master_seed + 1,
                  self.master_seed + n_vp + 1)})
 
-    def after_run_stuff(self, sim, common_params):
+    def after_run_info(self, sim, common_params):
         if self.record_corr:
             if sim.nest.GetStatus(self.corr_detector, 'local')[0]:
                 print('getting count_covariance on rank ', sim.rank())
@@ -198,7 +198,7 @@ class NestSimulatorInfo(NestParams):
                                 f.write('')
                 f.close()
 
-    def record_corr_stuff(self, sim, common_params):
+    def record_corr_info(self, sim, common_params):
         if self.record_corr:
             # Create correlation recording device
             sim.nest.SetDefaults(
@@ -211,7 +211,7 @@ class NestSimulatorInfo(NestParams):
                  'tau_max': common_params.tau_max,
                  'Tstart': common_params.tau_max})
 
-    def rank_stuff(self, common_params, layer, pop):
+    def rank_info(self, common_params, layer, pop):
         if (not self.record_fraction and self.n_record > int(
                 round(common_params.n_full[layer][pop] * self.n_scaling))):
             print(

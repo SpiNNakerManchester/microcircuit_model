@@ -21,11 +21,11 @@ class Network:
     def __init__(self):
         self.pops = {}
 
-    def setup(self, sim, simulator_specific_stuff, common_params):
+    def setup(self, sim, simulator_specific_info, common_params):
         """ creates the PyNN network
 
         :param sim: the simulator
-        :param simulator_specific_stuff: \
+        :param simulator_specific_info: \
             the holder for simulator specific params.
         :param common_params: the holder for common params.
         :rtype: None
@@ -33,11 +33,11 @@ class Network:
 
         # if parallel_safe=False, PyNN offsets the seeds by 1 for each rank
         script_rng = NumpyRNG(
-            seed=simulator_specific_stuff.pyseed,
-            parallel_safe=simulator_specific_stuff.parallel_safe)
+            seed=simulator_specific_info.pyseed,
+            parallel_safe=simulator_specific_info.parallel_safe)
 
         # Compute DC input before scaling
-        if simulator_specific_stuff.input_type == DC:
+        if simulator_specific_info.input_type == DC:
             dc_amp = {}
             for target_layer in common_params.layers:
                 dc_amp[target_layer] = {}
@@ -57,23 +57,23 @@ class Network:
 
         # In-degrees of the full-scale and scaled models
         k_full = get_in_degrees(common_params)
-        k = simulator_specific_stuff.k_scaling * k_full
+        k = simulator_specific_info.k_scaling * k_full
 
         k_ext = {}
         for layer in common_params.layers:
             k_ext[layer] = {}
             for pop in common_params.pops:
                 k_ext[layer][pop] = (
-                    simulator_specific_stuff.k_scaling *
+                    simulator_specific_info.k_scaling *
                     common_params.k_ext[layer][pop])
 
         w = create_weight_matrix(common_params)
 
         # Network scaling
-        if simulator_specific_stuff.k_scaling != 1:
+        if simulator_specific_info.k_scaling != 1:
             w, w_ext, dc_amp = adjust_w_and_ext_to_k(
-                k_full, simulator_specific_stuff.k_scaling, w, dc_amp,
-                common_params, simulator_specific_stuff)
+                k_full, simulator_specific_info.k_scaling, w, dc_amp,
+                common_params, simulator_specific_info)
         else:
             w_ext = common_params.w_mean
 
@@ -117,17 +117,17 @@ class Network:
                 [common_params.v0_l6i_mean, common_params.v0_l6i_sd],
                 rng=script_rng)}
 
-        if simulator_specific_stuff.neuron_model == NEST_NEURON_MODEL:
+        if simulator_specific_info.neuron_model == NEST_NEURON_MODEL:
             from pyNN.nest import native_cell_type
             model = native_cell_type('iaf_psc_exp_ps')
         else:
-            model = getattr(sim, simulator_specific_stuff.neuron_model)
+            model = getattr(sim, simulator_specific_info.neuron_model)
 
         if SIMULATOR == NEST_SIM:
-            simulator_specific_stuff.record_corr_stuff(sim, common_params)
+            simulator_specific_info.record_corr_info(sim, common_params)
 
         if sim.rank() == 0:
-            print('neuron_params:', simulator_specific_stuff.neuron_params)
+            print('neuron_params:', simulator_specific_info.neuron_params)
             print('k: ', k)
             print('k_ext: ', k_ext)
             print('w: ', w)
@@ -138,7 +138,7 @@ class Network:
                 for pop in sorted(common_params.pops):
                     print(layer, pop, common_params.n_rec[layer][pop])
                     if SIMULATOR == NEST_SIM:
-                        simulator_specific_stuff.rank_stuff(
+                        simulator_specific_info.rank_info(
                             common_params, layer, pop)
 
         # Create cortical populations
@@ -149,45 +149,45 @@ class Network:
             for pop in sorted(common_params.pops):
                 self.pops[layer][pop] = sim.Population(
                     int(round(common_params.n_full[layer][pop] *
-                              simulator_specific_stuff.n_scaling)),
-                    model, cellparams=simulator_specific_stuff.neuron_params,
+                              simulator_specific_info.n_scaling)),
+                    model, cellparams=simulator_specific_info.neuron_params,
                     label=layer+pop)
                 this_pop = self.pops[layer][pop]
 
                 # Provide DC input
-                if (simulator_specific_stuff.neuron_model ==
+                if (simulator_specific_info.neuron_model ==
                         SPINNAKER_NEURON_MODEL):
                     this_pop.set(i_offset=dc_amp[layer][pop])
-                if simulator_specific_stuff.neuron_model == NEST_NEURON_MODEL:
+                if simulator_specific_info.neuron_model == NEST_NEURON_MODEL:
                     this_pop.set(I_e=1000 * dc_amp[layer][pop])
 
                 base_neuron_ids[this_pop] = global_neuron_id
                 global_neuron_id += len(this_pop) + 2
 
-                if simulator_specific_stuff.voltage_input_type == 'random':
+                if simulator_specific_info.voltage_input_type == 'random':
                     this_pop.initialize(v=v_dist_all)
-                elif (simulator_specific_stuff.voltage_input_type ==
+                elif (simulator_specific_info.voltage_input_type ==
                         'pop_random'):
                     this_pop.initialize(v=v_dist[this_pop.label])
-                elif (simulator_specific_stuff.voltage_input_type ==
+                elif (simulator_specific_info.voltage_input_type ==
                         'from_list'):
                     this_pop.initialize(v=get_init_voltages_from_file(
-                        this_pop, simulator_specific_stuff))
+                        this_pop, simulator_specific_info))
 
                 # Spike recording
                 this_pop[0:common_params.n_rec[layer][pop]].record("spikes")
 
                 # Membrane potential recording
-                if simulator_specific_stuff.record_v:
-                    simulator_specific_stuff.set_record_v(this_pop)
+                if simulator_specific_info.record_v:
+                    simulator_specific_info.set_record_v(this_pop)
 
                 # Correlation recording
                 if SIMULATOR == NEST_SIM:
-                    simulator_specific_stuff.set_corr_recording(
+                    simulator_specific_info.set_corr_recording(
                         layer, pop, common_params, sim, this_pop)
 
         if SIMULATOR == NEST_SIM:
-            simulator_specific_stuff.set_defaults(sim)
+            simulator_specific_info.set_defaults(sim)
 
         thalamic_population = None
         if common_params.thalamic_input:
@@ -200,7 +200,7 @@ class Network:
                     'duration': common_params.thal_params['duration']},
                 label='thalamic_population',
                 additional_parameters={
-                    'seed': simulator_specific_stuff.pyseed})
+                    'seed': simulator_specific_info.pyseed})
             base_neuron_ids[thalamic_population] = global_neuron_id
             global_neuron_id += len(thalamic_population) + 2
 
@@ -214,17 +214,17 @@ class Network:
                 this_target_pop = self.pops[target_layer][target_pop]
                 w_ext = w_ext
                 # External inputs
-                if simulator_specific_stuff.input_type == POISSON:
+                if simulator_specific_info.input_type == POISSON:
                     rate = (
                         common_params.bg_rate *
                         k_ext[target_layer][target_pop])
 
                     if SIMULATOR == NEST_SIM:
-                        simulator_specific_stuff.create_poissons(
+                        simulator_specific_info.create_poissons(
                             sim, target_layer, target_pop, rate,
                             this_target_pop, w_ext, common_params)
                     else:
-                        simulator_specific_stuff.create_poissons(
+                        simulator_specific_info.create_poissons(
                             sim, target_layer, target_pop, rate,
                             this_target_pop, w_ext)
 
@@ -244,27 +244,27 @@ class Network:
                              common_params.thal_params['n_thal'] - 1.) /
                             (n_target *
                              common_params.thal_params['n_thal']))) /
-                        n_target * simulator_specific_stuff.k_scaling)
+                        n_target * simulator_specific_info.k_scaling)
 
-                    if simulator_specific_stuff.conn_routine == CONN_ROUTINE:
+                    if simulator_specific_info.conn_routine == CONN_ROUTINE:
                         if SIMULATOR == SPINNAKER_SIM:
-                            simulator_specific_stuff.fixed_tot_number_connect(
+                            simulator_specific_info.fixed_tot_number_connect(
                                 sim, thalamic_population, this_target_pop,
                                 k_thal, w_ext, common_params.w_rel * w_ext,
                                 common_params.d_mean['E'],
                                 common_params.d_sd['E'], 'excitatory',
                                 script_rng)
                         else:
-                            simulator_specific_stuff.fixed_tot_number_connect(
+                            simulator_specific_info.fixed_tot_number_connect(
                                 sim, thalamic_population, this_target_pop,
                                 k_thal, w_ext, common_params.w_rel * w_ext,
                                 common_params.d_mean['E'],
                                 common_params.d_sd['E'])
-                    elif simulator_specific_stuff.conn_routine == 'from_list':
+                    elif simulator_specific_info.conn_routine == 'from_list':
                         build_from_list_connect(
                             sim, thalamic_population, this_target_pop,
                             'excitatory', base_neuron_ids,
-                            simulator_specific_stuff)
+                            simulator_specific_info)
 
                 # Recurrent inputs
                 for source_layer in sorted(common_params.layers):
@@ -291,10 +291,10 @@ class Network:
                         else:
                             w_sd = abs(weight * common_params.w_rel)
 
-                        if (simulator_specific_stuff.conn_routine ==
+                        if (simulator_specific_info.conn_routine ==
                                 CONN_ROUTINE):
                             if SIMULATOR == SPINNAKER_SIM:
-                                simulator_specific_stuff.\
+                                simulator_specific_info.\
                                     fixed_tot_number_connect(
                                         sim, this_source_pop, this_target_pop,
                                         k[target_index][source_index], weight,
@@ -302,15 +302,15 @@ class Network:
                                         common_params.d_sd[source_pop],
                                         conn_type, script_rng)
                             else:
-                                simulator_specific_stuff.\
+                                simulator_specific_info.\
                                     fixed_tot_number_connect(
                                         sim, this_source_pop, this_target_pop,
                                         k[target_index][source_index], weight,
                                         w_sd, common_params.d_mean[source_pop],
                                         common_params.d_sd[source_pop])
-                        elif (simulator_specific_stuff.conn_routine ==
+                        elif (simulator_specific_info.conn_routine ==
                                 'from_list'):
                             build_from_list_connect(
                                 sim, this_source_pop, this_target_pop,
                                 conn_type, base_neuron_ids,
-                                simulator_specific_stuff)
+                                simulator_specific_info)
