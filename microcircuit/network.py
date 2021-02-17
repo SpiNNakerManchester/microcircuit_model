@@ -1,10 +1,11 @@
-from connectivity import build_from_list_connect
-from constants import (
+from .connectivity import build_from_list_connect
+from .constants import (
     DC, NEST_NEURON_MODEL, SPINNAKER_NEURON_MODEL, POISSON, CONN_ROUTINE)
-from sim_params import SIMULATOR, NEST_SIM, SPINNAKER_SIM
-from scaling import get_in_degrees, adjust_w_and_ext_to_k
-from helper_functions import (
+from .sim_params import NEST_SIM, SPINNAKER_SIM
+from .scaling import get_in_degrees, adjust_w_and_ext_to_k
+from .helper_functions import (
     create_weight_matrix, get_init_voltages_from_file)
+
 from pyNN.random import NumpyRNG, RandomDistribution
 import numpy as np
 
@@ -16,10 +17,12 @@ class Network:
 
     __slots__ = [
         'pops',
+        'simulator'
     ]
 
-    def __init__(self):
+    def __init__(self, simulator):
         self.pops = {}
+        self.simulator = simulator
 
     def setup(self, sim, simulator_specific_info, common_params):
         """ creates the PyNN network
@@ -123,7 +126,7 @@ class Network:
         else:
             model = getattr(sim, simulator_specific_info.neuron_model)
 
-        if SIMULATOR == NEST_SIM:
+        if self.simulator == NEST_SIM:
             simulator_specific_info.record_corr_info(sim, common_params)
 
         if sim.rank() == 0:
@@ -137,7 +140,7 @@ class Network:
             for layer in sorted(common_params.layers):
                 for pop in sorted(common_params.pops):
                     print(layer, pop, common_params.n_rec[layer][pop])
-                    if SIMULATOR == NEST_SIM:
+                    if self.simulator == NEST_SIM:
                         simulator_specific_info.rank_info(
                             common_params, layer, pop)
 
@@ -182,11 +185,11 @@ class Network:
                     simulator_specific_info.set_record_v(this_pop)
 
                 # Correlation recording
-                if SIMULATOR == NEST_SIM:
+                if self.simulator == NEST_SIM:
                     simulator_specific_info.set_corr_recording(
                         layer, pop, common_params, sim, this_pop)
 
-        if SIMULATOR == NEST_SIM:
+        if self.simulator == NEST_SIM:
             simulator_specific_info.set_defaults(sim)
 
         thalamic_population = None
@@ -219,7 +222,7 @@ class Network:
                         common_params.bg_rate *
                         k_ext[target_layer][target_pop])
 
-                    if SIMULATOR == NEST_SIM:
+                    if self.simulator == NEST_SIM:
                         simulator_specific_info.create_poissons(
                             sim, target_layer, target_pop, rate,
                             this_target_pop, w_ext, common_params)
@@ -247,7 +250,7 @@ class Network:
                         n_target * simulator_specific_info.k_scaling)
 
                     if simulator_specific_info.conn_routine == CONN_ROUTINE:
-                        if SIMULATOR == SPINNAKER_SIM:
+                        if self.simulator == SPINNAKER_SIM:
                             simulator_specific_info.fixed_tot_number_connect(
                                 sim, thalamic_population, this_target_pop,
                                 k_thal, w_ext, common_params.w_rel * w_ext,
@@ -293,7 +296,7 @@ class Network:
 
                         if (simulator_specific_info.conn_routine ==
                                 CONN_ROUTINE):
-                            if SIMULATOR == SPINNAKER_SIM:
+                            if self.simulator == SPINNAKER_SIM:
                                 simulator_specific_info.\
                                     fixed_tot_number_connect(
                                         sim, this_source_pop, this_target_pop,

@@ -1,10 +1,10 @@
 ###################################################
 # Simulation parameters
 ###################################################
+from inspect import getargspec
 
 NEST_SIM = "NEST"
 SPINNAKER_SIM = "SPINNAKER"
-SIMULATOR = SPINNAKER_SIM
 
 
 class SimParams(object):
@@ -105,3 +105,21 @@ class SpinnakerParams(SimParams):
         super(SpinnakerParams, self).__init__(
             timestep, sim_duration, min_delay, max_delay, outfile,
             errfile, output_path, output_format, conn_dir)
+
+
+def add_subparser(subparsers, command, method):
+    argspec = getargspec(method)
+    args_with_defaults = argspec.args
+    args_without_defaults = []
+    if argspec.defaults:
+        args_with_defaults = argspec.args[-len(argspec.defaults):]
+        args_without_defaults = argspec.args[:-len(argspec.defaults)]
+
+    args = subparsers.add_parser(command)
+    for arg in args_without_defaults:
+        if arg is not "self":
+            args.add_argument(arg, action="store")
+    if argspec.defaults:
+        for arg, default in zip(args_with_defaults, argspec.defaults):
+            args.add_argument("--" + arg, action="store", default=default)
+    return args

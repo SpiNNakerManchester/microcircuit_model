@@ -1,8 +1,8 @@
 import os
 
 from past.builtins import xrange
-from sim_params import NestParams
-from constants import DC, NEST_NEURON_MODEL, CONN_ROUTINE
+from .sim_params import NestParams
+from .constants import DC, NEST_NEURON_MODEL, CONN_ROUTINE
 import numpy
 
 
@@ -84,15 +84,27 @@ class NestSimulatorInfo(NestParams):
     ]
 
     def __init__(
-            self, parallel_safe=True, n_scaling=1.0, k_scaling=1.0,
-            neuron_model=NEST_NEURON_MODEL, conn_routine=CONN_ROUTINE,
-            save_connections=False, voltage_input_type='random',
-            delay_dist_type='normal', input_type=DC, record_fraction=True,
-            n_record=100, frac_record_spikes=1.0, record_v=False,
-            n_record_v=20, frac_record_v=0.1, record_corr=False,
-            pyseed=2563297, master_seed=124678,
-            tau_syn_name='tau_syn_ex'):
-        super(NestSimulatorInfo, self).__init__()
+            self, timestep=0.1, sim_duration=10000.0, min_delay=0.1,
+            max_delay=100.0, n_nodes=1, outfile='output.txt',
+            errfile='errors.txt', output_path='results', output_format='pkl',
+            conn_dir='connectivity', n_procs_per_node=24, wall_time='8:0:0',
+            memory='4gb',
+            mpi_path=(
+                '/usr/local/mpi/openmpi/1.4.3/gcc64/bin/'
+                'mpivars_openmpi-1.4.3_gcc64.sh'),
+            backend_path='/path/to/backend', pynn_path='/path/to/pyNN',
+            parallel_safe=True, n_scaling=1.0,
+            k_scaling=1.0, neuron_model=NEST_NEURON_MODEL,
+            conn_routine=CONN_ROUTINE, save_connections=False,
+            voltage_input_type='random', delay_dist_type='normal',
+            input_type=DC, record_fraction=True, n_record=100,
+            frac_record_spikes=1.0, record_v=False, n_record_v=20,
+            frac_record_v=0.1, record_corr=False, pyseed=2563297,
+            master_seed=124678, tau_syn_name='tau_syn_ex'):
+        super(NestSimulatorInfo, self).__init__(
+            timestep, sim_duration, min_delay, max_delay, n_nodes, outfile,
+            errfile, output_path, output_format, conn_dir, n_procs_per_node,
+            wall_time, memory, mpi_path, backend_path, pynn_path)
         self.parallel_safe = parallel_safe
         self.n_scaling = n_scaling
         self.k_scaling = k_scaling
