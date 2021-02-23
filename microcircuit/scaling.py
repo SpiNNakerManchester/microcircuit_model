@@ -3,7 +3,7 @@
 #############################################################################
 
 import numpy as np
-from constants import POISSON
+from .constants import POISSON
 
 
 def get_in_degrees(common_params):
@@ -50,7 +50,7 @@ def adjust_w_and_ext_to_k(
     :return: w_new, w_ext_new, i_ext
     """
     internal_scaling = k_scaling
-   
+
     w_new = w / np.sqrt(internal_scaling)
     w_ext_new = None
     i_ext = {}
