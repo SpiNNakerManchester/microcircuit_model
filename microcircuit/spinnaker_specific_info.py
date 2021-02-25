@@ -76,6 +76,8 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         'neuron_params',
         # tau syn name
         'tau_syn_name',
+        # The number of neurons per core
+        'neurons_per_core',
         # whether to use split synapse neuron model
         'use_split_synapse_neuron_model',
         # If using split synapse neuron model, how many synapse cores?
@@ -96,8 +98,8 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
             record_fraction=True, n_record=100, frac_record_spikes=1.0,
             record_v=False, frac_record_v=0.1, pyseed=2563297,
             live_output=False, tau_syn_name='tau_syn_E',
-            use_split_synapse_neuron_model=True, n_synapse_cores=3,
-            n_delay_slots=128):
+            neurons_per_core=64, use_split_synapse_neuron_model=True,
+            n_synapse_cores=3, n_delay_slots=128):
         super(SpinnakerSimulatorInfo, self).__init__(
             timestep, sim_duration, min_delay, max_delay, outfile, errfile,
             output_path, output_format, conn_dir)
@@ -119,6 +121,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         self.live_output = live_output
         self.input_dir = input_dir
         self.tau_syn_name = tau_syn_name
+        self.neurons_per_core = neurons_per_core
         self.use_split_synapse_neuron_model = use_split_synapse_neuron_model
         self.n_synapse_cores = n_synapse_cores
         self.n_delay_slots = n_delay_slots
@@ -141,11 +144,10 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         :param sim: sim
         :rtype: None
         """
-        neurons_per_core = 64
         sim.set_number_of_neurons_per_core(
-            sim.IF_curr_exp, neurons_per_core)
+            sim.IF_curr_exp, self.neurons_per_core)
         sim.set_number_of_neurons_per_core(
-            sim.SpikeSourcePoisson, neurons_per_core)
+            sim.SpikeSourcePoisson, self.neurons_per_core)
 
     @staticmethod
     def set_record_v(this_pop):
