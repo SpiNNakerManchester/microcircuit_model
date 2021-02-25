@@ -156,7 +156,6 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         this_pop.record_v()
 
     def create_neural_population(self, sim, n_neurons, layer, pop):
-
         additional_params = {}
         if self.use_split_synapse_neuron_model:
             from spynnaker.pyNN.extra_algorithms.splitter_components import (
@@ -164,9 +163,10 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
             additional_params["splitter"] = \
                 SplitterAbstractPopulationVertexNeuronsSynapses(
                     self.n_synapse_cores, self.n_delay_slots, False)
+        model = getattr(sim, self.neuron_model)
         return sim.Population(
             int(round(n_neurons * self.n_scaling)),
-            self.neuron_model, cellparams=self.neuron_params,
+            model, cellparams=self.neuron_params,
             label=layer+pop, additional_parameters=additional_params)
 
     def create_poissons(
