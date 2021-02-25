@@ -120,12 +120,6 @@ class Network:
                 [common_params.v0_l6i_mean, common_params.v0_l6i_sd],
                 rng=script_rng)}
 
-        if simulator_specific_info.neuron_model == NEST_NEURON_MODEL:
-            from pyNN.nest import native_cell_type
-            model = native_cell_type('iaf_psc_exp_ps')
-        else:
-            model = getattr(sim, simulator_specific_info.neuron_model)
-
         if self.simulator == NEST_SIM:
             simulator_specific_info.record_corr_info(sim, common_params)
 
@@ -150,20 +144,9 @@ class Network:
         for layer in sorted(common_params.layers):
             self.pops[layer] = {}
             for pop in sorted(common_params.pops):
-                additional_params = {}
-                if self.simulator == SPINNAKER_SIM:
-                    from spynnaker.pyNN.extra_algorithms.splitter_components\
-                        import SplitterAbstractPopulationVertexNeuronsSynapses
-                    additional_params = {
-                        "splitter":
-                        SplitterAbstractPopulationVertexNeuronsSynapses(3, 128, False)
-                    }
-                self.pops[layer][pop] = sim.Population(
-                    int(round(common_params.n_full[layer][pop] *
-                              simulator_specific_info.n_scaling)),
-                    model, cellparams=simulator_specific_info.neuron_params,
-                    label=layer+pop,
-                    additional_parameters=additional_params)
+                self.pops[layer][pop] = \
+                    simulator_specific_info.create_neural_population(
+                        sim, common_params.n_full[layer][pop], layer, pop)
                 this_pop = self.pops[layer][pop]
 
                 # Provide DC input
