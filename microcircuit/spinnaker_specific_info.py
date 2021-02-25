@@ -135,8 +135,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
             'v_thresh': -50.0  # mV
         }
 
-    @staticmethod
-    def after_setup_info(sim):
+    def after_setup_info(self, sim):
         """
         spinnaker related tasks for after setup
         :param sim: sim
