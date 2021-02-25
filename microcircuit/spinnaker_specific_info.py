@@ -86,7 +86,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
 
     def __init__(
             self, timestep=0.1, sim_duration=1000.0, min_delay=0.1,
-            max_delay=14.4, outfile='output.txt', errfile='errors.txt',
+            max_delay=12.8, outfile='output.txt', errfile='errors.txt',
             output_path='results', output_format='pkl',
             conn_dir='connectivity', parallel_safe=True, n_scaling=1.0,
             k_scaling=1.0, neuron_model=SPINNAKER_NEURON_MODEL,
@@ -160,6 +160,9 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         if self.use_split_synapse_neuron_model:
             from spynnaker.pyNN.extra_algorithms.splitter_components import (
                 SplitterAbstractPopulationVertexNeuronsSynapses)
+            print("Using split synapse neuron model with {} synapse cores and"
+                  " {} delay slots".format(self.n_synapse_cores,
+                                           self.n_delay_slots))
             additional_params["splitter"] = \
                 SplitterAbstractPopulationVertexNeuronsSynapses(
                     self.n_synapse_cores, self.n_delay_slots, False)
