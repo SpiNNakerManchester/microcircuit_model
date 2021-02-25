@@ -3,7 +3,6 @@ import os
 from past.builtins import xrange
 from .sim_params import NestParams
 from .constants import DC, NEST_NEURON_MODEL, CONN_ROUTINE
-from pyNN.nest import native_cell_type
 import numpy
 
 
@@ -258,6 +257,7 @@ class NestSimulatorInfo(NestParams):
             sim.nest.SetDefaults('static_synapse', {'receptor_type': 0})
 
     def create_neural_population(self, sim, n_neurons, layer, pop):
+        from pyNN.nest import native_cell_type
         model = native_cell_type('iaf_psc_exp_ps')
         return sim.Population(
             int(round(n_neurons * self.n_scaling)),

@@ -1,8 +1,6 @@
 from .sim_params import SpinnakerParams
 from .constants import POISSON, SPINNAKER_NEURON_MODEL, CONN_ROUTINE
 from pyNN.random import RandomDistribution
-from spynnaker.pyNN.extra_algorithms.splitter_components import (
-    SplitterPoissonDelegate, SplitterAbstractPopulationVertexNeuronsSynapses)
 import numpy
 
 
@@ -159,8 +157,11 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         this_pop.record_v()
 
     def create_neural_population(self, sim, n_neurons, layer, pop):
+
         additional_params = {}
         if self.use_split_synapse_neuron_model:
+            from spynnaker.pyNN.extra_algorithms.splitter_components import (
+                SplitterAbstractPopulationVertexNeuronsSynapses)
             additional_params["splitter"] = \
                 SplitterAbstractPopulationVertexNeuronsSynapses(
                     self.n_synapse_cores, self.n_delay_slots, False)
@@ -187,6 +188,8 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
                 ' {} {}'.format(target_layer, target_pop))
         additional_params = {'seed': self.pyseed}
         if self.use_split_synapse_neuron_model:
+            from spynnaker.pyNN.extra_algorithms.splitter_components import (
+                SplitterPoissonDelegate)
             additional_params['splitter'] = SplitterPoissonDelegate()
         poisson_generator = sim.Population(
             this_target_pop.size, sim.SpikeSourcePoisson,
