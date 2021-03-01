@@ -102,27 +102,28 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
             timestep, sim_duration, min_delay, max_delay, outfile, errfile,
             output_path, output_format, conn_dir)
         self.parallel_safe = parallel_safe
-        self.n_scaling = n_scaling
-        self.k_scaling = k_scaling
+        self.n_scaling = float(n_scaling)
+        self.k_scaling = float(k_scaling)
         self.neuron_model = neuron_model
         self.conn_routine = conn_routine
-        self.save_connections = save_connections
+        self.save_connections = bool(save_connections)
         self.voltage_input_type = voltage_input_type
         self.delay_dist_type = delay_dist_type
         self.input_type = input_type
         self.record_fraction = record_fraction
-        self.n_record = n_record
-        self.frac_record_spikes = frac_record_spikes
-        self.record_v = record_v
-        self.frac_record_v = frac_record_v
-        self.pyseed = pyseed
-        self.live_output = live_output
+        self.n_record = int(n_record)
+        self.frac_record_spikes = float(frac_record_spikes)
+        self.record_v = bool(record_v)
+        self.frac_record_v = float(frac_record_v)
+        self.pyseed = int(pyseed)
+        self.live_output = bool(live_output)
         self.input_dir = input_dir
         self.tau_syn_name = tau_syn_name
-        self.neurons_per_core = neurons_per_core
-        self.use_split_synapse_neuron_model = use_split_synapse_neuron_model
-        self.n_synapse_cores = n_synapse_cores
-        self.n_delay_slots = n_delay_slots
+        self.neurons_per_core = int(neurons_per_core)
+        self.use_split_synapse_neuron_model = bool(
+            use_split_synapse_neuron_model)
+        self.n_synapse_cores = int(n_synapse_cores)
+        self.n_delay_slots = int(n_delay_slots)
         self.neuron_params = {
             'cm': 0.25,  # nF
             'i_offset': 0.0,   # nA
