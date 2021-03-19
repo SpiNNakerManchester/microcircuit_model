@@ -113,7 +113,7 @@ def add_subparser(subparsers, command, method):
 
     args = subparsers.add_parser(command)
     for arg in args_without_defaults:
-        if arg is not "self":
+        if arg != "self":
             args.add_argument(arg, action="store")
     if argspec.defaults:
         for arg, default in zip(args_with_defaults, argspec.defaults):
