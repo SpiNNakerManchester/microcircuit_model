@@ -105,24 +105,24 @@ class NestSimulatorInfo(NestParams):
             timestep, sim_duration, min_delay, max_delay, n_nodes, outfile,
             errfile, output_path, output_format, conn_dir, n_procs_per_node,
             wall_time, memory, mpi_path, backend_path, pynn_path)
-        self.parallel_safe = parallel_safe
-        self.n_scaling = n_scaling
-        self.k_scaling = k_scaling
+        self.parallel_safe = bool(parallel_safe)
+        self.n_scaling = float(n_scaling)
+        self.k_scaling = float(k_scaling)
         self.neuron_model = neuron_model
         self.conn_routine = conn_routine
-        self.save_connections = save_connections
+        self.save_connections = bool(save_connections)
         self.voltage_input_type = voltage_input_type
         self.delay_dist_type = delay_dist_type
         self.input_type = input_type
-        self.record_fraction = record_fraction
-        self.n_record = n_record
-        self.frac_record_spikes = frac_record_spikes
-        self.record_v = record_v
-        self.n_record_v = n_record_v
-        self.frac_record_v = frac_record_v
-        self.record_corr = record_corr
-        self.pyseed = pyseed
-        self.master_seed = master_seed
+        self.record_fraction = bool(record_fraction)
+        self.n_record = int(n_record)
+        self.frac_record_spikes = float(frac_record_spikes)
+        self.record_v = bool(record_v)
+        self.n_record_v = int(n_record_v)
+        self.frac_record_v = float(frac_record_v)
+        self.record_corr = bool(record_corr)
+        self.pyseed = int(pyseed)
+        self.master_seed = int(master_seed)
         self.tau_syn_name = tau_syn_name
         self.neuron_params = {
             'C_m': 250.0,  # pF
@@ -255,6 +255,14 @@ class NestSimulatorInfo(NestParams):
         if self.record_corr:
             # reset receptor_type
             sim.nest.SetDefaults('static_synapse', {'receptor_type': 0})
+
+    def create_neural_population(self, sim, n_neurons, layer, pop):
+        from pyNN.nest import native_cell_type
+        model = native_cell_type('iaf_psc_exp_ps')
+        return sim.Population(
+            int(round(n_neurons * self.n_scaling)),
+            model, cellparams=self.neuron_params,
+            label=layer+pop)
 
     @staticmethod
     def create_poissons(

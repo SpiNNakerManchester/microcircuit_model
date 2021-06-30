@@ -73,12 +73,20 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         # neuron params
         'neuron_params',
         # tau syn name
-        'tau_syn_name'
+        'tau_syn_name',
+        # The number of neurons per core
+        'neurons_per_core',
+        # whether to use split synapse neuron model
+        'use_split_synapse_neuron_model',
+        # If using split synapse neuron model, how many synapse cores?
+        'n_synapse_cores',
+        # If using split synapse neuron model, how many delay slots?
+        'n_delay_slots'
     ]
 
     def __init__(
             self, timestep=0.1, sim_duration=1000.0, min_delay=0.1,
-            max_delay=14.4, outfile='output.txt', errfile='errors.txt',
+            max_delay=12.8, outfile='output.txt', errfile='errors.txt',
             output_path='results', output_format='pkl',
             conn_dir='connectivity', parallel_safe=True, n_scaling=1.0,
             k_scaling=1.0, neuron_model=SPINNAKER_NEURON_MODEL,
@@ -87,28 +95,35 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
             input_dir='voltages_0.1_0.1_delays', input_type=POISSON,
             record_fraction=True, n_record=100, frac_record_spikes=1.0,
             record_v=False, frac_record_v=0.1, pyseed=2563297,
-            live_output=False, tau_syn_name='tau_syn_E'):
+            live_output=False, tau_syn_name='tau_syn_E',
+            neurons_per_core=64, use_split_synapse_neuron_model=True,
+            n_synapse_cores=3, n_delay_slots=128):
         super(SpinnakerSimulatorInfo, self).__init__(
             timestep, sim_duration, min_delay, max_delay, outfile, errfile,
             output_path, output_format, conn_dir)
         self.parallel_safe = parallel_safe
-        self.n_scaling = n_scaling
-        self.k_scaling = k_scaling
+        self.n_scaling = float(n_scaling)
+        self.k_scaling = float(k_scaling)
         self.neuron_model = neuron_model
         self.conn_routine = conn_routine
-        self.save_connections = save_connections
+        self.save_connections = bool(save_connections)
         self.voltage_input_type = voltage_input_type
         self.delay_dist_type = delay_dist_type
         self.input_type = input_type
         self.record_fraction = record_fraction
-        self.n_record = n_record
-        self.frac_record_spikes = frac_record_spikes
-        self.record_v = record_v
-        self.frac_record_v = frac_record_v
-        self.pyseed = pyseed
-        self.live_output = live_output
+        self.n_record = int(n_record)
+        self.frac_record_spikes = float(frac_record_spikes)
+        self.record_v = bool(record_v)
+        self.frac_record_v = float(frac_record_v)
+        self.pyseed = int(pyseed)
+        self.live_output = bool(live_output)
         self.input_dir = input_dir
         self.tau_syn_name = tau_syn_name
+        self.neurons_per_core = int(neurons_per_core)
+        self.use_split_synapse_neuron_model = bool(
+            use_split_synapse_neuron_model)
+        self.n_synapse_cores = int(n_synapse_cores)
+        self.n_delay_slots = int(n_delay_slots)
         self.neuron_params = {
             'cm': 0.25,  # nF
             'i_offset': 0.0,   # nA
@@ -121,18 +136,16 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
             'v_thresh': -50.0  # mV
         }
 
-    @staticmethod
-    def after_setup_info(sim):
+    def after_setup_info(self, sim):
         """
         spinnaker related tasks for after setup
         :param sim: sim
         :rtype: None
         """
-        neurons_per_core = 255
         sim.set_number_of_neurons_per_core(
-            sim.IF_curr_exp, neurons_per_core)
+            sim.IF_curr_exp, self.neurons_per_core)
         sim.set_number_of_neurons_per_core(
-            sim.SpikeSourcePoisson, neurons_per_core)
+            sim.SpikeSourcePoisson, self.neurons_per_core)
 
     @staticmethod
     def set_record_v(this_pop):
@@ -142,6 +155,23 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         :return:
         """
         this_pop.record_v()
+
+    def create_neural_population(self, sim, n_neurons, layer, pop):
+        additional_params = {}
+        if self.use_split_synapse_neuron_model:
+            from spynnaker.pyNN.extra_algorithms.splitter_components import (
+                SplitterAbstractPopulationVertexNeuronsSynapses)
+            print("Using split synapse neuron model with {} synapse cores and"
+                  " {} delay slots".format(self.n_synapse_cores,
+                                           self.n_delay_slots))
+            additional_params["splitter"] = \
+                SplitterAbstractPopulationVertexNeuronsSynapses(
+                    self.n_synapse_cores, self.n_delay_slots, False)
+        model = getattr(sim, self.neuron_model)
+        return sim.Population(
+            int(round(n_neurons * self.n_scaling)),
+            model, cellparams=self.neuron_params,
+            label=layer+pop, additional_parameters=additional_params)
 
     def create_poissons(
             self, sim, target_layer, target_pop, rate, this_target_pop, w_ext):
@@ -159,10 +189,14 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
             print(
                 'connecting Poisson generators to'
                 ' {} {}'.format(target_layer, target_pop))
+        additional_params = {'seed': self.pyseed}
+        if self.use_split_synapse_neuron_model:
+            from spynnaker.pyNN.extra_algorithms.splitter_components import (
+                SplitterPoissonDelegate)
+            additional_params['splitter'] = SplitterPoissonDelegate()
         poisson_generator = sim.Population(
             this_target_pop.size, sim.SpikeSourcePoisson,
-            {'rate': rate},
-            additional_parameters={'seed': self.pyseed})
+            {'rate': rate}, additional_parameters=additional_params)
         conn = sim.OneToOneConnector()
         syn = sim.StaticSynapse(weight=w_ext)
         sim.Projection(

@@ -33,10 +33,8 @@ class SimParams(object):
     ]
 
     def __init__(
-            self, timestep, sim_duration, min_delay, max_delay,
-            outfile='output.txt', errfile='errors.txt',
-            output_path='results', output_format='pkl',
-            conn_dir='connectivity'):
+            self, timestep, sim_duration, min_delay, max_delay, outfile,
+            errfile, output_path, output_format, conn_dir):
         self.timestep = timestep
         self.sim_duration = sim_duration
         self.min_delay = min_delay
@@ -98,10 +96,8 @@ class NestParams(SimParams):
 class SpinnakerParams(SimParams):
 
     def __init__(
-            self, timestep=0.1, sim_duration=1000.0, min_delay=0.1,
-            max_delay=14.4, outfile='output.txt', errfile='errors.txt',
-            output_path='results', output_format='pkl',
-            conn_dir='connectivity'):
+            self, timestep, sim_duration, min_delay, max_delay, outfile,
+            errfile, output_path, output_format, conn_dir):
         super(SpinnakerParams, self).__init__(
             timestep, sim_duration, min_delay, max_delay, outfile,
             errfile, output_path, output_format, conn_dir)
@@ -117,7 +113,7 @@ def add_subparser(subparsers, command, method):
 
     args = subparsers.add_parser(command)
     for arg in args_without_defaults:
-        if arg is not "self":
+        if arg != "self":
             args.add_argument(arg, action="store")
     if argspec.defaults:
         for arg, default in zip(args_with_defaults, argspec.defaults):
