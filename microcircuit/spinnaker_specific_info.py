@@ -97,10 +97,13 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
             record_v=False, frac_record_v=0.1, pyseed=2563297,
             live_output=False, tau_syn_name='tau_syn_E',
             neurons_per_core=64, use_split_synapse_neuron_model=True,
-            n_synapse_cores=3, n_delay_slots=128):
+            # TODO fix chip neeeded count and remove the n_boards_required
+            n_synapse_cores=3, n_delay_slots=128, n_boards_required=9):
         super(SpinnakerSimulatorInfo, self).__init__(
             timestep, sim_duration, min_delay, max_delay, outfile, errfile,
             output_path, output_format, conn_dir)
+        # TODO fix chip neeeded count and remove the n_boards_required
+        self.setup_params["n_boards_required"] = n_boards_required
         self.parallel_safe = parallel_safe
         self.n_scaling = float(n_scaling)
         self.k_scaling = float(k_scaling)
