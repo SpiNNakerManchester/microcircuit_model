@@ -177,7 +177,8 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
             label=layer+pop, additional_parameters=additional_params)
 
     def create_poissons(
-            self, sim, target_layer, target_pop, rate, this_target_pop, w_ext):
+            self, sim, target_layer, target_pop, rate, this_target_pop, w_ext,
+            script_rng):
         """ creates the SSP's
 
         :param sim:
@@ -192,7 +193,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
             print(
                 'connecting Poisson generators to'
                 ' {} {}'.format(target_layer, target_pop))
-        additional_params = {'seed': self.pyseed}
+        additional_params = {'seed': int(script_rng.next() * 0xFFFFFFFF)}
         if self.use_split_synapse_neuron_model:
             from spynnaker.pyNN.extra_algorithms.splitter_components import (
                 SplitterPoissonDelegate)

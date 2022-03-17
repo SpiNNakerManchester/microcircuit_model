@@ -221,7 +221,7 @@ class Network:
                     else:
                         simulator_specific_info.create_poissons(
                             sim, target_layer, target_pop, rate,
-                            this_target_pop, w_ext)
+                            this_target_pop, w_ext, script_rng)
 
                 if common_params.thalamic_input:
                     # Thalamic inputs
