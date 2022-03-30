@@ -55,7 +55,7 @@ It has been run on three different back-ends: NEST, SpiNNaker, and the ESS (emul
 
 This simulation is part of the Spynnaker integration tests so is tested daily.
 The tests use python 3.8 and the latest possible version of each dependency unless restricted by
-See https://github.com/SpiNNakerManchester/sPyNNaker/blob/master/requirements.txt
+https://github.com/SpiNNakerManchester/sPyNNaker/blob/master/requirements.txt
 
 ## Known issues:
 
