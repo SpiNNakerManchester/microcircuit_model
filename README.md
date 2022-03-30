@@ -53,10 +53,9 @@ It has been run on three different back-ends: NEST, SpiNNaker, and the ESS (emul
    - If 'plot_spiking_activity' is set to True, a raster plot and bar plot
      of the firing rates are created and saved as 'spiking_activity.png'
 
-
-The simulation was successfully tested with NEST revision 10711 and MPI 1.4.3.
-Plotting works with Python 2.6.6 including packages numpy 1.3.0,
-matplotlib 0.99.1.1, and glob.
+This simulation is part of the Spynnaker integration tests so is tested daily.
+The tests use python 3.8 and the latest possible version of each dependency unless restricted by
+https://github.com/SpiNNakerManchester/sPyNNaker/blob/master/requirements.txt
 
 ## Known issues:
 
