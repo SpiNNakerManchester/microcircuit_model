@@ -52,7 +52,7 @@ if simulator == NEST_SIM:
 
 # prepare simulation
 if simulator == SPINNAKER_SIM:
-    import spynnaker8 as sim
+    import pyNN.spiNNaker as sim
 
 sim.setup(**simulator_specific_info.setup_params)
 simulator_specific_info.after_setup_info(sim)
