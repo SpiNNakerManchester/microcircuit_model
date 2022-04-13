@@ -1,6 +1,5 @@
 import os
 
-from past.builtins import xrange
 from .sim_params import NestParams
 from .constants import DC, NEST_NEURON_MODEL, CONN_ROUTINE
 import numpy
@@ -204,7 +203,7 @@ class NestSimulatorInfo(NestParams):
                                     sim.nest.GetStatus(
                                         self.corr_detector,
                                         'n_events')[0][source_index]))
-                                for i in xrange(
+                                for i in range(
                                         len(cov[target_index][source_index])):
                                     f.write(cov[target_index][source_index][i])
                                 f.write('')
