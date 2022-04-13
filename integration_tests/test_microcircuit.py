@@ -15,7 +15,6 @@
 
 from spinnaker_testbase import ScriptChecker
 import os
-import sys
 import stat
 
 
