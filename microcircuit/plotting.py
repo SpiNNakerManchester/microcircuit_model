@@ -3,7 +3,7 @@ import glob
 import neo
 import matplotlib
 matplotlib.use('Agg')
-import matplotlib.pyplot as plt  # noqa: F401
+import matplotlib.pyplot as plt  # noqa: F402
 
 
 def plot_raster_bars(
