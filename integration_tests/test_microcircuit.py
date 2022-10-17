@@ -16,6 +16,8 @@
 from spinnaker_testbase import ScriptChecker
 import os
 import stat
+from spinn_front_end_common.utilities.report_functions.timer_report import (
+    timer_report_file)
 
 
 class TestMicrocircuit(ScriptChecker):
@@ -34,3 +36,8 @@ class TestMicrocircuit(ScriptChecker):
             result_path = os.path.join("results", result_file)
             assert os.path.exists(result_path)
             assert os.stat(result_path)[stat.ST_SIZE]
+
+        report = timer_report_file()
+        with open(report) as f:
+            message = f.read()
+        self.report(message, "microcircuit_timer.rpt")
