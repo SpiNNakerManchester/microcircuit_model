@@ -32,5 +32,5 @@ class TestMicrocircuit(ScriptChecker):
                 "spikes_L6E.pkl", "spikes_L6I.pkl",
                 "spiking_activity.png"]:
             result_path = os.path.join("results", result_file)
-            assert(os.path.exists(result_path))
-            assert(os.stat(result_path)[stat.ST_SIZE])
+            assert os.path.exists(result_path)
+            assert os.stat(result_path)[stat.ST_SIZE]
