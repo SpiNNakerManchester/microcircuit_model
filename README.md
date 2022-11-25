@@ -66,30 +66,30 @@ https://github.com/SpiNNakerManchester/sPyNNaker/blob/master/requirements.txt
   with single or nonexistent connections, for instance by adjusting
   lib/python2.6/site-packages/pyNN/nest/__init__.py from line 365 as follows:
 
-  if numpy.size(lines) != 0:
-      if numpy.shape(numpy.shape(lines))[0] == 1:
-          lines = numpy.array([lines])
-          lines[:,2] *= 0.001
-          if compatible_output:
-              lines[:,0] = self.pre.id_to_index(lines[:,0])
-              lines[:,1] = self.post.id_to_index(lines[:,1])
-      file.write(lines, {'pre' : self.pre.label, 'post' : self.post.label})
+      if numpy.size(lines) != 0:
+          if numpy.shape(numpy.shape(lines))[0] == 1:
+              lines = numpy.array([lines])
+              lines[:,2] *= 0.001
+              if compatible_output:
+                  lines[:,0] = self.pre.id_to_index(lines[:,0])
+                  lines[:,1] = self.post.id_to_index(lines[:,1])
+          file.write(lines, {'pre' : self.pre.label, 'post' : self.post.label})
 
 - To use saveConnections in parallel simulations, additionally ensure that
   pyNN does not cause a race condition where the directory is created by one
   process between the if statement and makedirs on another process: In
   lib/python2.6/site-packages/pyNN/recording/files.py for instance replace
 
-  os.makedirs(dir)
+      os.makedirs(dir)
 
   by
 
-  try:
-      os.makedirs(dir)
-  except OSError, e:
-      if e.errno != 17:
-          raise
-      pass
+      try:
+          os.makedirs(dir)
+      except OSError, e:
+          if e.errno != 17:
+              raise
+          pass
 
 Reinstall pyNN after making these adjustments, so that they take effect
 in your pyNN installation directory.
