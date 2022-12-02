@@ -1,7 +1,7 @@
 ###################################################
 # Simulation parameters
 ###################################################
-from inspect import getargspec
+from inspect import getfullargspec
 
 NEST_SIM = "NEST"
 SPINNAKER_SIM = "SPINNAKER"
@@ -104,7 +104,7 @@ class SpinnakerParams(SimParams):
 
 
 def add_subparser(subparsers, command, method):
-    argspec = getargspec(method)
+    argspec = getfullargspec(method)
     args_with_defaults = argspec.args
     args_without_defaults = []
     if argspec.defaults:
