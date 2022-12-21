@@ -94,7 +94,7 @@ class NestParams(SimParams):
 
 
 class SpinnakerParams(SimParams):
-
+    pass
 
 def add_subparser(subparsers, command, method):
     argspec = getfullargspec(method)
