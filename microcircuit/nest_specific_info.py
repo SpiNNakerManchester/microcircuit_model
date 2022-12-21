@@ -4,6 +4,8 @@ from .sim_params import NestParams
 from .constants import DC, NEST_NEURON_MODEL, CONN_ROUTINE
 import numpy
 
+# pylint: skip-file
+
 
 class NestSimulatorInfo(NestParams):
     """

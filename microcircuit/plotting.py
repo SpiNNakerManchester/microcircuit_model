@@ -39,7 +39,6 @@ def plot_raster_bars(
                             np.vstack((pop_spike_array, spike_array)))
                 except IOError:
                     print('reading spike data from ', file_name, ' failed')
-                    pass
             spikes[layer][pop] = pop_spike_array
 
     # Plot spike times in raster plot and bar plot with the
