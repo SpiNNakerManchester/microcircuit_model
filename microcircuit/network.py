@@ -207,7 +207,6 @@ class Network:
                 target_index = (
                     common_params.structure[target_layer][target_pop])
                 this_target_pop = self.pops[target_layer][target_pop]
-                w_ext = w_ext
                 # External inputs
                 if simulator_specific_info.input_type == POISSON:
                     rate = (
