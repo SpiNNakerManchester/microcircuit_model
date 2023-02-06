@@ -94,13 +94,7 @@ class NestParams(SimParams):
 
 
 class SpinnakerParams(SimParams):
-
-    def __init__(
-            self, timestep, sim_duration, min_delay, max_delay, outfile,
-            errfile, output_path, output_format, conn_dir):
-        super(SpinnakerParams, self).__init__(
-            timestep, sim_duration, min_delay, max_delay, outfile,
-            errfile, output_path, output_format, conn_dir)
+    pass
 
 
 def add_subparser(subparsers, command, method):
