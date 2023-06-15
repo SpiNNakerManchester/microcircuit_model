@@ -6,7 +6,7 @@ from .scaling import get_in_degrees, adjust_w_and_ext_to_k
 from .helper_functions import (
     create_weight_matrix, get_init_voltages_from_file)
 
-from pyNN.random import NumpyRNG, RandomDistribution
+from pyNN.random import RandomDistribution
 import numpy as np
 
 
@@ -33,11 +33,7 @@ class Network:
         :param common_params: the holder for common params.
         :rtype: None
         """
-
-        # if parallel_safe=False, PyNN offsets the seeds by 1 for each rank
-        script_rng = NumpyRNG(
-            seed=simulator_specific_info.pyseed,
-            parallel_safe=simulator_specific_info.parallel_safe)
+        script_rng = simulator_specific_info.script_rng
 
         # Compute DC input before scaling
         if simulator_specific_info.input_type == DC:
@@ -246,8 +242,7 @@ class Network:
                                 sim, thalamic_population, this_target_pop,
                                 k_thal, w_ext, common_params.w_rel * w_ext,
                                 common_params.d_mean['E'],
-                                common_params.d_sd['E'], 'excitatory',
-                                script_rng)
+                                common_params.d_sd['E'], 'excitatory')
                         else:
                             simulator_specific_info.fixed_tot_number_connect(
                                 sim, thalamic_population, this_target_pop,
@@ -294,7 +289,7 @@ class Network:
                                         k[target_index][source_index], weight,
                                         w_sd, common_params.d_mean[source_pop],
                                         common_params.d_sd[source_pop],
-                                        conn_type, script_rng)
+                                        conn_type)
                             else:
                                 simulator_specific_info.\
                                     fixed_tot_number_connect(
