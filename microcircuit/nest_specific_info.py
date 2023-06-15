@@ -3,6 +3,7 @@ import os
 from .sim_params import NestParams
 from .constants import DC, NEST_NEURON_MODEL, CONN_ROUTINE
 import numpy
+from pyNN.random import NumpyRNG
 
 # pylint: skip-file
 
@@ -81,7 +82,9 @@ class NestSimulatorInfo(NestParams):
         # tau_syn param name
         'tau_syn_name',
         # correlation detector
-        'corr_detector'
+        'corr_detector',
+        # The RNG to use
+        'script_rng'
     ]
 
     def __init__(
@@ -137,6 +140,10 @@ class NestSimulatorInfo(NestParams):
             'V_th': -50.0  # mV
         }
         self.corr_detector = None
+
+        # if parallel_safe=False, PyNN offsets the seeds by 1 for each rank
+        self.script_rng = NumpyRNG(
+            seed=self.pyseed, parallel_safe=self.parallel_safe)
 
     def after_setup_info(self, sim):
         n_vp = sim.nest.GetKernelStatus('total_num_virtual_procs')

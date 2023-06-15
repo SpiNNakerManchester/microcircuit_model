@@ -81,7 +81,9 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         # If using split synapse neuron model, how many synapse cores?
         'n_synapse_cores',
         # If using split synapse neuron model, how many delay slots?
-        'n_delay_slots'
+        'n_delay_slots',
+        # Script RNG
+        'script_rng'
     ]
 
     def __init__(
@@ -135,6 +137,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
             'v_rest': -65.0,  # mV
             'v_thresh': -50.0  # mV
         }
+        self.script_rng = None
 
     def after_setup_info(self, sim):
         """
@@ -157,7 +160,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         this_pop.record_v()
 
     def create_neural_population(self, sim, n_neurons, layer, pop):
-        additional_params = {}
+        additional_params = {"seed": self.pyseed}
         if self.use_split_synapse_neuron_model:
             from spynnaker.pyNN.extra_algorithms.splitter_components import (
                 SplitterAbstractPopulationVertexNeuronsSynapses)
@@ -204,8 +207,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
             receptor_type='excitatory')
 
     def fixed_tot_number_connect(
-            self, sim, pop1, pop2, k, w_mean, w_sd, d_mean, d_sd, conn_type,
-            rng):
+            self, sim, pop1, pop2, k, w_mean, w_sd, d_mean, d_sd, conn_type):
         """
         SpiNNaker-specific function connecting two populations with multapses
         and a fixed total number of synapses
@@ -219,7 +221,6 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         :param d_mean:
         :param d_sd:
         :param conn_type:
-        :param rng:
         :return:
         """
 
@@ -231,23 +232,23 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
 
         if self.delay_dist_type == 'normal':
             d_dist = RandomDistribution(
-                'normal_clipped', mu=d_mean, sigma=d_sd, rng=rng,
+                'normal_clipped', mu=d_mean, sigma=d_sd,
                 low=self.min_delay, high=self.max_delay)
         elif self.delay_dist_type == 'uniform':
             d_dist = RandomDistribution(
-                'uniform', low=d_mean - d_sd, high=d_mean + d_sd, rng=rng)
+                'uniform', low=d_mean - d_sd, high=d_mean + d_sd)
 
         if w_mean > 0:
             w_dist = RandomDistribution(
-                'normal_clipped', mu=w_mean, sigma=w_sd, rng=rng,
+                'normal_clipped', mu=w_mean, sigma=w_sd,
                 low=0., high=numpy.inf)
         else:
             w_dist = RandomDistribution(
-                'normal_clipped', mu=w_mean, sigma=w_sd, rng=rng,
+                'normal_clipped', mu=w_mean, sigma=w_sd,
                 low=-numpy.inf, high=0.)
 
         syn = sim.StaticSynapse(weight=w_dist, delay=d_dist)
-        connector = sim.FixedTotalNumberConnector(n=n_syn, rng=rng)
+        connector = sim.FixedTotalNumberConnector(n=n_syn)
         proj = sim.Projection(pop1, pop2, connector, syn,
                               receptor_type=conn_type)
 
