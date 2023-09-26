@@ -94,7 +94,7 @@ if simulator_specific_info.record_v:
             filename = (
                 simulator_specific_info.output_path + '/voltages_' + layer +
                 pop + '.dat')
-            network.pops[layer][pop].print_v(filename, gather=True)
+            network.pops[layer][pop].write_data(filename, 'v')
 
 if simulator == NEST_SIM:
     simulator_specific_info.after_run_info(sim, common_params)
