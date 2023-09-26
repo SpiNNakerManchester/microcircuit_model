@@ -157,7 +157,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         :param this_pop:
         :return:
         """
-        this_pop.record_v()
+        this_pop.record("v")
 
     def create_neural_population(self, sim, n_neurons, layer, pop):
         additional_params = {"seed": self.pyseed}
