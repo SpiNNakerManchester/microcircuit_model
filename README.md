@@ -56,7 +56,7 @@ It has been run on three different back-ends: NEST, SpiNNaker, and the ESS (emul
      of the firing rates are created and saved as 'spiking_activity.png'
 
 This simulation is part of the Spynnaker integration tests so is tested daily.
-The tests use python 3.8 and the latest possible version of each dependency unless restricted by
+The tests use python 3.12 and the latest possible version of each dependency unless restricted by
 https://github.com/SpiNNakerManchester/sPyNNaker/blob/master/requirements.txt
 
 ## Known issues:
