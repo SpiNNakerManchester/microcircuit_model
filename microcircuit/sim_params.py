@@ -21,7 +21,6 @@ from inspect import getfullargspec
 NEST_SIM = "NEST"
 SPINNAKER_SIM = "SPINNAKER"
 
-
 class SimParams(object):
     """
     Shared parameters for simulations.
