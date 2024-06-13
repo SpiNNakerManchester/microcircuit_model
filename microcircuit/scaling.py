@@ -37,6 +37,7 @@ def get_in_degrees(common_params):
 
 def adjust_w_and_ext_to_k(
         k_full, k_scaling, w, dc, common_params, simulation_params):
+    # pylint: disable=wrong-spelling-in-docstring
     """
     Adjust synaptic weights and external drive to the in-degrees
     to preserve mean and variance of inputs in the diffusion approximation

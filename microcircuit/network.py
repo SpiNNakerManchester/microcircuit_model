@@ -25,6 +25,7 @@ class Network:
         self.simulator = simulator
 
     def setup(self, sim, simulator_specific_info, common_params):
+        # pylint: disable=wrong-spelling-in-comment
         """ creates the PyNN network
 
         :param sim: the simulator
@@ -221,8 +222,8 @@ class Network:
                 if common_params.thalamic_input:
                     # Thalamic inputs
                     if sim.rank() == 0:
-                        print('creating thalamic connections to {} {}'.format(
-                            target_layer, target_pop))
+                        print(f'creating thalamic connections to '
+                              f'{target_layer} {target_pop}')
                     c_thal = (
                         common_params.thal_params[
                             'C'][target_layer][target_pop])
@@ -268,10 +269,9 @@ class Network:
 
                         if sim.rank() == 0:
                             print(
-                                'creating connections from {} {} to {} '
-                                '{}'.format(
-                                    source_layer, source_pop, target_layer,
-                                    target_pop))
+                                f'creating connections '
+                                f'from {source_layer} {source_pop} '
+                                f'to {target_layer} {target_pop}')
 
                         if (source_pop == 'E' and source_layer == 'L4'
                                 and target_layer == 'L23'

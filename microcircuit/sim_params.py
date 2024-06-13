@@ -8,8 +8,12 @@ SPINNAKER_SIM = "SPINNAKER"
 
 
 class SimParams(object):
+    """
+    Shared parameters for simulations.
+    """
 
     __slots__ = [
+        # pylint: disable = wrong-spelling-in-comment
         # sim time step
         'timestep',
         # sim duration
@@ -51,6 +55,12 @@ class SimParams(object):
 
 
 class NestParams(SimParams):
+    """
+    Nest parameters for simulations.
+
+    Not used by sPyNNaker
+    """
+
 
     __slots__ = [
         # number of nodes
@@ -94,10 +104,21 @@ class NestParams(SimParams):
 
 
 class SpinnakerParams(SimParams):
+    """
+    Spynnaker parameters
+    """
     pass
 
 
 def add_subparser(subparsers, command, method):
+    """
+    Adds simulation subparsers.
+
+    :param subparsers:
+    :param command:
+    :param method:
+    :return:
+    """
     argspec = getfullargspec(method)
     args_with_defaults = argspec.args
     args_without_defaults = []

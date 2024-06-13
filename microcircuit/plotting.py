@@ -1,9 +1,9 @@
-import numpy as np
 import glob
+import numpy as np
 import neo
 import matplotlib
+import matplotlib.pyplot as plt
 matplotlib.use('Agg')
-import matplotlib.pyplot as plt  # noqa: E402
 
 
 def plot_raster_bars(

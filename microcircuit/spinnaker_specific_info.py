@@ -10,6 +10,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
     """
 
     __slots__ = [
+        # pylint: disable=wrong-spelling-in-commen
         # Whether to make random numbers independent of the number of processes
         'parallel_safe',
         # Fraction of neurons to simulate

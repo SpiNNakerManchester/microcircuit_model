@@ -3,10 +3,10 @@ import math
 
 
 def build_from_list_connect(
-        sim, pop1, pop2, conn_type, base_neuron_ids, simulator_params):
+        simulator, pop1, pop2, conn_type, base_neuron_ids, simulator_params):
     """
     Establish connections based on data read from file
-    :param sim:
+    :param simulator:
     :param pop1:
     :param pop2:
     :param conn_type:
@@ -46,5 +46,5 @@ def build_from_list_connect(
                              float(delay)))
             f.close()
     if len(connections) > 0:
-        connector = sim.FromListConnector(conn_list=connections)
-        sim.Projection(pop1, pop2, connector, receptor_type=conn_type)
+        connector = simulator.FromListConnector(conn_list=connections)
+        simulator.Projection(pop1, pop2, connector, receptor_type=conn_type)
