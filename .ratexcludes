@@ -1,0 +1,8 @@
+**/SpiNNUtils/**
+**/SpiNNMachine/**
+**/SpiNNMan/**
+**/PACMAN/**
+**/spalloc/**
+**/SpiNNFrontEndCommon/**
+**/sPyNNaker/**
+**/.pylintrc
