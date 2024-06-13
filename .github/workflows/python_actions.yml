@@ -24,7 +24,8 @@ jobs:
     with:
       dependencies: >
           SpiNNUtils SpiNNMachine SpiNNMan PACMAN spalloc
-          SpiNNFrontEndCommon SpiNNakerGraphFrontEnd TestBase
+          SpiNNFrontEndCommon SpiNNakerGraphFrontEnd
+      install_module: false
       ubuntu_packages: graphviz
       test_directories:
       coverage-package:
