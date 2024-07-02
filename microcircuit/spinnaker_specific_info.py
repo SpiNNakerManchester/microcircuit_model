@@ -156,6 +156,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         self.script_rng = None
 
     def after_setup_info(self, sim):
+        # pylint: disable=wrong-spelling-in-docstring
         """
         spinnaker related tasks for after setup
         :param sim: sim
@@ -176,13 +177,16 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         this_pop.record("v")
 
     def create_neural_population(self, sim, n_neurons, layer, pop):
+        """
+        Create a neurol population optimized for sPyNNaker
+        """
         additional_params = {"seed": self.pyseed}
         if self.use_split_synapse_neuron_model:
             from spynnaker.pyNN.extra_algorithms.splitter_components import (
                 SplitterAbstractPopulationVertexNeuronsSynapses)
-            print("Using split synapse neuron model with {} synapse cores and"
-                  " {} delay slots".format(self.n_synapse_cores,
-                                           self.n_delay_slots))
+            print(f"Using split synapse neuron model with "
+                  f"{self.n_synapse_cores} synapse cores and "
+                  f"{self.n_delay_slots} delay slots")
             additional_params["splitter"] = \
                 SplitterAbstractPopulationVertexNeuronsSynapses(
                     self.n_synapse_cores, self.n_delay_slots, False)
@@ -194,7 +198,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
 
     def create_poissons(
             self, sim, target_layer, target_pop, rate, this_target_pop, w_ext):
-        # pylint: disable = wrong-spelling-in-docstring
+        # pylint: disable=wrong-spelling-in-docstring
         """ creates the SSP's
 
         :param sim:

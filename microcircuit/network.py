@@ -97,6 +97,7 @@ class Network:
             'normal', [common_params.v0_mean, common_params.v0_sd],
             rng=script_rng)
 
+        # pylint: disable=wrong-spelling-in-comment
         # Improved initialisation from Julich
         v_dist = {
             'L23E': RandomDistribution(

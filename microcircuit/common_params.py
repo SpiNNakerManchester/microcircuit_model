@@ -19,7 +19,7 @@ class CommonParams(object):
     """
 
     __slots__ = [
-        # pylint: disable = wrong-spelling-in-comment
+        # pylint: disable=wrong-spelling-in-comment
         # Relative inhibitory synaptic weight
         'g',
         'layers',

@@ -28,7 +28,7 @@ class SimParams(object):
     """
 
     __slots__ = [
-        # pylint: disable = wrong-spelling-in-comment
+        # pylint: disable=wrong-spelling-in-comment
         # sim time step
         'timestep',
         # sim duration
