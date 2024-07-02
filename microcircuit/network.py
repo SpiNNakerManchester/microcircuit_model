@@ -40,7 +40,7 @@ class Network:
         self.simulator = simulator
 
     def setup(self, sim, simulator_specific_info, common_params):
-        # pylint: disable=wrong-spelling-in-comment
+        # pylint: disable=wrong-spelling-in-docstring
         """ creates the PyNN network
 
         :param sim: the simulator

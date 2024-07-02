@@ -81,7 +81,7 @@ class NestParams(SimParams):
         'n_nodes',
         # number of MPI processes per node
         'n_procs_per_node',
-        # walltime for simulation
+        # wall time for simulation
         'wall_time',
         # total memory for simulation
         # For 12 or 24 MPI processes, 4gb is OK. For 48 MPI processes,
@@ -89,7 +89,7 @@ class NestParams(SimParams):
         'memory',
         # path to the MPI shell script
         'mpi_path',
-        # path to back-end (not needed for standard NEST versions on Blaustein,
+        # path to back-end (not needed for standard NEST versions,
         # which are loaded as modules)
         'backend_path',
         # path to PyNN installation
@@ -125,6 +125,7 @@ class SpinnakerParams(SimParams):
 
 
 def add_subparser(subparsers, command, method):
+    # pylint:disable = wrong-spelling-in-docstring
     """
     Adds simulation subparsers.
 

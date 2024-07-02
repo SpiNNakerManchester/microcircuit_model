@@ -25,7 +25,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
     """
 
     __slots__ = [
-        # pylint: disable=wrong-spelling-in-commen
+        # pylint: disable=wrong-spelling-in-comment
         # Whether to make random numbers independent of the number of processes
         'parallel_safe',
         # Fraction of neurons to simulate
@@ -194,6 +194,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
 
     def create_poissons(
             self, sim, target_layer, target_pop, rate, this_target_pop, w_ext):
+        # pylint: disable = wrong-spelling-in-docstring
         """ creates the SSP's
 
         :param sim:

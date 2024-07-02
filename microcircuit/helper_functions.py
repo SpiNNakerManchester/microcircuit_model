@@ -23,7 +23,7 @@ def create_weight_matrix(common_params):
     Creates the wight array based on the parameters
 
     :param  CommonParams common_params:
-    :rtype: nparray
+    :rtype: ndarray
     """
     w = np.zeros(
         [common_params.n_layers * common_params.n_pops_per_layer,

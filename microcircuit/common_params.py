@@ -15,10 +15,11 @@
 
 class CommonParams(object):
     """
-    common params for all sims
+    common params for all simulators.
     """
 
     __slots__ = [
+        # pylint: disable = wrong-spelling-in-comment
         # Relative inhibitory synaptic weight
         'g',
         'layers',
