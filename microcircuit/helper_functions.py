@@ -55,7 +55,7 @@ def get_init_voltages_from_file(pop, simulator_params):
 
     :param Population pop:
     :param SpinnakerParams simulator_params:
-    :rtype: nparray
+    :rtype: ndarray
     """
     voltages = np.zeros(len(pop))
     for filename in os.listdir(simulator_params.input_dir):
