@@ -214,7 +214,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         if sim.rank() == 0:
             print(
                 f'connecting Poisson generators to'
-                ' {target_layer} {target_pop}')
+                f' {target_layer} {target_pop}')
         additional_params = {'seed': self.pyseed}
         if self.use_split_synapse_neuron_model:
             # pylint: disable=import-outside-toplevel
