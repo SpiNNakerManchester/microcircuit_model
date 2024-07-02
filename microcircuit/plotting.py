@@ -23,6 +23,9 @@ matplotlib.use('Agg')
 
 def plot_raster_bars(
         t_start, t_stop, n_rec, frac_to_plot, path, common_params):
+    """
+    Plots the data.
+    """
 
     # Dictionary of spike arrays, one entry for each population
     spikes = {}

@@ -121,7 +121,6 @@ class SpinnakerParams(SimParams):
     """
     Spynnaker parameters
     """
-    pass
 
 
 def add_subparser(subparsers, command, method):

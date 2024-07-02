@@ -178,10 +178,11 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
 
     def create_neural_population(self, sim, n_neurons, layer, pop):
         """
-        Create a neurol population optimized for sPyNNaker
+        Create a neural population optimized for sPyNNaker
         """
         additional_params = {"seed": self.pyseed}
         if self.use_split_synapse_neuron_model:
+            # pylint: disable=import-outside-toplevel
             from spynnaker.pyNN.extra_algorithms.splitter_components import (
                 SplitterAbstractPopulationVertexNeuronsSynapses)
             print(f"Using split synapse neuron model with "
@@ -215,6 +216,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
                 ' {} {}'.format(target_layer, target_pop))
         additional_params = {'seed': self.pyseed}
         if self.use_split_synapse_neuron_model:
+            # pylint: disable=import-outside-toplevel
             from spynnaker.pyNN.extra_algorithms.splitter_components import (
                 SplitterPoissonDelegate)
             additional_params['splitter'] = SplitterPoissonDelegate()
@@ -229,6 +231,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
 
     def fixed_tot_number_connect(
             self, sim, pop1, pop2, k, w_mean, w_sd, d_mean, d_sd, conn_type):
+        # pylint: disable=wrong-spelling-in-docstring
         """
         SpiNNaker-specific function connecting two populations with multapses
         and a fixed total number of synapses

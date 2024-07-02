@@ -13,6 +13,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+from pyNN.random import RandomDistribution
+import numpy as np
+
 from .connectivity import build_from_list_connect
 from .constants import (
     DC, NEST_NEURON_MODEL, SPINNAKER_NEURON_MODEL, POISSON, CONN_ROUTINE)
@@ -20,9 +23,6 @@ from .sim_params import NEST_SIM, SPINNAKER_SIM
 from .scaling import get_in_degrees, adjust_w_and_ext_to_k
 from .helper_functions import (
     create_weight_matrix, get_init_voltages_from_file)
-
-from pyNN.random import RandomDistribution
-import numpy as np
 
 
 class Network:

@@ -32,7 +32,7 @@ def build_from_list_connect(
     connections = list()
     for filename in os.listdir(simulator_params.conn_dir):
         if filename.startswith(pop1.label + "_" + pop2.label):
-            print("Reading {}".format(filename))
+            print(f"Reading {filename}")
             f = open(os.path.join(simulator_params.conn_dir, filename),
                      encoding="utf8")
             in_comment_bracket = False
