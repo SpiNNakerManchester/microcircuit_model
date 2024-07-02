@@ -13,10 +13,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import numpy
+from pyNN.random import RandomDistribution
+
 from .sim_params import SpinnakerParams
 from .constants import POISSON, SPINNAKER_NEURON_MODEL, CONN_ROUTINE
-from pyNN.random import RandomDistribution
-import numpy
 
 
 class SpinnakerSimulatorInfo(SpinnakerParams):
@@ -200,7 +201,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
     def create_poissons(
             self, sim, target_layer, target_pop, rate, this_target_pop, w_ext):
         # pylint: disable=wrong-spelling-in-docstring
-        """ creates the SSP's
+        """ Creates the Spike Source Poisson
 
         :param sim:
         :param target_layer:
@@ -212,8 +213,8 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         """
         if sim.rank() == 0:
             print(
-                'connecting Poisson generators to'
-                ' {} {}'.format(target_layer, target_pop))
+                f'connecting Poisson generators to'
+                ' {target_layer} {target_pop}')
         additional_params = {'seed': self.pyseed}
         if self.use_split_synapse_neuron_model:
             # pylint: disable=import-outside-toplevel
