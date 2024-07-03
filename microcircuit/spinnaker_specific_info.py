@@ -14,7 +14,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import numpy
-from pyNN.random import RandomDistribution
+from pyNN.random import RandomDistribution  # type: ignore[import]
 
 from .sim_params import SpinnakerParams
 from .constants import POISSON, SPINNAKER_NEURON_MODEL, CONN_ROUTINE

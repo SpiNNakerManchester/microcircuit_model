@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from pyNN.random import RandomDistribution
+from pyNN.random import RandomDistribution  # type: ignore[import]
 import numpy as np
 
 from .connectivity import build_from_list_connect

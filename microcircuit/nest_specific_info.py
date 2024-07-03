@@ -18,7 +18,7 @@ import os
 from .sim_params import NestParams
 from .constants import DC, NEST_NEURON_MODEL, CONN_ROUTINE
 import numpy
-from pyNN.random import NumpyRNG
+from pyNN.random import NumpyRNG  # type: ignore[import]
 
 # pylint: skip-file
 
