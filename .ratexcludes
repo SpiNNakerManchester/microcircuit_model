@@ -6,4 +6,5 @@
 **/spalloc/**
 **/SpiNNFrontEndCommon/**
 **/sPyNNaker/**
+**/TestBase/**
 **/.pylintrc
