@@ -280,7 +280,7 @@ class NestSimulatorInfo(NestParams):
             sim.nest.SetDefaults('static_synapse', {'receptor_type': 0})
 
     def create_neural_population(self, sim, n_neurons, layer, pop):
-        from pyNN.nest import native_cell_type
+        from pyNN.nest import native_cell_type  # type: ignore[import]
         model = native_cell_type('iaf_psc_exp_ps')
         return sim.Population(
             int(round(n_neurons * self.n_scaling)),
