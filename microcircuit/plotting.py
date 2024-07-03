@@ -16,8 +16,8 @@
 import glob
 import numpy as np
 import neo  # type: ignore[import]
-import matplotlib
-import matplotlib.pyplot as plt
+import matplotlib  # type: ignore[import]
+import matplotlib.pyplot as plt  # type: ignore[import]
 matplotlib.use('Agg')
 
 
