@@ -33,7 +33,10 @@ sim_parser.add_argument("-h", "--help", action="store_true")
 args, extras = sim_parser.parse_known_args()
 argv = list()
 if args.simulator is not None:
-    argv.append(args.simulator)
+    if args.simulator in [NEST_SIM, SPINNAKER_SIM]:
+        argv.append(args.simulator)
+    else:
+        args.simulator = None
 if args.help:
     argv.append("-h")
 elif args.simulator is None:
