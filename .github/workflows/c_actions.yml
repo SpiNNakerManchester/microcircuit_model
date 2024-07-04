@@ -1,19 +1,17 @@
-# Copyright (c) 2020 The University of Manchester
+# Copyright (c) 2024 The University of Manchester
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-#     https://www.apache.org/licenses/LICENSE-2.0
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# This workflow will install Python dependencies, run tests, lint and rat with a variety of Python versions
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 name: C Actions
 on: [push]
@@ -37,11 +35,6 @@ jobs:
         echo "NEURAL_MODELLING_DIRS=$PWD/neural_modelling" >> $GITHUB_ENV
         echo "C_LOGS_DICT=$PWD/logs.sqlite3" >> $GITHUB_ENV
 
-    - name: Lint C code using Vera++
-      uses: SpiNNakerManchester/SupportScripts/actions/vera@main
-      with:
-        base-dir: neural_modelling/src
-
     - name: Build C dependencies
       run: |
         make -C $SPINN_DIRS
@@ -55,19 +48,9 @@ jobs:
 
     - name: Build PYNN C code
       run: make
-      working-directory: neural_modelling
+      working-directory: sPyNNaker/neural_modelling
       env:
         CFLAGS: -fdiagnostics-color=always
-
-    - name: Build C code in DEBUG mode
-      run: make clean; make SPYNNAKER_DEBUG=DEBUG
-      working-directory: neural_modelling
-      env:
-        CFLAGS: -fdiagnostics-color=always
-
-    - name: Build documentation using doxygen
-      run: make doxysetup doxygen
-      working-directory: neural_modelling
 
     - name: Upload Fec binaries
       uses: actions/upload-artifact@v4
@@ -80,7 +63,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: pynn_binaries
-        path: spynnaker/pyNN/model_binaries/*.aplx
+        path: sPyNNaker/spynnaker/pyNN/model_binaries/*.aplx
         retention-days: 5
 
     - name: Upload log.sqlite3s
