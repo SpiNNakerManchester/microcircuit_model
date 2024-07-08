@@ -73,8 +73,41 @@ jobs:
         path: logs.sqlite3
         retention-days: 5
 
+  java_compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+    - name: Prepare
+      uses: SpiNNakerManchester/SupportScripts/actions/prepare@main
+      with:
+        checkout_dependencies: JavaSpiNNaker
+        install_module: false
+        install_check_tools: false
+    - name: Set up JRE ${{ matrix.java }}
+      uses: actions/setup-java@v4.2.1
+      with:
+        distribution: 'zulu'
+        java-version: 11
+        cache: 'maven'
+    - name: "Set up node cache"
+      uses: actions/cache@v4
+      with:
+        path: '~/.m2/repository/com/github/eirslett/node'
+        key: ${{ runner.os }}-node-${{ hashFiles('SpiNNaker-allocserv/pom.xml') }}
+        restore-keys: ${{ runner.os }}-node-
+
+    - name: Compile
+      run: mvn clean install --file ./JavaSpiNNaker/pom.xml --settings ./JavaSpiNNaker/.github/settings.xml -B -DskipTests=true -Dmaven.javadoc.skip=true -P "!jsp-precompile"
+
+    - name: Upload Jar
+      uses: actions/upload-artifact@v4
+      with:
+        name: spinnaker-exe.jar
+        path: ./JavaSpiNNaker/SpiNNaker-front-end/target/spinnaker-exe.jar
+        retention-days: 5
+
   test:
-    needs: build
+    needs: [build, java_compile]
     runs-on: ${{ matrix.runner }}
     strategy:
       matrix:
@@ -92,6 +125,13 @@ jobs:
         ubuntu_packages: graphviz
         pip_installs: pytest
         cfg_file: spynnaker
+
+    - name: Set up JRE ${{ matrix.java }}
+      uses: actions/setup-java@v4.2.1
+      with:
+        distribution: 'zulu'
+        java-version: 11
+        java-package: jre
 
     - name: Download Fec binaries
       uses: actions/download-artifact@v4
@@ -112,6 +152,13 @@ jobs:
         name: logs.sqlite3
         path: external_binaries
 
+    - name: Download jar
+      uses: actions/download-artifact@v4
+      with:
+        name: spinnaker-exe.jar
+        # Need to go into spynnaker as FEC will have been moved by install
+        path: external_binaries
+
     - name: Append cfg
       # Doing this in the prepare action ended with a different path
       # assumes cfg so far already has and ends with Machine section
@@ -119,6 +166,9 @@ jobs:
         echo 'enable_advanced_monitor_support = False' >> ~/.spiNNakerGraphFrontEnd.cfg
         echo '[Mapping]' >> ~/.spynnaker.cfg
         echo "external_binaries=$PWD/external_binaries" >> ~/.spynnaker.cfg
+        echo '[Java]' >> ~/.spiNNakerGraphFrontEnd.cfg
+        echo 'use_java = False' >> ~/.spiNNakerGraphFrontEnd.cfg
+        echo "java_jar_path=$PWD/external_binaries/spinnaker-exe.jar" >> ~/.spiNNakerGraphFrontEnd.cfg
         cat ~/.spynnaker.cfg
 
     - name: Test with pytest and proxy
