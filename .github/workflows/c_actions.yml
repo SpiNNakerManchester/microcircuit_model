@@ -114,7 +114,9 @@ jobs:
 
     - name: Append cfg
       # Doing this in the prepare action ended with a different path
+      # assumes cfg so far already has and ends with Machine section
       run: | 
+        echo 'enable_advanced_monitor_support = False' >> ~/.spiNNakerGraphFrontEnd.cfg
         echo '[Mapping]' >> ~/.spynnaker.cfg
         echo "external_binaries=$PWD/external_binaries" >> ~/.spynnaker.cfg
         cat ~/.spynnaker.cfg
