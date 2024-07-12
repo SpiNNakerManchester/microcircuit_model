@@ -1,0 +1,10 @@
+**/microcircuit_colors
+**/SpiNNUtils/**
+**/SpiNNMachine/**
+**/SpiNNMan/**
+**/PACMAN/**
+**/spalloc/**
+**/SpiNNFrontEndCommon/**
+**/sPyNNaker/**
+**/TestBase/**
+**/.pylintrc

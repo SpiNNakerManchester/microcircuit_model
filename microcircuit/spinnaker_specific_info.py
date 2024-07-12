@@ -1,7 +1,23 @@
+# Copyright (c) 2017 Ebrains project and The University of Manchester
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+import numpy
+from pyNN.random import RandomDistribution  # type: ignore[import]
+
 from .sim_params import SpinnakerParams
 from .constants import POISSON, SPINNAKER_NEURON_MODEL, CONN_ROUTINE
-from pyNN.random import RandomDistribution
-import numpy
 
 
 class SpinnakerSimulatorInfo(SpinnakerParams):
@@ -10,6 +26,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
     """
 
     __slots__ = [
+        # pylint: disable=wrong-spelling-in-comment
         # Whether to make random numbers independent of the number of processes
         'parallel_safe',
         # Fraction of neurons to simulate
@@ -140,6 +157,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         self.script_rng = None
 
     def after_setup_info(self, sim):
+        # pylint: disable=wrong-spelling-in-docstring
         """
         spinnaker related tasks for after setup
         :param sim: sim
@@ -160,13 +178,17 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         this_pop.record("v")
 
     def create_neural_population(self, sim, n_neurons, layer, pop):
+        """
+        Create a neural population optimized for sPyNNaker
+        """
         additional_params = {"seed": self.pyseed}
         if self.use_split_synapse_neuron_model:
+            # pylint: disable=import-outside-toplevel
             from spynnaker.pyNN.extra_algorithms.splitter_components import (
                 SplitterAbstractPopulationVertexNeuronsSynapses)
-            print("Using split synapse neuron model with {} synapse cores and"
-                  " {} delay slots".format(self.n_synapse_cores,
-                                           self.n_delay_slots))
+            print(f"Using split synapse neuron model with "
+                  f"{self.n_synapse_cores} synapse cores and "
+                  f"{self.n_delay_slots} delay slots")
             additional_params["splitter"] = \
                 SplitterAbstractPopulationVertexNeuronsSynapses(
                     self.n_synapse_cores, self.n_delay_slots, False)
@@ -178,7 +200,8 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
 
     def create_poissons(
             self, sim, target_layer, target_pop, rate, this_target_pop, w_ext):
-        """ creates the SSP's
+        # pylint: disable=wrong-spelling-in-docstring
+        """ Creates the Spike Source Poisson
 
         :param sim:
         :param target_layer:
@@ -190,10 +213,11 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         """
         if sim.rank() == 0:
             print(
-                'connecting Poisson generators to'
-                ' {} {}'.format(target_layer, target_pop))
+                f'connecting Poisson generators to'
+                f' {target_layer} {target_pop}')
         additional_params = {'seed': self.pyseed}
         if self.use_split_synapse_neuron_model:
+            # pylint: disable=import-outside-toplevel
             from spynnaker.pyNN.extra_algorithms.splitter_components import (
                 SplitterPoissonDelegate)
             additional_params['splitter'] = SplitterPoissonDelegate()
@@ -208,6 +232,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
 
     def fixed_tot_number_connect(
             self, sim, pop1, pop2, k, w_mean, w_sd, d_mean, d_sd, conn_type):
+        # pylint: disable=wrong-spelling-in-docstring
         """
         SpiNNaker-specific function connecting two populations with multapses
         and a fixed total number of synapses

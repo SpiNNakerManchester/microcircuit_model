@@ -1,3 +1,18 @@
+# Copyright (c) 2017 Ebrains project and The University of Manchester
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 ###################################################
 #  Main script
 ###################################################
@@ -18,7 +33,10 @@ sim_parser.add_argument("-h", "--help", action="store_true")
 args, extras = sim_parser.parse_known_args()
 argv = list()
 if args.simulator is not None:
-    argv.append(args.simulator)
+    if args.simulator in [NEST_SIM, SPINNAKER_SIM]:
+        argv.append(args.simulator)
+    else:
+        args.simulator = None
 if args.help:
     argv.append("-h")
 elif args.simulator is None:

@@ -1,3 +1,18 @@
+# Copyright (c) 2017 Ebrains project and The University of Manchester
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 ###################################################
 # Simulation parameters
 ###################################################
@@ -8,8 +23,12 @@ SPINNAKER_SIM = "SPINNAKER"
 
 
 class SimParams(object):
+    """
+    Shared parameters for simulations.
+    """
 
     __slots__ = [
+        # pylint: disable=wrong-spelling-in-comment
         # sim time step
         'timestep',
         # sim duration
@@ -51,13 +70,18 @@ class SimParams(object):
 
 
 class NestParams(SimParams):
+    """
+    Nest parameters for simulations.
+
+    Not used by sPyNNaker
+    """
 
     __slots__ = [
         # number of nodes
         'n_nodes',
         # number of MPI processes per node
         'n_procs_per_node',
-        # walltime for simulation
+        # wall time for simulation
         'wall_time',
         # total memory for simulation
         # For 12 or 24 MPI processes, 4gb is OK. For 48 MPI processes,
@@ -65,7 +89,7 @@ class NestParams(SimParams):
         'memory',
         # path to the MPI shell script
         'mpi_path',
-        # path to back-end (not needed for standard NEST versions on Blaustein,
+        # path to back-end (not needed for standard NEST versions,
         # which are loaded as modules)
         'backend_path',
         # path to PyNN installation
@@ -94,10 +118,21 @@ class NestParams(SimParams):
 
 
 class SpinnakerParams(SimParams):
-    pass
+    """
+    Spynnaker parameters
+    """
 
 
 def add_subparser(subparsers, command, method):
+    # pylint:disable = wrong-spelling-in-docstring
+    """
+    Adds simulation subparsers.
+
+    :param subparsers:
+    :param command:
+    :param method:
+    :return:
+    """
     argspec = getfullargspec(method)
     args_with_defaults = argspec.args
     args_without_defaults = []

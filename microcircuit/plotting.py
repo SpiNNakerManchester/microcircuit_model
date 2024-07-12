@@ -1,13 +1,31 @@
-import numpy as np
+# Copyright (c) 2017 Ebrains project and The University of Manchester
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 import glob
-import neo
-import matplotlib
+import numpy as np
+import neo  # type: ignore[import]
+import matplotlib  # type: ignore[import]
+import matplotlib.pyplot as plt  # type: ignore[import]
 matplotlib.use('Agg')
-import matplotlib.pyplot as plt  # noqa: E402
 
 
 def plot_raster_bars(
         t_start, t_stop, n_rec, frac_to_plot, path, common_params):
+    """
+    Plots the data.
+    """
 
     # Dictionary of spike arrays, one entry for each population
     spikes = {}

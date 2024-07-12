@@ -1,12 +1,27 @@
+# Copyright (c) 2017 Ebrains project and The University of Manchester
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 import os
 import math
 
 
 def build_from_list_connect(
-        sim, pop1, pop2, conn_type, base_neuron_ids, simulator_params):
+        simulator, pop1, pop2, conn_type, base_neuron_ids, simulator_params):
     """
     Establish connections based on data read from file
-    :param sim:
+    :param simulator:
     :param pop1:
     :param pop2:
     :param conn_type:
@@ -17,7 +32,7 @@ def build_from_list_connect(
     connections = list()
     for filename in os.listdir(simulator_params.conn_dir):
         if filename.startswith(pop1.label + "_" + pop2.label):
-            print("Reading {}".format(filename))
+            print(f"Reading {filename}")
             f = open(os.path.join(simulator_params.conn_dir, filename),
                      encoding="utf8")
             in_comment_bracket = False
@@ -46,5 +61,5 @@ def build_from_list_connect(
                              float(delay)))
             f.close()
     if len(connections) > 0:
-        connector = sim.FromListConnector(conn_list=connections)
-        sim.Projection(pop1, pop2, connector, receptor_type=conn_type)
+        connector = simulator.FromListConnector(conn_list=connections)
+        simulator.Projection(pop1, pop2, connector, receptor_type=conn_type)

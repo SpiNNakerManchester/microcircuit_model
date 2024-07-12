@@ -1,3 +1,21 @@
+# Copyright (c) 2017 Ebrains project and The University of Manchester
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+from pyNN.random import RandomDistribution  # type: ignore[import]
+import numpy as np
+
 from .connectivity import build_from_list_connect
 from .constants import (
     DC, NEST_NEURON_MODEL, SPINNAKER_NEURON_MODEL, POISSON, CONN_ROUTINE)
@@ -5,9 +23,6 @@ from .sim_params import NEST_SIM, SPINNAKER_SIM
 from .scaling import get_in_degrees, adjust_w_and_ext_to_k
 from .helper_functions import (
     create_weight_matrix, get_init_voltages_from_file)
-
-from pyNN.random import RandomDistribution
-import numpy as np
 
 
 class Network:
@@ -25,6 +40,7 @@ class Network:
         self.simulator = simulator
 
     def setup(self, sim, simulator_specific_info, common_params):
+        # pylint: disable=wrong-spelling-in-docstring
         """ creates the PyNN network
 
         :param sim: the simulator
@@ -81,6 +97,7 @@ class Network:
             'normal', [common_params.v0_mean, common_params.v0_sd],
             rng=script_rng)
 
+        # pylint: disable=wrong-spelling-in-comment
         # Improved initialisation from Julich
         v_dist = {
             'L23E': RandomDistribution(
@@ -221,8 +238,8 @@ class Network:
                 if common_params.thalamic_input:
                     # Thalamic inputs
                     if sim.rank() == 0:
-                        print('creating thalamic connections to {} {}'.format(
-                            target_layer, target_pop))
+                        print(f'creating thalamic connections to '
+                              f'{target_layer} {target_pop}')
                     c_thal = (
                         common_params.thal_params[
                             'C'][target_layer][target_pop])
@@ -268,10 +285,9 @@ class Network:
 
                         if sim.rank() == 0:
                             print(
-                                'creating connections from {} {} to {} '
-                                '{}'.format(
-                                    source_layer, source_pop, target_layer,
-                                    target_pop))
+                                f'creating connections '
+                                f'from {source_layer} {source_pop} '
+                                f'to {target_layer} {target_pop}')
 
                         if (source_pop == 'E' and source_layer == 'L4'
                                 and target_layer == 'L23'

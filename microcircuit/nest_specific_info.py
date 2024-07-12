@@ -1,9 +1,24 @@
+# Copyright (c) 2017 Ebrains project and The University of Manchester
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 import os
 
 from .sim_params import NestParams
 from .constants import DC, NEST_NEURON_MODEL, CONN_ROUTINE
 import numpy
-from pyNN.random import NumpyRNG
+from pyNN.random import NumpyRNG  # type: ignore[import]
 
 # pylint: skip-file
 
@@ -265,7 +280,7 @@ class NestSimulatorInfo(NestParams):
             sim.nest.SetDefaults('static_synapse', {'receptor_type': 0})
 
     def create_neural_population(self, sim, n_neurons, layer, pop):
-        from pyNN.nest import native_cell_type
+        from pyNN.nest import native_cell_type  # type: ignore[import]
         model = native_cell_type('iaf_psc_exp_ps')
         return sim.Population(
             int(round(n_neurons * self.n_scaling)),

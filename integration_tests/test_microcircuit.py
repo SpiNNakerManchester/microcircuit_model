@@ -13,17 +13,28 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from spinnaker_testbase import ScriptChecker
 import os
 import stat
+from spinnaker_testbase import ScriptChecker
 
 
 class TestMicrocircuit(ScriptChecker):
+    """
+    Runs the Microcircuit script and check for the existence of result files
+    """
 
     def test_microcircuit(self):
+        """
+        Runs the Microcircuit with safety code
+
+        :return:
+        """
         self.runsafe(self.microcircuit)
 
     def microcircuit(self):
+        """
+        Runs the Microcircuit script and check for the existence of results
+        """
         self.check_script("run_microcircuit.py")
         for result_file in [
                 "spikes_L23E.pkl", "spikes_L23I.pkl",

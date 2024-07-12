@@ -1,3 +1,18 @@
+# Copyright (c) 2017 Ebrains project and The University of Manchester
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 #############################################################################
 # Functions for computing and adjusting connection and input parameters
 #############################################################################
@@ -37,6 +52,7 @@ def get_in_degrees(common_params):
 
 def adjust_w_and_ext_to_k(
         k_full, k_scaling, w, dc, common_params, simulation_params):
+    # pylint: disable=wrong-spelling-in-docstring
     """
     Adjust synaptic weights and external drive to the in-degrees
     to preserve mean and variance of inputs in the diffusion approximation
