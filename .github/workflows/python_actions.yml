@@ -28,10 +28,10 @@ jobs:
       install_module: false
       ubuntu_packages: graphviz
       test_directories:
-      coverage-package:
-      flake8-packages: microcircuit integration_tests
-      pylint-packages: microcircuit integration_tests
-      mypy-packages: microcircuit integration_tests
+      coverage_package:
+      flake8_packages: microcircuit integration_tests
+      pylint_packages: microcircuit integration_tests
+      mypy_packages: microcircuit integration_tests
       rat_config_file: rat_gpl3.xml
       run_sphinx: false
-      run_cff-validator: false
+      run_cff_validator: false
