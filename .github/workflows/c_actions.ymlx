@@ -25,7 +25,7 @@ jobs:
       with:
         checkout_dependencies: spinnaker_tools spinn_common SpiNNFrontEndCommon sPyNNaker
         install_dependencies: SpiNNUtils
-        install_module: false
+        install-module: false
         install_check_tools: false
         ubuntu_packages: doxygen gcc-arm-none-eabi
 
@@ -81,7 +81,7 @@ jobs:
       uses: SpiNNakerManchester/SupportScripts/actions/prepare@main
       with:
         checkout_dependencies: JavaSpiNNaker
-        install_module: false
+        install-module: false
         install_check_tools: false
     - name: Set up JRE ${{ matrix.java }}
       uses: actions/setup-java@v4.2.1
@@ -121,7 +121,7 @@ jobs:
         install_dependencies: > 
           SpiNNUtils SpiNNMachine SpiNNMan PACMAN spalloc
           SpiNNFrontEndCommon TestBase sPyNNaker
-        install_module: false
+        install-module: false
         install_check_tools: false
         ubuntu_packages: graphviz
         pip_installs: pytest
