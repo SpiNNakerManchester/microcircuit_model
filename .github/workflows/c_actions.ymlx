@@ -21,7 +21,7 @@ jobs:
     timeout-minutes: 10
     steps:
     - name: Prepare
-      uses: SpiNNakerManchester/SupportScripts/actions/prepare@main
+      uses: SpiNNakerManchester/SupportScripts/actions/prepare@action-dash
       with:
         checkout_dependencies: spinnaker_tools spinn_common SpiNNFrontEndCommon sPyNNaker
         install_dependencies: SpiNNUtils
@@ -78,7 +78,7 @@ jobs:
     timeout-minutes: 100
     steps:
     - name: Prepare
-      uses: SpiNNakerManchester/SupportScripts/actions/prepare@main
+      uses: SpiNNakerManchester/SupportScripts/actions/prepare@action-dash
       with:
         checkout_dependencies: JavaSpiNNaker
         install-module: false
@@ -116,7 +116,7 @@ jobs:
 
     steps:
     - name: Prepare
-      uses: SpiNNakerManchester/SupportScripts/actions/prepare@main
+      uses: SpiNNakerManchester/SupportScripts/actions/prepare@action-dash
       with:
         install_dependencies: > 
           SpiNNUtils SpiNNMachine SpiNNMan PACMAN spalloc
