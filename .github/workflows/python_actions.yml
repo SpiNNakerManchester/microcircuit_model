@@ -26,7 +26,7 @@ jobs:
           SpiNNUtils SpiNNMachine SpiNNMan PACMAN spalloc
           SpiNNFrontEndCommon sPyNNaker TestBase
       install-module: false
-      ubuntu_packages: graphviz
+      ubuntu-packages: graphviz
       test_directories:
       coverage-package:
       flake8-packages: microcircuit integration_tests
