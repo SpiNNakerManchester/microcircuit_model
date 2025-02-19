@@ -33,5 +33,5 @@ jobs:
       pylint-packages: microcircuit integration_tests
       mypy-packages: microcircuit integration_tests
       rat-config-file: rat_gpl3.xml
-      run_sphinx: false
+      run-sphinx: false
       run_cff-validator: false
