@@ -27,7 +27,7 @@ jobs:
           SpiNNFrontEndCommon sPyNNaker TestBase
       install-module: false
       ubuntu-packages: graphviz
-      test_directories:
+      test-directories:
       coverage-package:
       flake8-packages: microcircuit integration_tests
       pylint-packages: microcircuit integration_tests
