@@ -25,13 +25,13 @@ jobs:
       dependencies: >
           SpiNNUtils SpiNNMachine SpiNNMan PACMAN spalloc
           SpiNNFrontEndCommon sPyNNaker TestBase
-      install_module: false
-      ubuntu_packages: graphviz
-      test_directories:
+      install-module: false
+      ubuntu-packages: graphviz
+      test-directories:
       coverage-package:
       flake8-packages: microcircuit integration_tests
       pylint-packages: microcircuit integration_tests
       mypy-packages: microcircuit integration_tests
-      rat_config_file: rat_gpl3.xml
-      run_sphinx: false
-      run_cff-validator: false
+      rat-config-file: rat_gpl3.xml
+      run-sphinx: false
+      run-cff-validator: false

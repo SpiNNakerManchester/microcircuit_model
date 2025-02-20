@@ -23,11 +23,11 @@ jobs:
     - name: Prepare
       uses: SpiNNakerManchester/SupportScripts/actions/prepare@main
       with:
-        checkout_dependencies: spinnaker_tools spinn_common SpiNNFrontEndCommon sPyNNaker
-        install_dependencies: SpiNNUtils
-        install_module: false
-        install_check_tools: false
-        ubuntu_packages: doxygen gcc-arm-none-eabi
+        checkout-dependencies: spinnaker_tools spinn_common SpiNNFrontEndCommon sPyNNaker
+        install-dependencies: SpiNNUtils
+        install-module: false
+        install-check_tools: false
+        ubuntu-packages: doxygen gcc-arm-none-eabi
 
     - name: Set environment variables
       run: |
@@ -81,8 +81,8 @@ jobs:
       uses: SpiNNakerManchester/SupportScripts/actions/prepare@main
       with:
         checkout_dependencies: JavaSpiNNaker
-        install_module: false
-        install_check_tools: false
+        install-module: false
+        install-check-tools: false
     - name: Set up JRE ${{ matrix.java }}
       uses: actions/setup-java@v4.2.1
       with:
@@ -121,11 +121,11 @@ jobs:
         install_dependencies: > 
           SpiNNUtils SpiNNMachine SpiNNMan PACMAN spalloc
           SpiNNFrontEndCommon TestBase sPyNNaker
-        install_module: false
-        install_check_tools: false
-        ubuntu_packages: graphviz
-        pip_installs: pytest
-        cfg_file: spynnaker
+        install-module: false
+        install-check-tools: false
+        ubuntu-packages: graphviz
+        pip-installs: pytest
+        cfg-file: spynnaker
 
     - name: Set up JRE ${{ matrix.java }}
       uses: actions/setup-java@v4.2.1
