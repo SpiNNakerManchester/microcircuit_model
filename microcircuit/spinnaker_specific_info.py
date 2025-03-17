@@ -185,12 +185,12 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         if self.use_split_synapse_neuron_model:
             # pylint: disable=import-outside-toplevel
             from spynnaker.pyNN.extra_algorithms.splitter_components import (
-                SplitterAbstractPopulationVertexNeuronsSynapses)
+                SplitterPopulationVertexNeuronsSynapses)
             print(f"Using split synapse neuron model with "
                   f"{self.n_synapse_cores} synapse cores and "
                   f"{self.n_delay_slots} delay slots")
             additional_params["splitter"] = \
-                SplitterAbstractPopulationVertexNeuronsSynapses(
+                SplitterPopulationVertexNeuronsSynapses(
                     self.n_synapse_cores, self.n_delay_slots, False)
         model = getattr(sim, self.neuron_model)
         return sim.Population(
