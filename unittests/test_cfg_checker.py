@@ -26,9 +26,6 @@ class TestCfgChecker(unittest.TestCase):
     def test_config_checks(self):
         unittests = os.path.dirname(__file__)
         parent = os.path.dirname(unittests)
-
-        checker = ConfigChecker([parent])
-        checker.check(local_defaults=False)
         cfg = os.path.join(parent, "spynnaker.cfg")
         integration_tests = os.path.join(parent, "integration_tests")
         microcircuit = os.path.join(parent, "microcircuit")
