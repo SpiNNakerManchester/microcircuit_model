@@ -26,6 +26,7 @@ jobs:
           SpiNNUtils SpiNNMachine SpiNNMan PACMAN spalloc
           SpiNNFrontEndCommon sPyNNaker TestBase
       install-module: false
+      pip-installs: pytest
       ubuntu-packages: graphviz
       test-directories: unittests
       coverage-package:
