@@ -14,6 +14,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import os
+import sys
 import stat
 from spinnaker_testbase import ScriptChecker
 
@@ -35,6 +36,9 @@ class TestMicrocircuit(ScriptChecker):
         """
         Runs the Microcircuit script and check for the existence of results
         """
+        file = sys.modules[self.__module__].__file__
+        assert file is not None
+        self._setup(file)
         self.check_script("run_microcircuit.py", use_script_dir=False)
         for result_file in [
                 "spikes_L23E.pkl", "spikes_L23I.pkl",
