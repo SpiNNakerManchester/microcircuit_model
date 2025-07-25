@@ -14,6 +14,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import os
+from runpy import run_path
 import stat
 from spinnaker_testbase import ScriptChecker
 
@@ -35,7 +36,8 @@ class TestMicrocircuit(ScriptChecker):
         """
         Runs the Microcircuit script and check for the existence of results
         """
-        self.check_script("run_microcircuit.py")
+        script_path = self._script_path("run_microcircuit.py")
+        run_path(script_path)
         for result_file in [
                 "spikes_L23E.pkl", "spikes_L23I.pkl",
                 "spikes_L4E.pkl", "spikes_L4I.pkl",
