@@ -32,5 +32,6 @@ class TestCfgChecker(unittest.TestCase):
         cfg = os.path.join(parent, "spynnaker.cfg")
         integration_tests = os.path.join(parent, "integration_tests")
         microcircuit = os.path.join(parent, "microcircuit")
+
         cc = ConfigChecker([cfg, integration_tests, microcircuit, unittests])
         cc.check(local_defaults=False)
