@@ -1,4 +1,4 @@
-# Copyright (c) 2022 The University of Manchester
+# Copyright (c) 2025 The University of Manchester
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,23 +16,23 @@
 # This workflow will install Python dependencies, run lint and rat with a variety of Python versions
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-name: Python Actions
-on: [push]
-jobs:
-  call:
-    uses: SpiNNakerManchester/SupportScripts/.github/workflows/python_checks.yml@main
-    with:
-      dependencies: >
-          SpiNNUtils SpiNNMachine SpiNNMan PACMAN spalloc
-          SpiNNFrontEndCommon sPyNNaker TestBase
-      install-module: false
-      pip-installs: pytest
-      ubuntu-packages: graphviz
-      test-directories: unittests
-      coverage-package:
-      flake8-packages: microcircuit integration_tests
-      pylint-packages: microcircuit integration_tests
-      mypy-packages: microcircuit integration_tests
-      rat-config-file: rat_gpl3.xml
-      run-sphinx: false
-      run-cff-validator: false
+import os
+import unittest
+from spinn_utilities.configs.config_checker import ConfigChecker
+from spynnaker.pyNN.config_setup import unittest_setup
+
+
+class TestCfgChecker(unittest.TestCase):
+
+    def setUp(self):
+        unittest_setup()
+
+    def test_config_checks(self):
+        unittests = os.path.dirname(__file__)
+        parent = os.path.dirname(unittests)
+        cfg = os.path.join(parent, "spynnaker.cfg")
+        integration_tests = os.path.join(parent, "integration_tests")
+        microcircuit = os.path.join(parent, "microcircuit")
+
+        cc = ConfigChecker([cfg, integration_tests, microcircuit, unittests])
+        cc.check(local_defaults=False)
