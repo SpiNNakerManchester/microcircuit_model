@@ -1,4 +1,4 @@
-[![Python Actions](https://github.com/SpiNNakerManchester/microcircuit_model/actions/workflows/python_actions.yml/badge.svg)](https://github.com/SpiNNakerManchester/microcircuit_model/actions/workflows/python_actions.yml)
+[[![Python Actions](https://github.com/SpiNNakerManchester/MarkovChainMonteCarlo/actions/workflows/python_actions.yml/badge.svg)](https://github.com/SpiNNakerManchester/MarkovChainMonteCarlo/actions/workflows/python_actions.yml)
 
 # Cortical microcircuit simulation: PyNN version
 _Stored for easy access for people within the organisation_
