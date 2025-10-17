@@ -1,4 +1,4 @@
-[![CI Check](https://github.com/SpiNNakerManchester/microcircuit_model/workflows/Python%20Actions/badge.svg?branch=master)](https://github.com/SpiNNakerManchester/microcircuit_model/actions?query=workflow%3A%22Python+Actions%22+branch%3Amaster)
+[![Python Actions](https://github.com/SpiNNakerManchester/microcircuit_model/actions/workflows/python_actions.yml/badge.svg)](https://github.com/SpiNNakerManchester/microcircuit_model/actions/workflows/python_actions.yml)
 
 # Cortical microcircuit simulation: PyNN version
 _Stored for easy access for people within the organisation_
