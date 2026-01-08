@@ -61,14 +61,9 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: pynn_binaries
-        path: sPyNNaker/spynnaker/pyNN/model_binaries/*.aplx
-        retention-days: 5
-
-    - name: Upload log.sqlite3s
-      uses: actions/upload-artifact@v4
-      with:
-        name: logs.sqlite3
-        path: logs.sqlite3
+        path: |
+            sPyNNaker/spynnaker/pyNN/model_binaries/*.aplx
+            sPyNNaker/spynnaker/pyNN/model_binaries/logs*.sqlite3
         retention-days: 5
 
   java_compile:
@@ -143,12 +138,6 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: pynn_binaries
-        path: external_binaries
-
-    - name: Download logs.sqlite3
-      uses: actions/download-artifact@v4
-      with:
-        name: logs.sqlite3
         path: external_binaries
 
     - name: Download jar
