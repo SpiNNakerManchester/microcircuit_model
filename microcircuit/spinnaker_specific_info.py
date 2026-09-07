@@ -173,7 +173,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         """
         model = getattr(sim, self.neuron_model)
         return sim.Population(
-            int(round(n_neurons * self.n_scaling)),
+            round(n_neurons * self.n_scaling),
             model, cellparams=self.neuron_params,
             label=layer+pop, seed=self.pyseed)
 
@@ -225,7 +225,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         if not k:
             return
 
-        n_syn = int(round(k * len(pop2)))
+        n_syn = round(k * len(pop2))
         d_dist = None
 
         if self.delay_dist_type == 'normal':

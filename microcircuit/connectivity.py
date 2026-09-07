@@ -48,10 +48,10 @@ def build_from_list_connect(
                         line = line.strip()
                         (source_id, target_id, weight, delay) = line.split()
                         source_id = (
-                            int(math.floor(float(source_id))) -
+                            math.floor(float(source_id)) -
                             base_neuron_ids[pop1])
                         target_id = (
-                            int(math.floor(float(target_id))) -
+                            math.floor(float(target_id)) -
                             base_neuron_ids[pop2])
                         if source_id < 0 or target_id < 0:
                             print(line, base_neuron_ids[pop1],

@@ -247,7 +247,7 @@ class NestSimulatorInfo(NestParams):
                  'Tstart': common_params.tau_max})
 
     def rank_info(self, common_params, layer, pop):
-        if (not self.record_fraction and self.n_record > int(
+        if (not self.record_fraction and self.n_record > (
                 round(common_params.n_full[layer][pop] * self.n_scaling))):
             print(
                 'Note that requested number of neurons '
@@ -283,7 +283,7 @@ class NestSimulatorInfo(NestParams):
         from pyNN.nest import native_cell_type  # type: ignore[import]
         model = native_cell_type('iaf_psc_exp_ps')
         return sim.Population(
-            int(round(n_neurons * self.n_scaling)),
+            round(n_neurons * self.n_scaling),
             model, cellparams=self.neuron_params,
             label=layer+pop)
 
@@ -328,7 +328,7 @@ class NestSimulatorInfo(NestParams):
 
         source_neurons = list(pop1.all_cells)
         target_neurons = list(pop2.all_cells)
-        n_syn = int(round(k * len(target_neurons)))
+        n_syn = round(k * len(target_neurons))
         # weights are multiplied by 1000 because NEST uses pA whereas PyNN
         # uses nA RandomPopulationConnectD is called on each process with the
         # full sets of source and target neurons, and internally only

@@ -197,12 +197,11 @@ class CommonParams(object):
             for pop in self.pops:
                 if sim_params.record_fraction:
                     self.n_rec[layer][pop] = min(
-                        int(round(
+                        round(
                             self.n_full[layer][pop] * sim_params.n_scaling *
-                            sim_params.frac_record_spikes)),
-                        int(round(
-                            self.n_full[layer][pop] * sim_params.n_scaling)))
+                            sim_params.frac_record_spikes),
+                        round(self.n_full[layer][pop] * sim_params.n_scaling))
                 else:
                     self.n_rec[layer][pop] = min(
-                        sim_params.n_record, int(round(
-                            self.n_full[layer][pop] * sim_params.n_scaling)))
+                        sim_params.n_record, round(
+                            self.n_full[layer][pop] * sim_params.n_scaling))
