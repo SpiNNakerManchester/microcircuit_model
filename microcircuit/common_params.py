@@ -62,10 +62,6 @@ class CommonParams(object):
         'thal_params',
         # Parameters for transient thalamic input
         'thalamic_input',
-        'v0_l23e_mean',
-        'v0_l23e_sd',
-        'v0_l23i_mean',
-        'v0_l23i_sd',
         'v0_l4e_mean',
         'v0_l4e_sd',
         'v0_l4i_mean',
@@ -78,6 +74,10 @@ class CommonParams(object):
         'v0_l6e_sd',
         'v0_l6i_mean',
         'v0_l6i_sd',
+        'v0_l23e_mean',
+        'v0_l23e_sd',
+        'v0_l23i_mean',
+        'v0_l23i_sd',
         # Mean and standard deviation of initial membrane potential
         # distribution
         'v0_mean',
