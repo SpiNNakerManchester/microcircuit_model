@@ -18,7 +18,9 @@
 
 import os
 import unittest
+
 from spinn_utilities.configs.config_checker import ConfigChecker
+
 from spynnaker.pyNN.config_setup import unittest_setup
 
 

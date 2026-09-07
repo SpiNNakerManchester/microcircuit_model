@@ -14,10 +14,12 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import glob
-import numpy as np
-import neo  # type: ignore[import]
+
 import matplotlib  # type: ignore[import]
 import matplotlib.pyplot as plt  # type: ignore[import]
+import neo  # type: ignore[import]
+import numpy as np
+
 matplotlib.use('Agg')
 
 

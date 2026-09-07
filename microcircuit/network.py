@@ -13,16 +13,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from pyNN.random import RandomDistribution  # type: ignore[import]
 import numpy as np
+from pyNN.random import RandomDistribution  # type: ignore[import]
 
 from .connectivity import build_from_list_connect
 from .constants import (
-    DC, NEST_NEURON_MODEL, SPINNAKER_NEURON_MODEL, POISSON, CONN_ROUTINE)
+    CONN_ROUTINE,
+    DC,
+    NEST_NEURON_MODEL,
+    POISSON,
+    SPINNAKER_NEURON_MODEL,
+)
+from .helper_functions import create_weight_matrix, get_init_voltages_from_file
+from .scaling import adjust_w_and_ext_to_k, get_in_degrees
 from .sim_params import NEST_SIM, SPINNAKER_SIM
-from .scaling import get_in_degrees, adjust_w_and_ext_to_k
-from .helper_functions import (
-    create_weight_matrix, get_init_voltages_from_file)
 
 
 class Network:

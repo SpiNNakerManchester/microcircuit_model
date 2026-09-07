@@ -16,8 +16,8 @@
 import numpy
 from pyNN.random import RandomDistribution  # type: ignore[import]
 
+from .constants import CONN_ROUTINE, POISSON, SPINNAKER_NEURON_MODEL
 from .sim_params import SpinnakerParams
-from .constants import POISSON, SPINNAKER_NEURON_MODEL, CONN_ROUTINE
 
 
 class SpinnakerSimulatorInfo(SpinnakerParams):
