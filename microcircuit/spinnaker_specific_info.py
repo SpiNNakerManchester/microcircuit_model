@@ -26,6 +26,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
     """
 
     __slots__ = [
+        # pylint: disable=wrong-spelling-in-comment
         # Connection routine
         # 'fixed_total_number' reproduces the connectivity from
         # Potjans & Diesmann (2014), establishing a fixed number of synapses
@@ -71,7 +72,6 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         'neuron_params',
         # The number of neurons per core
         'neurons_per_core',
-        # pylint: disable=wrong-spelling-in-comment
         # Whether to make random numbers independent of the number of processes
         'parallel_safe',
         # random number generator seeds for V and connectivity.
