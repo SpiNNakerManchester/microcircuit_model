@@ -29,7 +29,7 @@ def build_from_list_connect(
     :param simulator_params:
     :return:
     """
-    connections = ()
+    connections = []
     for filename in os.listdir(simulator_params.conn_dir):
         if filename.startswith(pop1.label + "_" + pop2.label):
             print(f"Reading {filename}")
