@@ -202,9 +202,9 @@ class NestSimulatorInfo(NestParams):
                                             1:])))
 
                 f = open(self.output_path + '/covariances.dat', 'w')
-                f.write('tau_max: {}'.format(common_params.tau_max))
-                f.write('delta_tau: {}'.format(delta_tau))
-                f.write('simtime: {}\n'.format(self.sim_duration))
+                f.write(f'tau_max: {common_params.tau_max}')
+                f.write(f'delta_tau: {delta_tau}')
+                f.write(f'simtime: {self.sim_duration}\n')
 
                 for target_layer in numpy.sort(common_params.layers.keys()):
                     for target_pop in common_params.pops:
@@ -216,9 +216,8 @@ class NestSimulatorInfo(NestParams):
                                 source_index = (
                                     common_params.structure[source_layer][
                                         source_pop])
-                                f.write("{}{} - {}{}".format(
-                                    target_layer, target_pop, source_layer,
-                                    source_pop))
+                                f.write(f"{target_layer}{target_pop} - "
+                                        f"{source_layer}{source_pop}")
                                 f.write('n_events_target: {}'.format(
                                     sim.nest.GetStatus(
                                         self.corr_detector,
@@ -251,8 +250,8 @@ class NestSimulatorInfo(NestParams):
                 round(common_params.n_full[layer][pop] * self.n_scaling))):
             print(
                 'Note that requested number of neurons '
-                'to record exceeds {} {} population '
-                'size'.format(layer, pop))
+                f'to record exceeds {layer} {pop} population '
+                'size')
 
     def set_record_v(self, this_pop):
         if self.record_fraction:
@@ -295,8 +294,8 @@ class NestSimulatorInfo(NestParams):
         # each population, since the native NEST implementation
         # sends independent spike trains to all targets
         if sim.rank() == 0:
-            print('connecting Poisson generator to {} {} '
-                  'via SLI'.format(target_layer, target_pop))
+            print(f'connecting Poisson generator to '
+                  f'{target_layer} {target_pop} via SLI')
         sim.nest.sli_run(
             '/poisson_generator Create /poisson_generator_e '
             'Set poisson_generator_e << /rate ' + str(rate) + ' >> SetStatus')
@@ -377,9 +376,8 @@ class NestSimulatorInfo(NestParams):
                         raise
                     pass
             f = open(
-                "{}/{}_{}'.conn{}".format(
-                    self.conn_dir, pop1.label, pop2.label, str(sim.rank())),
-                'w')
+                f"{self.conn_dir}/{pop1.label}_{pop2.label}'.conn"
+                f"{str(sim.rank())}", 'w')
             for c in conns:
                 f.write(
                     str(c).replace('(', '').replace(')', '').replace(
