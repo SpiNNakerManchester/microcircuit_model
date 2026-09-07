@@ -20,29 +20,48 @@ class CommonParams(object):
 
     __slots__ = [
         # pylint: disable=wrong-spelling-in-comment
-        # Relative inhibitory synaptic weight
-        'g',
-        'layers',
-        'n_layers',
-        'pops',
-        'n_pops_per_layer',
-        'structure',
-        # Numbers of neurons in full-scale model
-        'n_full',
+
+        # Background rate per synapse
+        'bg_rate',
         # Probabilities for >=1 connection between neurons in the given
         # populations. The first index is for the target population; the
         # second for the source population
         # 2/3e, 2/3i, 4e, 4i, 5e, 5i, 6e, 6i
         'conn_probs',
-        # In-degrees for external inputs
-        'k_ext',
+        # Means and standard deviations of delays from given source
+        # populations (ms)
+        # When delay_dist_type is 'uniform', delays are drawn from
+        # [d_mean-d_sd, d_mean+d_sd].
+        'd_mean',
+        'd_sd',
+        # Fraction of recorded neurons to include in raster plot
+        'frac_to_plot',
         # Mean rates in the full-scale model, necessary for scaling
         # Precise values differ somewhat between network realizations
         'full_mean_rates',
-        # Mean and standard deviation of initial membrane potential
-        # distribution
-        'v0_mean',
-        'v0_sd',
+        # Relative inhibitory synaptic weight
+        'g',
+        # In-degrees for external inputs
+        'k_ext',
+        'layers',
+        # Numbers of neurons in full-scale model
+        'n_full',
+        'n_layers',
+        'n_pops_per_layer',
+        # Numbers of neurons from which to record spikes
+        'n_rec',
+        # Parameters for plots of spiking activity
+        'plot_spiking_activity',
+        'pops',
+        # raster_t_min and raster_t_max include the time scaling factor
+        'raster_t_max',
+        'raster_t_min',
+        'structure',
+        # Maximum delay over which to determine covariances
+        'tau_max',
+        'thal_params',
+        # Parameters for transient thalamic input
+        'thalamic_input',
         'v0_l23e_mean',
         'v0_l23e_sd',
         'v0_l23i_mean',
@@ -59,15 +78,17 @@ class CommonParams(object):
         'v0_l6e_sd',
         'v0_l6i_mean',
         'v0_l6i_sd',
-        # Background rate per synapse
-        'bg_rate',
-        # Mean synaptic weight for all excitatory projections except L4e->L2/3e
-        'w_mean',
+        # Mean and standard deviation of initial membrane potential
+        # distribution
+        'v0_mean',
+        'v0_sd',
         # Mean synaptic weight for L4e->L2/3e connections
         # See p. 801 of the paper, second paragraph under
         # 'Model Parameterization',
         # and the caption to Supplementary Fig. 7
         'w_234',
+        # Mean synaptic weight for all excitatory projections except L4e->L2/3e
+        'w_mean',
         # Standard deviation of weight distribution relative to mean for
         # all projections except L4e->L2/3e
         'w_rel',
@@ -76,26 +97,6 @@ class CommonParams(object):
         # This value is not mentioned in the paper, but is chosen to match the
         # original code by Tobias Potjans
         'w_rel_234',
-        # Means and standard deviations of delays from given source
-        # populations (ms)
-        # When delay_dist_type is 'uniform', delays are drawn from
-        # [d_mean-d_sd, d_mean+d_sd].
-        'd_mean',
-        'd_sd',
-        # Parameters for transient thalamic input
-        'thalamic_input',
-        'thal_params',
-        # Maximum delay over which to determine covariances
-        'tau_max',
-        # Parameters for plots of spiking activity
-        'plot_spiking_activity',
-        # raster_t_min and raster_t_max include the time scaling factor
-        'raster_t_min',
-        'raster_t_max',
-        # Fraction of recorded neurons to include in raster plot
-        'frac_to_plot',
-        # Numbers of neurons from which to record spikes
-        'n_rec'
     ]
 
     def __init__(self, sim_params):

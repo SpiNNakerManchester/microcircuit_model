@@ -26,11 +26,29 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
     """
 
     __slots__ = [
-        # pylint: disable=wrong-spelling-in-comment
-        # Whether to make random numbers independent of the number of processes
-        'parallel_safe',
-        # Fraction of neurons to simulate
-        'n_scaling',
+        # Connection routine
+        # 'fixed_total_number' reproduces the connectivity from
+        # Potjans & Diesmann (2014), establishing a fixed number of synapses
+        # between each pair of populations. This function is available for
+        # the NEST and SpiNNaker back-ends. 'from_list' reads in the
+        # connections from file
+        'conn_routine',
+        # Delay distribution. Possible values: 'normal' and 'uniform'.
+        # The original model has normally distributed delays.
+        'delay_dist_type',
+        # Fraction of neurons from which to record spikes
+        # when record_fraction = True
+        'frac_record_spikes',
+        # Fraction of neurons from which to record membrane potentials when
+        # record_v=True and record_fraction = True
+        'frac_record_v',
+        # input directory where voltages are read from.
+        'input_dir',
+        # Type of background input. Possible values: 'poisson' and 'DC'
+        # If 'DC' is chosen, a constant external current is provided,
+        # equal to the mean current due to the Poisson input used in the
+        # default version of the model.
+        'input_type',
         # Scaling factor for in-degrees. Upon downscaling, synaptic weights are
         # taken proportional to 1/sqrt(in-degree) and external drive is
         # adjusted to preserve mean and variances of activity in the diffusion
@@ -40,61 +58,43 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         # simulations on small systems that give results similar to
         # full-scale simulations.
         'k_scaling',
-        # Neuron model. Possible values: 'IF_curr_exp', 'iaf_psc_exp_ps'
-        'neuron_model',
-        # Connection routine
-        # 'fixed_total_number' reproduces the connectivity from
-        # Potjans & Diesmann (2014), establishing a fixed number of synapses
-        # between each pair of populations. This function is available for
-        # the NEST and SpiNNaker back-ends. 'from_list' reads in the
-        # connections from file
-        'conn_routine',
-        # Whether to save connections to file. See README.txt for known
-        # issues with using  save_connections in parallel simulations.
-        'save_connections',
-        # Initialization of membrane potentials
-        # 'from_list' uses a set of initial neuron voltages read from a file,
-        # 'random' uses randomized voltages
-        'voltage_input_type',
-        # Delay distribution. Possible values: 'normal' and 'uniform'.
-        # The original model has normally distributed delays.
-        'delay_dist_type',
-        # Type of background input. Possible values: 'poisson' and 'DC'
-        # If 'DC' is chosen, a constant external current is provided,
-        # equal to the mean current due to the Poisson input used in the
-        # default version of the model.
-        'input_type',
-        # Whether to record from a fixed fraction of neurons in each
-        # population. If False, a fixed number of neurons is recorded.
-        'record_fraction',
+        # Whether to send output live
+        'live_output',
         # Number of neurons from which to record spikes
         # when record_fraction = False
         'n_record',
-        # Fraction of neurons from which to record spikes
-        # when record_fraction = True
-        'frac_record_spikes',
-        # Whether to record membrane potentials
-        # (not yet working for iaf_psc_exp_ps)
-        'record_v',
-        # Fraction of neurons from which to record membrane potentials when
-        # record_v=True and record_fraction = True
-        'frac_record_v',
+        # Fraction of neurons to simulate
+        'n_scaling',
+        # Neuron model. Possible values: 'IF_curr_exp', 'iaf_psc_exp_ps'
+        'neuron_model',
+        # neuron params
+        'neuron_params',
+        # The number of neurons per core
+        'neurons_per_core',
+        # pylint: disable=wrong-spelling-in-comment
+        # Whether to make random numbers independent of the number of processes
+        'parallel_safe',
         # random number generator seeds for V and connectivity.
         # When parallel_safe is True, only the first is used.
         # When parallel_safe is False, the first num_processes are used.
         'pyseed',
-        # Whether to send output live
-        'live_output',
-        # input directory where voltages are read from.
-        'input_dir',
-        # neuron params
-        'neuron_params',
-        # tau syn name
-        'tau_syn_name',
-        # The number of neurons per core
-        'neurons_per_core',
+        # Whether to record from a fixed fraction of neurons in each
+        # population. If False, a fixed number of neurons is recorded.
+        'record_fraction',
+        # Whether to record membrane potentials
+        # (not yet working for iaf_psc_exp_ps)
+        'record_v',
+        # Whether to save connections to file. See README.txt for known
+        # issues with using  save_connections in parallel simulations.
+        'save_connections',
         # Script RNG
         'script_rng'
+        # tau syn name
+        'tau_syn_name',
+        # Initialization of membrane potentials
+        # 'from_list' uses a set of initial neuron voltages read from a file,
+        # 'random' uses randomized voltages
+        'voltage_input_type',
     ]
 
     def __init__(
