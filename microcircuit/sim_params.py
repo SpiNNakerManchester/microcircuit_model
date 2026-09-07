@@ -105,7 +105,7 @@ class NestParams(SimParams):
                 '/usr/local/mpi/openmpi/1.4.3/gcc64/bin/'
                 'mpivars_openmpi-1.4.3_gcc64.sh'),
             backend_path='/path/to/backend', pynn_path='/path/to/pyNN'):
-        super(NestParams, self).__init__(
+        super().__init__(
             timestep, sim_duration, min_delay, max_delay, outfile,
             errfile, output_path, output_format, conn_dir)
         self.n_nodes = n_nodes

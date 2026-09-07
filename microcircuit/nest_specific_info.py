@@ -120,7 +120,7 @@ class NestSimulatorInfo(NestParams):
             frac_record_spikes=1.0, record_v=False, n_record_v=20,
             frac_record_v=0.1, record_corr=False, pyseed=2563297,
             master_seed=124678, tau_syn_name='tau_syn_ex'):
-        super(NestSimulatorInfo, self).__init__(
+        super().__init__(
             timestep, sim_duration, min_delay, max_delay, n_nodes, outfile,
             errfile, output_path, output_format, conn_dir, n_procs_per_node,
             wall_time, memory, mpi_path, backend_path, pynn_path)
