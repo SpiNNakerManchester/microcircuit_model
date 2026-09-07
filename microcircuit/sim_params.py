@@ -28,6 +28,7 @@ class SimParams(object):
     """
 
     __slots__ = [
+        # pylint: disable=wrong-spelling-in-comment
         # Directory for connectivity I/O
         'conn_dir',
         # file name for error output
@@ -46,7 +47,6 @@ class SimParams(object):
         'setup_params',
         # sim duration
         'sim_duration',
-        # pylint: disable=wrong-spelling-in-comment
         # sim time step
         'timestep',
     ]
@@ -91,7 +91,7 @@ class NestParams(SimParams):
         # number of MPI processes per node
         'n_procs_per_node',
         # path to PyNN installation
-        'pynn_path'
+        'pynn_path',
         # wall time for simulation
         'wall_time',
     ]
