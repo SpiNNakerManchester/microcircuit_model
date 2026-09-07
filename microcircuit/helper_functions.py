@@ -15,6 +15,7 @@
 
 import math
 import os
+
 import numpy as np
 
 
@@ -67,7 +68,7 @@ def get_init_voltages_from_file(pop, simulator_params):
                 if not line.startswith("#"):
                     line = line.strip()
                     (voltage, neuron_id) = line.split()
-                    neuron_id = int(math.floor(float(neuron_id)))
+                    neuron_id = math.floor(float(neuron_id))
                     voltage = float(voltage)
                     if voltages[neuron_id] == 0:
                         voltages[neuron_id] = voltage

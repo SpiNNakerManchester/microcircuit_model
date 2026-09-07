@@ -13,8 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import os
 import math
+import os
 
 
 def build_from_list_connect(
@@ -29,7 +29,7 @@ def build_from_list_connect(
     :param simulator_params:
     :return:
     """
-    connections = list()
+    connections = []
     for filename in os.listdir(simulator_params.conn_dir):
         if filename.startswith(pop1.label + "_" + pop2.label):
             print(f"Reading {filename}")
@@ -48,10 +48,10 @@ def build_from_list_connect(
                         line = line.strip()
                         (source_id, target_id, weight, delay) = line.split()
                         source_id = (
-                            int(math.floor(float(source_id))) -
+                            math.floor(float(source_id)) -
                             base_neuron_ids[pop1])
                         target_id = (
-                            int(math.floor(float(target_id))) -
+                            math.floor(float(target_id)) -
                             base_neuron_ids[pop2])
                         if source_id < 0 or target_id < 0:
                             print(line, base_neuron_ids[pop1],

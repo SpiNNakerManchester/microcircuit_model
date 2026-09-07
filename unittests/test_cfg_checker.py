@@ -13,12 +13,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# This workflow will install Python dependencies, run lint and rat with a variety of Python versions
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
 import os
 import unittest
+
 from spinn_utilities.configs.config_checker import ConfigChecker
+
 from spynnaker.pyNN.config_setup import unittest_setup
 
 
