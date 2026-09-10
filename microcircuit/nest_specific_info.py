@@ -227,9 +227,10 @@ class NestSimulatorInfo(NestParams):
                                     sim.nest.GetStatus(
                                         self.corr_detector,
                                         'n_events')[0][source_index]))
-                                for i in range(
-                                        len(cov[target_index][source_index])):
-                                    f.write(cov[target_index][source_index][i])
+                                f.writelines(
+                                    cov[target_index][source_index][i]
+                                    for i in range(len(
+                                        cov[target_index][source_index])))
                                 f.write('')
                 f.close()
 
@@ -379,10 +380,8 @@ class NestSimulatorInfo(NestParams):
             f = open(
                 f"{self.conn_dir}/{pop1.label}_{pop2.label}'.conn"
                 f"{str(sim.rank())}", 'w')
-            for c in conns:
-                f.write(
-                    str(c).replace('(', '').replace(')', '').replace(
-                        ', ', '\t'))
+            f.writelines(str(c).replace('(', '').replace(')', '').replace(
+                        ', ', '\t') for c in conns)
             f.close()
 
     @staticmethod
