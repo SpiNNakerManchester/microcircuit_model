@@ -379,7 +379,7 @@ class NestSimulatorInfo(NestParams):
                     pass
             f = open(
                 f"{self.conn_dir}/{pop1.label}_{pop2.label}'.conn"
-                f"{str(sim.rank())}", 'w')
+                f"{sim.rank()}", 'w')
             f.writelines(str(c).replace('(', '').replace(')', '').replace(
                         ', ', '\t') for c in conns)
             f.close()
