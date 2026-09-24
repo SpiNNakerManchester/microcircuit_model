@@ -123,6 +123,8 @@ class SpinnakerParams(SimParams):
     Spynnaker parameters
     """
 
+    __slots__ = []
+
 
 def add_subparser(subparsers, command, method):
     # pylint:disable = wrong-spelling-in-docstring
