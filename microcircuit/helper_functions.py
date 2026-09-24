@@ -62,14 +62,14 @@ def get_init_voltages_from_file(pop, simulator_params):
     for filename in os.listdir(simulator_params.input_dir):
         if filename == f'voltages_{pop.label}.dat':
             print(f'Reading voltages from {filename}')
-            f = open(os.path.join(simulator_params.input_dir, filename),
-                     encoding="utf8")
-            for line in f:
-                if not line.startswith("#"):
-                    line = line.strip()
-                    (voltage, neuron_id) = line.split()
-                    neuron_id = math.floor(float(neuron_id))
-                    voltage = float(voltage)
-                    if voltages[neuron_id] == 0:
-                        voltages[neuron_id] = voltage
+            with open(os.path.join(simulator_params.input_dir, filename),
+                      encoding="utf8") as f:
+                for line in f:
+                    if not line.startswith("#"):
+                        line = line.strip()
+                        (voltage, neuron_id) = line.split()
+                        neuron_id = math.floor(float(neuron_id))
+                        voltage = float(voltage)
+                        if voltages[neuron_id] == 0:
+                            voltages[neuron_id] = voltage
     return voltages
