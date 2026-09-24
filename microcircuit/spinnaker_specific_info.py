@@ -88,7 +88,7 @@ class SpinnakerSimulatorInfo(SpinnakerParams):
         # issues with using  save_connections in parallel simulations.
         'save_connections',
         # Script RNG
-        'script_rng'
+        'script_rng',
         # tau syn name
         'tau_syn_name',
         # Initialization of membrane potentials
