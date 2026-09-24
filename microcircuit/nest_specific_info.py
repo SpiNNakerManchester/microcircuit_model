@@ -202,37 +202,38 @@ class NestSimulatorInfo(NestParams):
                                         cov_all[source_index][target_index][
                                             1:])))
 
-                f = open(self.output_path + '/covariances.dat', 'w')
-                f.write(f'tau_max: {common_params.tau_max}')
-                f.write(f'delta_tau: {delta_tau}')
-                f.write(f'simtime: {self.sim_duration}\n')
+                with open(self.output_path + '/covariances.dat', 'w') as f:
+                    f.write(f'tau_max: {common_params.tau_max}')
+                    f.write(f'delta_tau: {delta_tau}')
+                    f.write(f'simtime: {self.sim_duration}\n')
 
-                for target_layer in numpy.sort(common_params.layers.keys()):
-                    for target_pop in common_params.pops:
-                        target_index = (
-                            common_params.structure[target_layer][target_pop])
-                        for source_layer in numpy.sort(
-                                common_params.layers.keys()):
-                            for source_pop in common_params.pops:
-                                source_index = (
-                                    common_params.structure[source_layer][
-                                        source_pop])
-                                f.write(f"{target_layer}{target_pop} - "
-                                        f"{source_layer}{source_pop}")
-                                f.write('n_events_target: {}'.format(
-                                    sim.nest.GetStatus(
-                                        self.corr_detector,
-                                        'n_events')[0][target_index]))
-                                f.write('n_events_source: {}'.format(
-                                    sim.nest.GetStatus(
-                                        self.corr_detector,
-                                        'n_events')[0][source_index]))
-                                f.writelines(
-                                    cov[target_index][source_index][i]
-                                    for i in range(len(
-                                        cov[target_index][source_index])))
-                                f.write('')
-                f.close()
+                    for target_layer in numpy.sort(
+                            common_params.layers.keys()):
+                        for target_pop in common_params.pops:
+                            target_index = (
+                                common_params.structure[
+                                    target_layer][target_pop])
+                            for source_layer in numpy.sort(
+                                    common_params.layers.keys()):
+                                for source_pop in common_params.pops:
+                                    source_index = (
+                                        common_params.structure[source_layer][
+                                            source_pop])
+                                    f.write(f"{target_layer}{target_pop} - "
+                                            f"{source_layer}{source_pop}")
+                                    f.write('n_events_target: {}'.format(
+                                        sim.nest.GetStatus(
+                                            self.corr_detector,
+                                            'n_events')[0][target_index]))
+                                    f.write('n_events_source: {}'.format(
+                                        sim.nest.GetStatus(
+                                            self.corr_detector,
+                                            'n_events')[0][source_index]))
+                                    f.writelines(
+                                        cov[target_index][source_index][i]
+                                        for i in range(len(
+                                            cov[target_index][source_index])))
+                                    f.write('')
 
     def record_corr_info(self, sim, common_params):
         if self.record_corr:
@@ -377,12 +378,10 @@ class NestSimulatorInfo(NestParams):
                     if e.errno != 17:
                         raise
                     pass
-            f = open(
-                f"{self.conn_dir}/{pop1.label}_{pop2.label}'.conn"
-                f"{sim.rank()}", 'w')
-            f.writelines(str(c).replace('(', '').replace(')', '').replace(
-                        ', ', '\t') for c in conns)
-            f.close()
+            with open(f"{self.conn_dir}/{pop1.label}_{pop2.label}'.conn"
+                      f"{sim.rank()}", 'w') as f:
+                f.writelines(str(c).replace('(', '').replace(')', '').
+                             replace(', ', '\t') for c in conns)
 
     @staticmethod
     def memory_print(sim):
