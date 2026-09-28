@@ -22,7 +22,7 @@ NEST_SIM = "NEST"
 SPINNAKER_SIM = "SPINNAKER"
 
 
-class SimParams(object):
+class SimParams:
     """
     Shared parameters for simulations.
     """
