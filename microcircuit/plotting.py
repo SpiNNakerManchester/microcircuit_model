@@ -57,7 +57,7 @@ def plot_raster_bars(
                         n_rec[layer][pop] = len(spike_trains)
                         pop_spike_array = (
                             np.vstack((pop_spike_array, spike_array)))
-                except IOError:
+                except OSError:
                     print('reading spike data from ', file_name, ' failed')
             spikes[layer][pop] = pop_spike_array
 
