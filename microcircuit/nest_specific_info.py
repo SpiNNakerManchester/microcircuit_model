@@ -377,7 +377,6 @@ class NestSimulatorInfo(NestParams):
                 except OSError as e:
                     if e.errno != 17:
                         raise
-                    pass
             with open(f"{self.conn_dir}/{pop1.label}_{pop2.label}'.conn"
                       f"{sim.rank()}", 'w') as f:
                 f.writelines(str(c).replace('(', '').replace(')', '').
